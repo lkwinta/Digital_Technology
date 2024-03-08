@@ -1,0 +1,9 @@
+version: '3'
+
+tasks:
+  lab1:
+    desc: Compile lab1.tex to pdf
+    sources:
+      - src/lab1/*
+    cmds:
+      - tectonic "./src/lab1/lab1.tex" -Z search-path="src" --outdir "pdf"
