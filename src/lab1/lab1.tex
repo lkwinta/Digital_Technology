@@ -31,6 +31,7 @@
 
 \sectionfont{\normalfont\huge\sectionrule{0pt}{0pt}{-6pt}{1pt}}
 \subsectionfont{\normalfont\LARGE}
+\subsubsectionfont{\normalfont\Large}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -108,7 +109,7 @@ Układ mapuje wejście na wyjście w następujący sposób - zakładając notacj
 \begin{center}
   \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
     \hline Wejście            & 0 & 1 & 2 & 3 & 4  & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 \\ 
-    \hline Oczekiwane wyjście & 2 & 3 & 5 & 7 & 11 & 13 & 17 & 19 & 23 & 29 & 31 & 37 & 41 & 43 & 47 & 43 \\ 
+    \hline Oczekiwane wyjście & 2 & 3 & 5 & 7 & 11 & 13 & 17 & 19 & 23 & 29 & 31 & 37 & 41 & 43 & 47 & 51 \\ 
     \hline
   \end{tabular}
 \end{center}
@@ -143,7 +144,179 @@ Poniżej zapisaliśmy tabelę prawd dla projektowanego układu:
 
 
 \subsection{Tablice Karnaugh}
+Poniżej przedstawione są tabele Karnaugh których użyliśmy do zbudowania transkoderów poszczególnych bitów
+\subsubsection{Człon J}
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}
+  \hline
+  AB\textbackslash{}CD & 00 & 01 & 11 & 10 \\ \hline
+  00                   & 0  & 1  & 1  & 1  \\ \hline
+  01                   & 1  & 1  & 1  & 1  \\ \hline
+  11                   & 1  & 1  & 1  & 1  \\ \hline
+  10                   & 1  & 1  & 1  & 1  \\ \hline
+  \end{tabular}  \\
+\end{center}
+\begin{center}
+  $f_{(1)} =A+C+D+B $
+\end{center}
+
+\begin{figure}[H]
+ \centering
+ \includegraphics{tab_J.png}
+\end{figure}
+
+
+\subsubsection{Człon I}
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}
+  \hline
+  AB\textbackslash{}CD & 00 & 01 & 11 & 10 \\ \hline
+  00                   & 1  & 1  & 1  & 0  \\ \hline
+  01                   & 1  & 0  & 1  & 0  \\ \hline
+  11                   & 0  & 1  & 0  & 1  \\ \hline
+  10                   & 1  & 0  & 0  & 1  \\ \hline
+  \end{tabular}  \\
+\end{center}
+\begin{center}
+  $f_{(1)} = AC\overline{D} + \overline{A}CD+\overline{ABC}+\overline{ACD}+\overline{BCD}+AB\overline{C}D $
+\end{center}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{tab_I.png}
+ \end{figure}
+
+\subsubsection{Człon H}
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}
+  \hline
+  AB\textbackslash{}CD & 00 & 01 & 11 & 10 \\ \hline
+  00                   & 0  & 0  & 1  & 1  \\ \hline
+  01                   & 0  & 1  & 0  & 0  \\ \hline
+  11                   & 0  & 0  & 1  & 1  \\ \hline
+  10                   & 1  & 1  & 1  & 1  \\ \hline
+  \end{tabular}
+  \\
+\end{center}
+\begin{center}
+  $f_{(1)} = A\overline{B} + AC+\overline{B}C+\overline{A}B\overline{C}D $
+\end{center}
+\begin{figure}[H]
+  \centering
+  \includegraphics{tab_H.png}
+ \end{figure}
+
+\subsubsection{Człon G}
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}
+  \hline
+  AB\textbackslash{}CD & 00 & 01 & 11 & 10 \\ \hline
+  00                   & 0  & 0  & 0  & 0  \\ \hline
+  01                   & 1  & 1  & 0  & 0  \\ \hline
+  11                   & 1  & 1  & 0  & 1  \\ \hline
+  10                   & 0  & 1  & 0  & 1  \\ \hline
+  \end{tabular}\\
+\end{center}
+\begin{center}
+  $f_{(1)} = B\overline{C} + AC\overline{D}+A\overline{C}D $
+\end{center}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{tab_G.png}
+ \end{figure}
+
+\subsubsection{Człon F}
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}
+  \hline
+  AB\textbackslash{}CD & 00 & 01 & 11 & 10 \\ \hline
+  00                   & 0  & 0  & 0  & 0  \\ \hline
+  01                   & 0  & 0  & 1  & 1  \\ \hline
+  11                   & 0  & 0  & 1  & 0  \\ \hline
+  10                   & 1  & 1  & 0  & 1  \\ \hline
+  \end{tabular}\\
+\end{center}
+\begin{center}
+  $f_{(1)} = A\overline{BD} + A\overline{BC}+\overline{A}BC+BCD $
+\end{center}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{tab_F.png}
+ \end{figure}
+
+
+\subsubsection{Człon E}
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}
+  \hline
+  AB\textbackslash{}CD & 00 & 01 & 11 & 10 \\ \hline
+  00                   & 0  & 0  & 0  & 0  \\ \hline
+  01                   & 0  & 0  & 0  & 0  \\ \hline
+  11                   & 1  & 1  & 1  & 1  \\ \hline
+  10                   & 0  & 0  & 1  & 0  \\ \hline
+  \end{tabular}
+\end{center}
+  \begin{center}
+  $f_{(1)} = AB + ACD$
+\end{center}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{tab_E.png}
+ \end{figure}
+
 \subsection{Implementacja}
+Otrzymane z tablic Karnough funkcje zostały odpowiednio przekształcone tak,
+ aby używały jedynie bramek NAND i następnie zostały one zaimplementowane.
+ \subsubsection{transkoder J}
+ \begin{figure}[H]
+  \centering
+  \includegraphics{schemat_J.png}
+\end{figure}
+
+\subsubsection{transkoder I}
+\begin{figure}[H]
+ \centering
+ \includegraphics{schemat_I.png}
+\end{figure}
+
+\subsubsection{transkoder M}
+\begin{figure}[H]
+ \centering
+ \includegraphics{schemat_H.png}
+\end{figure}
+
+\subsubsection{transkoder G}
+\begin{figure}[H]
+ \centering
+ \includegraphics{schemat_G.png}
+\end{figure}
+
+\subsubsection{transkoder F}
+\begin{figure}[H]
+ \centering
+ \includegraphics{schemat_F.png}
+\end{figure}
+
+\subsubsection{transkoder E}
+\begin{figure}[H]
+ \centering
+ \includegraphics{schemat_E.png}
+\end{figure}
+
+Ostatecznie układ prezentuje się w następujący sposób:
+\begin{figure}[H]
+  \centering
+  \includegraphics{schemat.png}
+ \end{figure}
+
+ Oprócz przedstawionego wyżej transkodera nazwanego na schemacie Prime transkoder w układzie znajdują się
+  także Word Generator służący do generowania wszystkich sygnałów wejsciowych i Logic Analyzer, który monitoruje sygnały wyjściowe.
+
+
+
 
 \section{Zastosowania}
 Poniżej wymieniamy przykładowe zastosowania zaprojektowanego układu:
@@ -157,3 +330,5 @@ Poniżej wymieniamy przykładowe zastosowania zaprojektowanego układu:
       który np. nadaje się do wyświetlenia użytkownikowi - bo mówi coś więcej o istocie problemu.
 \end{itemize}
 \end{document}
+
+
