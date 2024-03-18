@@ -681,6 +681,17 @@ Poniżej wymieniamy przykładowe zastosowania zaprojektowanego układu:
   \item Innym zastosowaniem układów z rodziny transkoderów - lecz nie koniecznie tego konkretnego - może być 
       przekształcenie kodu jakiegoś błędu reprezentowanego w systemie przez liczby 0-15 na jakiś inny kod błędu, 
       który np. nadaje się do wyświetlenia użytkownikowi - bo mówi coś więcej o istocie problemu.
+  \item W systemach do zarządzania danymi, zwłaszcza w przypadku baz danych,
+      transkoder przekształcający liczby od 0 do 15 na pierwsze 16 liczb pierwszych może być
+      używany do tworzenia unikalnych identyfikatorów dla rekordów lub kluczy głównych.\
+      Jest to przydatne, ponieważ liczby pierwsze są unikalne i trudne do odgadnięcia,
+      co może pomóc w zabezpieczeniu danych przed próbami nieautoryzowanego dostępu lub manipulacji.
+
+  \item W systemach wizyjnych, gdzie obrazy są przetwarzane i analizowane,
+   transkoder taki może być wykorzystywany do mapowania odcieni kolorów lub innych cech obrazów na liczby pierwsze.
+    Jest to szczególnie przydatne w przypadku algorytmów kompresji obrazu,
+     gdzie zamiast bezpośrednio kodować odcienie kolorów, można przekształcać je na liczby pierwsze,
+      co może zmniejszyć złożoność obliczeniową i objętość danych.
 \end{itemize}
 \end{document}
 
