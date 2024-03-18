@@ -115,7 +115,7 @@ Układ mapuje wejście na wyjście w następujący sposób - zakładając notacj
 \begin{center}
   \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
     \hline Wejście            & 0 & 1 & 2 & 3 & 4  & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 \\ 
-    \hline Oczekiwane wyjście & 2 & 3 & 5 & 7 & 11 & 13 & 17 & 19 & 23 & 29 & 31 & 37 & 41 & 43 & 47 & 51 \\ 
+    \hline Oczekiwane wyjście & 2 & 3 & 5 & 7 & 11 & 13 & 17 & 19 & 23 & 29 & 31 & 37 & 41 & 43 & 47 & 53 \\ 
     \hline
   \end{tabular}
 \end{center}
@@ -150,7 +150,8 @@ Poniżej zapisaliśmy tabelę prawd dla projektowanego układu:
 
 
 \subsection{Tablice Karnaugh}
-Poniżej przedstawione są tabele Karnaugh których użyliśmy do zbudowania transkoderów poszczególnych bitów
+Poniżej przedstawione są tabele Karnaugh których użyliśmy do zbudowania transkoderów poszczególnych bitów.
+ W poniższym zapisie $A+B$ oznacza bramkę $OR(A,B)$, $AB$ oznacza $AND(A,B)$ i $\overline{A}$ oznacza $NOT(A)$.
 \subsubsection{Człon J}
 
 \begin{center}
@@ -280,18 +281,47 @@ Otrzymane z tablic Karnough funkcje zostały odpowiednio przekształcone tak,
 Użyliśmy rezystorów pull-down na wejściu układu, które ściągają niepodpięty sygnał do logicznego zera aby 
 zapewnić poprawne funkcjonowanie układu nawet gdy wejście nie jest podpięte w całości.
 
-Poniżej implementacje poszczególnych funkcji logicznych zgodnie z funkcjami otrzymanymi z tablic Karnaugh:
+Poniżej implementacje poszczególnych funkcji logicznych zgodnie z funkcjami otrzymanymi z tablic Karnaugh razem z przekształceniami aby używane były wyłącznie bramki NAND.
+Najczęściej używanymi przez nas przekształceniami będą:\\
+$OR(A,B) = NAND(NOT(A),NOT(B))$\\
+$AND(A,B) = NOT(NAND(A,B))$\\
+$NOT(A) = NAND(A,A)$\\
+Warto zauważyć, że w następującej sytuacji:\\ 
+$OR(AND(A,B)) = NAND(NOT(NOT(NAND(A,B))),NOT(NOT(NAND(A,B))))$\\
+Co można uprościć do poniższej formuły:\\
+$NAND(NAND(A,B),NAND(A,B))$
+
+
 \subsubsection{Transkoder J}
  \begin{figure}[H]
   \centering
   \includegraphics{schemat_J.png}
 \end{figure}
 
+\begin{center}
+  $f_{(1)} = OR(A,B,C,D) $
+\end{center}
+Po przekształceniach:
+\begin{center}
+  $ f_{(1)} = NAND(NAND(A,A),NAND(B,B),NAND(C,C),NAND(D,D))$
+\end{center}
+
+
 \subsubsection{Transkoder I}
 \begin{figure}[H]
  \centering
  \includegraphics{schemat_I.png}
 \end{figure}
+
+\begin{center}
+  $f_{(1)} = 
+    \textcolor{red}{AC\overline{D}} + 
+    \textcolor{pink}{\overline{A}CD} +
+    \textcolor{green}{\overline{ABC}} +
+    \textcolor{cyan}{\overline{ACD}} +
+    \textcolor{blue}{\overline{BCD}} +
+    \textcolor{yellow}{AB\overline{C}D} $
+\end{center}
 
 \subsubsection{Transkoder H}
 \begin{figure}[H]
@@ -321,9 +351,51 @@ Aby wyświetlać liczby dwucyfrowe w poprawny sposób zdecydowaliśmy się na za
 w którym liczba dziesiętna jest kodowana cyfra po cyfrze przez 4 bitowe liczby binarne. Pozwala to na łatwe wyświetlanie wielocyfrowych liczb.
 W programie Multisim nie udało nam się znaleźć gotowego układu z większą niż 4 bity liczbą wejść, dlatego sami go zaimplementowaliśmy. Jako, że 
 nie jest to bezpośredni cel ćwiczenia, nie rozpisywaliśmy ręcznie tablic Karnaugh - dla 6 zmiennych wejściowych jest to bardziej złożona operacja, lecz
-skorzystaliśmy z gotowego kalkulatora w internecie, aby wygenerować funkcję logiczną. Tabelę prawd wygenerowaliśmy samemu algorytmicznie, a następnie
-zaznaczyliśmy odpowiednie bity w kalkulatorze online w ten sposób otrzymując funkcje logiczne.
+skorzystaliśmy z gotowego kalkulatora w internecie (http://www.32x8.com/var6.html), aby wygenerować funkcję logiczną. Tabelę prawd wygenerowaliśmy samemu algorytmicznie, a następnie
+zaznaczyliśmy odpowiednie bity w kalkulatorze online w ten sposób otrzymując funkcje logiczne. Użyliśmy go dwukrotnie. Jeden służy do przedstawienia liczb 0-15,
+ drugi zaś do przedstawienia kolejnych liczb pierwszych. 
 \subsection{Black box}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{black_box2.png}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{black_box3.png}
+\end{figure}
+
+Wejście do układu stanowią 6 pinów ABCDEF kodujące binarnie wejściową liczbę 0-63. Stan wysoki na pinach
+stanowi logiczną jedynkę (1), a stan niski logiczne zero (0).
+\begin{center}
+  \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline Numer bitu & 5 & 4 & 3 & 2 & 1 & 0 \\ 
+    \hline Bit & A & B & C & D & E & F  \\
+    \hline Mnożnik &$2^5$ &$2^4$ & $2^3$ & $2^2$ & $2^1$ & $2^0$  \\
+    \hline
+  \end{tabular}
+\end{center}
+
+Wyjście układu stanowi 8 pinów GHIJKLMN kodujące odzielnie 2 cyfry składające się na liczbę 2 cyfrową. Tak samo jak na wejściu stan wysoki na pinach
+stanowi logiczną jedynkę (1), a stan niski logiczne zero (0). 
+\begin{center}
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline Numer bitu & 7 & 6 & 5 & 4 & 3 & 2 & 1 & 0 \\ 
+    \hline Bit & G & H & I & J & K & L & M & N \\
+    \hline Mnożnik & $2^7$ & $2^6$ & $2^5$ & $2^4$ & $2^3$ & $2^2$ & $2^1$ & $2^0$ \\
+    \hline
+  \end{tabular}
+\end{center}
+
+Układ mapuje wejście na wyjście w następujący sposób - zakładając notację binarną zapisanego mapowania.
+
+\begin{center}
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+  \hline Wejście & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & ... & 63 \\
+  \hline Oczekiwane wyjście & 0|0 & 0|1 & 0|2 & 0|3 & 0|4 & 0|5 & 0|6 & 0|7 & 0|8 & 0|9 & 1|0 & ... & 6|3 \\
+  \hline
+  \end{tabular}
+  \end{center}
+
 \subsection{Funkcje logiczne}
 \pagebreak
 \subsection{Tabela prawdy}
@@ -427,6 +499,31 @@ Aby przetestować projektowany element zestawiliśmy układ zawierający:
  \end{figure}
 
 \subsection{Analiza przebiegu}
+\begin{itemize}
+  \item{Word Generator}
+   \subitem{Generuje 4 bity wejściowe dla układu, które są następnie przesyłane do Prime Transkodera oraz do Two Digit Display Transkodera.}
+   \subitem{Generuje 6 bitów oczekiwanego wyjścia, które są zakodowanymi liczbami pierwszymi. Te bity są porównywane przez Comparator z wyjściem Prime Transkodera.}
+  \item{Prime Transkoder}
+   \subitem{Otrzymuje 4 bity wejściowe od Word Generator.}
+   \subitem{Transkoduje otrzymane bity wejściowe na liczby pierwsze zgodnie z opisaną tabelą.}
+   \subitem{Wygenerowane liczby pierwsze są przekazywane do Comparatora w celu porównania z oczekiwanym wyjściem.}
+  \item{Comperator}
+   \subitem{Porównuje wyjście z Prime Transkodera (liczby pierwsze) z zakodowanymi liczbami pierwszymi wygenerowanymi przez Word Generator.}
+   \subitem{Jeśli wyjście układu jest zgodne z oczekiwanym wyjściem, generuje sygnał informujący o poprawności działania układu.}
+
+  \item{Two Digit Display Transkoder}
+    \subitem{Pierwszy z nich otrzymuje od Word Generatora 4 bity wejściowe i transkoduje je zgodnie z opisaną tabelą, a następnie przekazuje do wyświetlaczy HEX}
+    \subitem{Drugi z nich otrzymuje od Prime Transkodera 6 bitów wejściowych i transkoduje je zgodnie z opisaną tabelą, a następnie przekazuje do wyświetlaczy HEX}
+
+  \item{Wyświetlacze HEX}
+   \subitem{Pomagają w lepszym zobrazowaniu działania układu poprzez wizualizację zadanych liczb.}
+   \pagebreak
+  \item{Logic Analyzer}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{logicAnalyzer.png}
+   \end{figure}
+\end{itemize}
 
 
 \section{Zastosowania}
