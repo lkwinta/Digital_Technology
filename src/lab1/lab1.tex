@@ -58,6 +58,9 @@
     urlcolor=black
 }
 
+\counterwithin{table}{section}
+\counterwithin{figure}{section}
+
 \title{\fontsize{30pt}{30pt}\selectfont Laboratorium 1 \\ Transkoder liczb}
 \author{\fontsize{20pt}{20pt}\selectfont Łukasz Kwinta, Kacper Kozubowski, Ida Ciepiela}
 \date{marzec 2024}
@@ -83,9 +86,10 @@
 Pierwszym krokiem w projektowaniu układu jest przedstawienie go jako tzw. "Black Box". Czyli taką czarną skrzynkę dla której 
 określamy tylko wejście i oczekiwany wynik działania dla danego wejścia ale nie wgłębiamy się w implementację.
 
-\begin{figure}[H]
+\begin{figure}[H] 
   \centering
   \includegraphics{black_box.png}
+  \captionof{figure}{Czarna skrzynka transkodera}
 \end{figure}
 
 Wejście do układu stanowią 4 piny ABCD kodujące binarnie wejściową liczbę 0-15. Stan wysoki na pinach
@@ -97,6 +101,7 @@ stanowi logiczną jedynkę (1), a stan niski logiczne zero (0).
     \hline Mnożnik & $2^3$ & $2^2$ & $2^1$ & $2^0$  \\
     \hline
   \end{tabular}
+  \captionof{table}{Kodowanie pinów ABCD} 
 \end{center}
 
 Wyjście układu stanowi 6 pinów EFGHIJ kodujące pierwsze 16 liczb pierwszych. Tak samo jak na wejściu stan wysoki na pinach
@@ -108,6 +113,7 @@ stanowi logiczną jedynkę (1), a stan niski logiczne zero (0).
     \hline Mnożnik & $2^5$ & $2^4$ & $2^3$ & $2^2$ & $2^1$ & $2^0$ \\
     \hline
   \end{tabular}
+  \captionof{table}{Kodowanie pinów EFGHIJ} 
 \end{center}
 
 Układ mapuje wejście na wyjście w następujący sposób - zakładając notację binarną zapisanego mapowania.
@@ -118,6 +124,7 @@ Układ mapuje wejście na wyjście w następujący sposób - zakładając notacj
     \hline Oczekiwane wyjście & 2 & 3 & 5 & 7 & 11 & 13 & 17 & 19 & 23 & 29 & 31 & 37 & 41 & 43 & 47 & 53 \\ 
     \hline
   \end{tabular}
+  \captionof{table}{mapowanie wejścia na wyjście} 
 \end{center}
 
 \subsection{Tabela prawdy}
@@ -146,6 +153,7 @@ Poniżej zapisaliśmy tabelę prawd dla projektowanego układu:
 
   \hline 
   \end{tabular}
+  \captionof{table}{Tabela prawdy dla układu} 
 \end{center}
 
 
@@ -162,6 +170,7 @@ Poniżej przedstawione są tabele Karnaugh których użyliśmy do zbudowania tra
     \implicant{4}{14}
     \implicant{12}{10}
   \end{karnaugh-map}
+  \captionof{table}{Tabela Karnaugh dla członu J} 
 \end{center}
 
 \begin{center}
@@ -181,6 +190,7 @@ Poniżej przedstawione są tabele Karnaugh których użyliśmy do zbudowania tra
     \implicantedge{0}{0}{8}{8}
     \implicant{3}{7}
   \end{karnaugh-map}
+  \captionof{table}{Tabela Karnaugh dla członu I} 
 \end{center}
 
 \begin{center}
@@ -202,6 +212,7 @@ Poniżej przedstawione są tabele Karnaugh których użyliśmy do zbudowania tra
     \implicant{5}{5}
     \implicant{8}{10}
   \end{karnaugh-map}
+  \captionof{table}{Tabela Karnaugh dla członu H} 
 \end{center}
 
 
@@ -222,6 +233,7 @@ Poniżej przedstawione są tabele Karnaugh których użyliśmy do zbudowania tra
     \implicant{4}{13}
     \implicant{13}{9}
   \end{karnaugh-map}
+  \captionof{table}{Tabela Karnaugh dla członu G} 
 \end{center}
 
 \begin{center}
@@ -241,6 +253,7 @@ Poniżej przedstawione są tabele Karnaugh których użyliśmy do zbudowania tra
     \implicant{7}{6}
     \implicant{7}{15}
   \end{karnaugh-map}
+  \captionof{table}{Tabela Karnaugh dla członu F} 
 \end{center}
 
 \begin{center}
@@ -259,6 +272,7 @@ Poniżej przedstawione są tabele Karnaugh których użyliśmy do zbudowania tra
     \implicant{12}{14}
     \implicant{15}{11}
   \end{karnaugh-map}
+  \captionof{table}{Tabela Karnaugh dla członu E} 
 \end{center}
 
   \begin{center}
@@ -276,6 +290,7 @@ Otrzymane z tablic Karnough funkcje zostały odpowiednio przekształcone tak,
   \centering
   \includegraphics[width=\textwidth]{prime_transkoder.png}
   \label{Podschemat najwyższego rzędu, gromadzący w sobie podschematy właściwych funkcji logicznych}
+  \captionof{figure}{Podschemat najwyższego rzędu, gromadzący w sobie podschematy właściwych funkcji logicznych} 
 \end{figure}
 
 Użyliśmy rezystorów pull-down na wejściu układu, które ściągają niepodpięty sygnał do logicznego zera aby 
@@ -296,6 +311,7 @@ $NAND(NAND(A,B),NAND(A,B))$
  \begin{figure}[H]
   \centering
   \includegraphics{schemat_J.png}
+  \captionof{figure}{Podschemat funkcji logicznej dla członu J} 
 \end{figure}
 
 
@@ -303,6 +319,7 @@ $NAND(NAND(A,B),NAND(A,B))$
 \begin{figure}[H]
  \centering
  \includegraphics{schemat_I.png}
+ \captionof{figure}{Podschemat funkcji logicznej dla członu I} 
 \end{figure}
 
 
@@ -310,24 +327,28 @@ $NAND(NAND(A,B),NAND(A,B))$
 \begin{figure}[H]
  \centering
  \includegraphics{schemat_H.png}
+ \captionof{figure}{Podschemat funkcji logicznej dla członu H} 
 \end{figure}
 
 \subsubsection{Transkoder G}
 \begin{figure}[H]
  \centering
  \includegraphics{schemat_G.png}
+ \captionof{figure}{Podschemat funkcji logicznej dla członu G} 
 \end{figure}
 
 \subsubsection{Transkoder F}
 \begin{figure}[H]
  \centering
  \includegraphics{schemat_F.png}
+ \captionof{figure}{Podschemat funkcji logicznej dla członu F} 
 \end{figure}
 
 \subsubsection{Transkoder E}
 \begin{figure}[H]
  \centering
  \includegraphics{schemat_E.png}
+ \captionof{figure}{Podschemat funkcji logicznej dla członu E} 
 \end{figure}
 \section{Enkoder BCD}
 Aby wyświetlać liczby dwucyfrowe w poprawny sposób zdecydowaliśmy się na zaimplementowanie enkodera BCD (Binary Coded Decimal). Jest to format
@@ -341,10 +362,12 @@ zaznaczyliśmy odpowiednie bity w kalkulatorze online w ten sposób otrzymując 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{black_box2.png}
+  \captionof{figure}{Czarna skrzynka enkodera BCD dla wejścia} 
 \end{figure}
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{black_box3.png}
+  \captionof{figure}{Czarna skrzynka enkodera BCD dla wyjścia} 
 \end{figure}
 
 Wejście do układu stanowią 6 pinów ABCDEF kodujące binarnie wejściową liczbę 0-63. Stan wysoki na pinach
@@ -356,6 +379,7 @@ stanowi logiczną jedynkę (1), a stan niski logiczne zero (0).
     \hline Mnożnik &$2^5$ &$2^4$ & $2^3$ & $2^2$ & $2^1$ & $2^0$  \\
     \hline
   \end{tabular}
+  \captionof{table}{Kodowanie pinów ABCDEF} 
 \end{center}
 
 Wyjście układu stanowi 8 pinów GHIJKLMN kodujące odzielnie 2 cyfry składające się na liczbę 2 cyfrową. Tak samo jak na wejściu stan wysoki na pinach
@@ -367,6 +391,7 @@ stanowi logiczną jedynkę (1), a stan niski logiczne zero (0).
     \hline Mnożnik & $2^7$ & $2^6$ & $2^5$ & $2^4$ & $2^3$ & $2^2$ & $2^1$ & $2^0$ \\
     \hline
   \end{tabular}
+  \captionof{table}{Kodowanie pinów GHIJKLMN} 
 \end{center}
 
 Układ mapuje wejście na wyjście w następujący sposób - zakładając notację binarną zapisanego mapowania.
@@ -377,9 +402,9 @@ Układ mapuje wejście na wyjście w następujący sposób - zakładając notacj
   \hline Oczekiwane wyjście & 0|0 & 0|1 & 0|2 & 0|3 & 0|4 & 0|5 & 0|6 & 0|7 & 0|8 & 0|9 & 1|0 & ... & 6|3 \\
   \hline
   \end{tabular}
+  \captionof{table}{Mapowanie wejścia na wyjście} 
   \end{center}
 
-\subsection{Funkcje logiczne}
 \pagebreak
 \subsection{Tabela prawdy}
 Poniżej zapisaliśmy tabelę prawd dla projektowanego układu:
@@ -462,9 +487,144 @@ cd.
   \hline 1 & 1 & 1 & 1 & 1 & 1 & 0   &  	1 &	1 &	0 &	0 &	0	& 1	& 1 \\
   \hline 
   \end{tabular}
+  \captionof{table}{Tabela prawdy dla układu} 
 \end{center} 
 
+% y = A'B'C'E + A'C'DE + AB'C'E' +
+%  + AC'DE' + AB'CE + ACDE + A'B'CDE' + A'BC'D'E' + A'BCD'E + ABCD'E'
+
+\subsection{Funkcje logiczne}
+\subsubsection{Funkcja M}
+\begin{center}
+  $f_{(1)} = 
+    {\overline{ABC}E} +
+    {\overline{AC}DE} + 
+    {A\overline{BCE}} +
+    {A\overline{C}D\overline{E}} +
+    {A\overline{B}CE} +
+    {ACDE}+
+    {\overline{AB}CD\overline{E}} +
+    {\overline{A}B\overline{CDE}} +
+    {\overline{A}BC\overline{D}E} +
+    {ABC\overline{DE}} $
+\end{center}
+
+% y = A'B'C'D + B'CDE + A'BD'E' + A'BCD' + BCD'E' + AB'DE' + AB'C'D'E + ABC'DE
+
+\subsubsection{Funkcja L}
+\begin{center}
+  $f_{(1)} = 
+  {\overline{ABC}D} + 
+  {\overline{B}CDE} +
+  {\overline{A}B\overline{DE}} +
+  {\overline{A}BC\overline{D}} +
+  {BC\overline{DE}} +
+  {A\overline{B}D\overline{E}} +
+  {A\overline{BCD}E} +
+  {AB\overline{C}DE} $
+\end{center}
+
+% y = A'B'CD'E' + A'BC'D'E + A'BCDE' + AB'C'DE + ABC'D'E' + ABCD'E
+
+\subsubsection{Funkcja K}
+\begin{center}
+  $f_{(1)} = 
+  {\overline{AB}C\overline{DE}} +
+  {\overline{A}B\overline{CD}E} +
+  {\overline{A}BCD\overline{E}} +
+  {A\overline{BC}DE} +
+  {AB\overline{CDE}} +
+  {ABC\overline{D}E} $
+\end{center}
+
+% y = AB'C' + AC'E + AC'D + A'B'CE + A'B'CD + A'CDE + A'BC'D' + ABCD'
+
+\subsubsection{Funkcja J}
+\begin{center}
+  $f_{(1)} = 
+  {A\overline{BC}} +
+  {A\overline{C}E} +
+  {A\overline{C}D} +
+  {\overline{AB}CE} +
+  {\overline{AB}CD} +
+  {\overline{A}CDE} +
+  {\overline{A}B\overline{CD}} +
+  {ABC\overline{D}} $
+\end{center}
+
+% y = A'BD + A'BC + BCD + AB'C'
+
+\subsubsection{Funkcja I}
+\begin{center}
+  $f_{(1)} = 
+  {\overline{A}BD} +
+  {\overline{A}BC} +
+  {BCD} +
+  {A\overline{BC}} $
+\end{center}
+
+% y = AC + AB
+
+\subsubsection{Funkcja H}
+\begin{center}
+  $f_{(1)} = {AB} + {AB} $
+\end{center}
+
 \subsection{Implementacja}
+Tak jak poprzednio, otrzymane funkcje logiczne zostały w naszym układzie zaimplementowane wyłącznie przy użyciu bramek NAND.
+  Tutaj również wykorzystaliśmy schematy hierarchiczne, zachowując, ten sam co wcześniej, podział na czerną skrzynkę, główny podschemat i transkodery dla poszczególnych bitów.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{enkoder_bcd.png}
+  \label{Podschemat najwyższego rzędu, gromadzący w sobie podschematy właściwych funkcji logicznych}
+  \captionof{figure}{Podschemat najwyższego rzędu, gromadzący w sobie podschematy właściwych funkcji logicznych} 
+\end{figure}
+
+
+\subsubsection{Enkoder M}
+ \begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{enkoder_bcd_M.png}
+  \captionof{figure}{Podschemat funkcji logicznej dla członu M} 
+\end{figure}
+
+
+\subsubsection{Enkoder L}
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=\linewidth]{enkoder_bcd_L.png}
+ \captionof{figure}{Podschemat funkcji logicznej dla członu L} 
+\end{figure}
+
+
+\subsubsection{Enkoder K}
+\begin{figure}[H]
+ \centering
+ \includegraphics{enkoder_bcd_K.png}
+ \captionof{figure}{Podschemat funkcji logicznej dla członu K} 
+\end{figure}
+
+\subsubsection{Enkoder J}
+\begin{figure}[H]
+ \centering
+ \includegraphics{enkoder_bcd_J.png}
+ \captionof{figure}{Podschemat funkcji logicznej dla członu J} 
+\end{figure}
+
+\subsubsection{Enkoder I}
+\begin{figure}[H]
+ \centering
+ \includegraphics{enkoder_bcd_I.png}
+ \captionof{figure}{Podschemat funkcji logicznej dla członu I} 
+\end{figure}
+
+\subsubsection{Enkoder H}
+\begin{figure}[H]
+ \centering
+ \includegraphics{enkoder_bcd_H.png}
+ \captionof{figure}{Podschemat funkcji logicznej dla członu H} 
+\end{figure}
+
 \section{Układ testowy}
 Aby przetestować projektowany element zestawiliśmy układ zawierający:
 \begin{itemize}
@@ -479,6 +639,7 @@ Aby przetestować projektowany element zestawiliśmy układ zawierający:
 \begin{figure}[H]
   \centering
   \includegraphics[width=\linewidth]{schemat.png}
+  \captionof{figure}{Schemat całego układu} 
  \end{figure}
 
 \subsection{Analiza przebiegu}
@@ -505,7 +666,8 @@ Aby przetestować projektowany element zestawiliśmy układ zawierający:
   \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{logicAnalyzer.png}
-   \end{figure}
+    \captionof{figure}{Zrzut ekranu z analizatora logicznego w trakcie działania układu} 
+  \end{figure}
 \end{itemize}
 
 
