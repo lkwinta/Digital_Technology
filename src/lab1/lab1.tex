@@ -67,11 +67,11 @@
 
 \begin{document}
 \maketitle
-\vfill
+\pagebreak
 \large
 \tableofcontents
 
-\newpage
+\pagebreak
 \section{Cel zadania}
 \Large Celem zadania było zaprojektować,
  zbudować i przetestować układ kombinacyjny realizujący transkoder czterobitowej liczby naturalnej (wraz z zerem)
@@ -126,7 +126,7 @@ Układ mapuje wejście na wyjście w następujący sposób - zakładając notacj
   \end{tabular}
   \captionof{table}{mapowanie wejścia na wyjście} 
 \end{center}
-
+\pagebreak
 \subsection{Tabela prawdy}
 Poniżej zapisaliśmy tabelę prawd dla projektowanego układu:
 
@@ -156,7 +156,7 @@ Poniżej zapisaliśmy tabelę prawd dla projektowanego układu:
   \captionof{table}{Tabela prawdy dla układu} 
 \end{center}
 
-
+\pagebreak
 \subsection{Tablice Karnaugh}
 Poniżej przedstawione są tabele Karnaugh których użyliśmy do zbudowania transkoderów poszczególnych bitów.
  W poniższym zapisie $A+B$ oznacza bramkę $OR(A,B)$, $AB$ oznacza $AND(A,B)$ i $\overline{A}$ oznacza $NOT(A)$.
@@ -278,9 +278,9 @@ Poniżej przedstawione są tabele Karnaugh których użyliśmy do zbudowania tra
   \begin{center}
   $f_{(1)} = \textcolor{red}{AB} + \textcolor{green}{ACD}$
 \end{center}
-
+\pagebreak
 \subsection{Implementacja}
-Otrzymane z tablic Karnough funkcje zostały odpowiednio przekształcone tak,
+Otrzymane z tablic Karnaugh funkcje zostały odpowiednio przekształcone tak,
  aby używały jedynie bramek NAND i następnie zostały one zaimplementowane. Zdecydowaliśmy się 
  na użycie schematów hierarchicznych - subcircuit - dla zwiększenia czytelnosci schematu. 
  Na pierwszym poziomie znajdują się same transkodery pojedynczych bitów - czarne skrzynki które otrzymują 
@@ -289,7 +289,6 @@ Otrzymane z tablic Karnough funkcje zostały odpowiednio przekształcone tak,
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{prime_transkoder.png}
-  \label{Podschemat najwyższego rzędu, gromadzący w sobie podschematy właściwych funkcji logicznych}
   \captionof{figure}{Podschemat najwyższego rzędu, gromadzący w sobie podschematy właściwych funkcji logicznych} 
 \end{figure}
 
@@ -297,14 +296,14 @@ Użyliśmy rezystorów pull-down na wejściu układu, które ściągają niepodp
 zapewnić poprawne funkcjonowanie układu nawet gdy wejście nie jest podpięte w całości.
 
 Poniżej implementacje poszczególnych funkcji logicznych zgodnie z funkcjami otrzymanymi z tablic Karnaugh razem z przekształceniami aby używane były wyłącznie bramki NAND.
-Najczęściej używanymi przez nas przekształceniami będą:\\
-$OR(A,B) = NAND(NOT(A),NOT(B))$\\
-$AND(A,B) = NOT(NAND(A,B))$\\
-$NOT(A) = NAND(A,A)$\\
-Warto zauważyć, że w następującej sytuacji:\\ 
-$OR(AND(A,B)) = NAND(NOT(NOT(NAND(A,B))),NOT(NOT(NAND(A,B))))$\\
-Co można uprościć do poniższej formuły:\\
-$NAND(NAND(A,B),NAND(A,B))$
+Najczęściej używanymi przez nas przekształceniami będą:
+$$A + B = NAND(\overline{A}, \overline{B})$$
+$$AB = \overline{NAND(A,B)}$$
+$$\overline{A} = NAND(A,A)$$
+Warto zauważyć, że w następującej sytuacji:
+$$AB + CD = NAND(\overline{AB}, \overline{CD}) = NAND(\overline{\overline{NAND(A,B)}}, \overline{\overline{NAND(C,D)}})$$
+Co można uprościć do poniższej formuły:
+$$NAND(NAND(A,B),NAND(C,D))$$
 
 
 \subsubsection{Transkoder J}
@@ -326,28 +325,28 @@ $NAND(NAND(A,B),NAND(A,B))$
 \subsubsection{Transkoder H}
 \begin{figure}[H]
  \centering
- \includegraphics{schemat_H.png}
+ \includegraphics[width=0.7\linewidth]{schemat_H.png}
  \captionof{figure}{Podschemat funkcji logicznej dla członu H} 
 \end{figure}
 
 \subsubsection{Transkoder G}
 \begin{figure}[H]
  \centering
- \includegraphics{schemat_G.png}
+ \includegraphics[width=0.7\linewidth]{schemat_G.png}
  \captionof{figure}{Podschemat funkcji logicznej dla członu G} 
 \end{figure}
 
 \subsubsection{Transkoder F}
 \begin{figure}[H]
  \centering
- \includegraphics{schemat_F.png}
+ \includegraphics[width=0.7\linewidth]{schemat_F.png}
  \captionof{figure}{Podschemat funkcji logicznej dla członu F} 
 \end{figure}
 
 \subsubsection{Transkoder E}
 \begin{figure}[H]
  \centering
- \includegraphics{schemat_E.png}
+ \includegraphics[width=0.7\linewidth]{schemat_E.png}
  \captionof{figure}{Podschemat funkcji logicznej dla członu E} 
 \end{figure}
 \section{Enkoder BCD}
@@ -355,19 +354,14 @@ Aby wyświetlać liczby dwucyfrowe w poprawny sposób zdecydowaliśmy się na za
 w którym liczba dziesiętna jest kodowana cyfra po cyfrze przez 4 bitowe liczby binarne. Pozwala to na łatwe wyświetlanie wielocyfrowych liczb.
 W programie Multisim nie udało nam się znaleźć gotowego układu z większą niż 4 bity liczbą wejść, dlatego sami go zaimplementowaliśmy. Jako, że 
 nie jest to bezpośredni cel ćwiczenia, nie rozpisywaliśmy ręcznie tablic Karnaugh - dla 6 zmiennych wejściowych jest to bardziej złożona operacja, lecz
-skorzystaliśmy z gotowego kalkulatora w internecie (http://www.32x8.com/var6.html), aby wygenerować funkcję logiczną. Tabelę prawd wygenerowaliśmy samemu algorytmicznie, a następnie
+skorzystaliśmy z gotowego kalkulatora w internecie (\url{http://www.32x8.com/var6.html}), aby wygenerować funkcję logiczną. Tabelę prawd wygenerowaliśmy samemu algorytmicznie, a następnie
 zaznaczyliśmy odpowiednie bity w kalkulatorze online w ten sposób otrzymując funkcje logiczne. Użyliśmy go dwukrotnie. Jeden służy do przedstawienia liczb 0-15,
  drugi zaś do przedstawienia kolejnych liczb pierwszych. 
 \subsection{Black box}
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{black_box2.png}
+  \includegraphics[width=0.9\textwidth]{black_box2.png}
   \captionof{figure}{Czarna skrzynka enkodera BCD dla wejścia} 
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=\textwidth]{black_box3.png}
-  \captionof{figure}{Czarna skrzynka enkodera BCD dla wyjścia} 
 \end{figure}
 
 Wejście do układu stanowią 6 pinów ABCDEF kodujące binarnie wejściową liczbę 0-63. Stan wysoki na pinach
@@ -494,6 +488,11 @@ cd.
 %  + AC'DE' + AB'CE + ACDE + A'B'CDE' + A'BC'D'E' + A'BCD'E + ABCD'E'
 
 \subsection{Funkcje logiczne}
+\subsubsection{Funkcja N}
+\begin{center}
+  $f_{(1)} = F $
+\end{center}
+
 \subsubsection{Funkcja M}
 \begin{center}
   $f_{(1)} = 
@@ -528,7 +527,7 @@ cd.
 
 \subsubsection{Funkcja K}
 \begin{center}
-  $f_{(1)} = 
+  $f_{(1)} =
   {\overline{AB}C\overline{DE}} +
   {\overline{A}B\overline{CD}E} +
   {\overline{A}BCD\overline{E}} +
@@ -570,13 +569,19 @@ cd.
   $f_{(1)} = {AB} + {AB} $
 \end{center}
 
+\subsubsection{Funkcja G}
+\begin{center}
+  $f_{(1)} = 0 $
+\end{center}
+
 \subsection{Implementacja}
 Tak jak poprzednio, otrzymane funkcje logiczne zostały w naszym układzie zaimplementowane wyłącznie przy użyciu bramek NAND.
   Tutaj również wykorzystaliśmy schematy hierarchiczne, zachowując, ten sam co wcześniej, podział na czerną skrzynkę, główny podschemat i transkodery dla poszczególnych bitów.
+  Również tutaj zastosowaliśmy rezystory pull-down do ściągania wejść do logicznego '0' aby możliwe było korzystanie z układu 
+  przy nie pełnej liczbie wejść.
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{enkoder_bcd.png}
-  \label{Podschemat najwyższego rzędu, gromadzący w sobie podschematy właściwych funkcji logicznych}
   \captionof{figure}{Podschemat najwyższego rzędu, gromadzący w sobie podschematy właściwych funkcji logicznych} 
 \end{figure}
 
@@ -670,6 +675,13 @@ Aby przetestować projektowany element zestawiliśmy układ zawierający:
   \end{figure}
 \end{itemize}
 
+Na Analizatorze widać 4 linie wejścia oznaczone A, B, C, D oraz 6 linii wyjścia układu oznaczone jako HB2\_I\_F (bit J), SC4\_I\_I (bit I), HB2\_I\_D (bit H), HB2\_I\_C (bit G), SC4\_I\_F (bit F), SC4\_I\_E (bit E). Dodatkow jako przebieg
+z etykietą "82", wyświetliliśmy wyjście z komparatora - sygnał ~AeqB - dający stan wysoki gdy strona A i B komparatora są różne i sygnał niski
+gdy obie strony są równe.\\
+\\
+Jak widać na przebiegu sygnał z komparatora jest cały czas niski czyli zachodzi zgodność wyjścia z oczekiwanym wyjściem. Dla potwierdzenia działania układu
+można odczytać stany poszczególnych wyjść w czasie wzdłuż zaznaczonych przez nas pionowych linii.
+
 
 \section{Zastosowania}
 Poniżej wymieniamy przykładowe zastosowania zaprojektowanego układu:
@@ -693,6 +705,26 @@ Poniżej wymieniamy przykładowe zastosowania zaprojektowanego układu:
      gdzie zamiast bezpośrednio kodować odcienie kolorów, można przekształcać je na liczby pierwsze,
       co może zmniejszyć złożoność obliczeniową i objętość danych.
 \end{itemize}
+\pagebreak
+
+\section{Wnioski}
+Dzięki ćwiczeniu mogliśmy się przekonać o łatwości z jaką bramki NAND mogą zastąpić funkcje logiczne. Jest to 
+ważna cecha tych, że bramek gdyż jest je stosunkowo łatwiej wytworzyć sprzętowo niż klasyczne bramki AND i OR. 
+Istotną cechą bramek NAND jest to, że stanowią one system funkcjonalnie pełny - można przez nimi zapisać wszystkie
+Boolowskie funkcje logiczne.
+
+Dowód - stosujemy uproszczoną notację $NAND(A, B) \equiv A \uparrow B$:
+\begin{itemize}
+  \item $\lnot A \equiv A \uparrow A$
+  \item $A \land B \equiv \lnot (A \uparrow B) \equiv (A \uparrow B) \uparrow (A \uparrow B)$
+  \item $A \lor B \equiv \lnot (\lnot A \land \lnot B) \equiv (A \uparrow A) \uparrow (B \uparrow B)$ 
+\end{itemize}
+
+Kolejnym nasuwającym się wnioskiem jest to, że korzystając z tablic Karnaugh byliśmy w stanie w łatwy i relatywnie szybki
+sposób stworzyć formuły logiczne zapewniające poprawne funkcjonowanie układu minimalnym kosztem ilości bramek logicznych. 
+Jest to stosunkowo proste narzędzie nawet dla bardzo skomplikowanych układów. Tak naprawdę nie ogranicza nas liczba wyjść układu, 
+lecz liczba jego wejść. Dla układu z 4 bitami wejścia, zadanie było stosunkowo proste i wymagało głównie staranności, lecz tablice
+dla układu z 6 wejściami było to już dosyć skomplikowane i musieliśmy posłużyć się gotowym narzędziem.
 \end{document}
 
 
