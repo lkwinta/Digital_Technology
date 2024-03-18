@@ -29,6 +29,8 @@
 \usepackage{xcolor,colortbl}
 \usepackage{animate}
 
+\usepackage{karnaugh-map}
+
 \sectionfont{\normalfont\huge\sectionrule{0pt}{0pt}{-6pt}{1pt}}
 \subsectionfont{\normalfont\LARGE}
 \subsubsectionfont{\normalfont\Large}
@@ -62,6 +64,10 @@
 
 \begin{document}
 \maketitle
+\vfill
+\large
+\tableofcontents
+
 \newpage
 \section{Cel zadania}
 \Large Celem zadania było zaprojektować,
@@ -146,176 +152,281 @@ Poniżej zapisaliśmy tabelę prawd dla projektowanego układu:
 \subsection{Tablice Karnaugh}
 Poniżej przedstawione są tabele Karnaugh których użyliśmy do zbudowania transkoderów poszczególnych bitów
 \subsubsection{Człon J}
+
 \begin{center}
-\begin{tabular}{|l|l|l|l|l|}
-  \hline
-  AB\textbackslash{}CD & 00 & 01 & 11 & 10 \\ \hline
-  00                   & 0  & 1  & 1  & 1  \\ \hline
-  01                   & 1  & 1  & 1  & 1  \\ \hline
-  11                   & 1  & 1  & 1  & 1  \\ \hline
-  10                   & 1  & 1  & 1  & 1  \\ \hline
-  \end{tabular}  \\
-\end{center}
-\begin{center}
-  $f_{(1)} =A+C+D+B $
+  \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \manualterms{0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+    \implicant{1}{11}
+    \implicant{3}{10}
+    \implicant{4}{14}
+    \implicant{12}{10}
+  \end{karnaugh-map}
 \end{center}
 
-\begin{figure}[H]
- \centering
- \includegraphics{tab_J.png}
-\end{figure}
+\begin{center}
+  $f_{(1)} = \textcolor{cyan}{A}+\textcolor{green}{C}+\textcolor{red}{D}+ \textcolor{yellow}{B} $
+\end{center}
 
 
 \subsubsection{Człon I}
+
 \begin{center}
-\begin{tabular}{|l|l|l|l|l|}
-  \hline
-  AB\textbackslash{}CD & 00 & 01 & 11 & 10 \\ \hline
-  00                   & 1  & 1  & 1  & 0  \\ \hline
-  01                   & 1  & 0  & 1  & 0  \\ \hline
-  11                   & 0  & 1  & 0  & 1  \\ \hline
-  10                   & 1  & 0  & 0  & 1  \\ \hline
-  \end{tabular}  \\
-\end{center}
-\begin{center}
-  $f_{(1)} = AC\overline{D} + \overline{A}CD+\overline{ABC}+\overline{ACD}+\overline{BCD}+AB\overline{C}D $
+  \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \manualterms{1,1,0,1,1,0,0,1,1,0,1,0,0,1,1,0}
+    \implicant{14}{10}
+    \implicant{0}{1}
+    \implicant{13}{13}
+    \implicant{0}{4}
+    \implicantedge{0}{0}{8}{8}
+    \implicant{3}{7}
+  \end{karnaugh-map}
 \end{center}
 
-\begin{figure}[H]
-  \centering
-  \includegraphics{tab_I.png}
- \end{figure}
+\begin{center}
+  $f_{(1)} = 
+    \textcolor{red}{AC\overline{D}} + 
+    \textcolor{pink}{\overline{A}CD} +
+    \textcolor{green}{\overline{ABC}} +
+    \textcolor{cyan}{\overline{ACD}} +
+    \textcolor{blue}{\overline{BCD}} +
+    \textcolor{yellow}{AB\overline{C}D} $
+\end{center}
 
 \subsubsection{Człon H}
 \begin{center}
-\begin{tabular}{|l|l|l|l|l|}
-  \hline
-  AB\textbackslash{}CD & 00 & 01 & 11 & 10 \\ \hline
-  00                   & 0  & 0  & 1  & 1  \\ \hline
-  01                   & 0  & 1  & 0  & 0  \\ \hline
-  11                   & 0  & 0  & 1  & 1  \\ \hline
-  10                   & 1  & 1  & 1  & 1  \\ \hline
-  \end{tabular}
-  \\
+  \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \manualterms{0,0,1,1,0,1,0,0,1,1,1,1,0,0,1,1}
+    \implicantedge{3}{2}{11}{10}
+    \implicant{15}{10}
+    \implicant{5}{5}
+    \implicant{8}{10}
+  \end{karnaugh-map}
 \end{center}
+
+
 \begin{center}
-  $f_{(1)} = A\overline{B} + AC+\overline{B}C+\overline{A}B\overline{C}D $
+  $f_{(1)} = 
+    \textcolor{cyan}{A\overline{B}} + 
+    \textcolor{green}{AC}+
+    \textcolor{red}{\overline{B}C}+
+    \textcolor{yellow}{\overline{A}B\overline{C}D} $
 \end{center}
-\begin{figure}[H]
-  \centering
-  \includegraphics{tab_H.png}
- \end{figure}
 
 \subsubsection{Człon G}
+
 \begin{center}
-\begin{tabular}{|l|l|l|l|l|}
-  \hline
-  AB\textbackslash{}CD & 00 & 01 & 11 & 10 \\ \hline
-  00                   & 0  & 0  & 0  & 0  \\ \hline
-  01                   & 1  & 1  & 0  & 0  \\ \hline
-  11                   & 1  & 1  & 0  & 1  \\ \hline
-  10                   & 0  & 1  & 0  & 1  \\ \hline
-  \end{tabular}\\
-\end{center}
-\begin{center}
-  $f_{(1)} = B\overline{C} + AC\overline{D}+A\overline{C}D $
+  \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \manualterms{0,0,0,0,1,1,0,0,0,1,1,0,1,1,1,0}
+    \implicant{14}{10}
+    \implicant{4}{13}
+    \implicant{13}{9}
+  \end{karnaugh-map}
 \end{center}
 
-\begin{figure}[H]
-  \centering
-  \includegraphics{tab_G.png}
- \end{figure}
+\begin{center}
+  $f_{(1)} = 
+    \textcolor{green}{B\overline{C}} + 
+    \textcolor{red}{AC\overline{D}}+
+    \textcolor{yellow}{A\overline{C}D} $
+\end{center}
 
 \subsubsection{Człon F}
+
 \begin{center}
-\begin{tabular}{|l|l|l|l|l|}
-  \hline
-  AB\textbackslash{}CD & 00 & 01 & 11 & 10 \\ \hline
-  00                   & 0  & 0  & 0  & 0  \\ \hline
-  01                   & 0  & 0  & 1  & 1  \\ \hline
-  11                   & 0  & 0  & 1  & 0  \\ \hline
-  10                   & 1  & 1  & 0  & 1  \\ \hline
-  \end{tabular}\\
-\end{center}
-\begin{center}
-  $f_{(1)} = A\overline{BD} + A\overline{BC}+\overline{A}BC+BCD $
+  \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \manualterms{0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,1}
+    \implicantedge{8}{8}{10}{10}
+    \implicant{8}{9}
+    \implicant{7}{6}
+    \implicant{7}{15}
+  \end{karnaugh-map}
 \end{center}
 
-\begin{figure}[H]
-  \centering
-  \includegraphics{tab_F.png}
- \end{figure}
-
+\begin{center}
+  $f_{(1)} = 
+    \textcolor{red}{A\overline{BD}} +
+    \textcolor{green}{A\overline{BC}} +
+    \textcolor{yellow}{\overline{A}BC} +
+    \textcolor{cyan}{BCD} $
+\end{center}
 
 \subsubsection{Człon E}
+
 \begin{center}
-\begin{tabular}{|l|l|l|l|l|}
-  \hline
-  AB\textbackslash{}CD & 00 & 01 & 11 & 10 \\ \hline
-  00                   & 0  & 0  & 0  & 0  \\ \hline
-  01                   & 0  & 0  & 0  & 0  \\ \hline
-  11                   & 1  & 1  & 1  & 1  \\ \hline
-  10                   & 0  & 0  & 1  & 0  \\ \hline
-  \end{tabular}
-\end{center}
-  \begin{center}
-  $f_{(1)} = AB + ACD$
+  \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \manualterms{0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1}
+    \implicant{12}{14}
+    \implicant{15}{11}
+  \end{karnaugh-map}
 \end{center}
 
-\begin{figure}[H]
-  \centering
-  \includegraphics{tab_E.png}
- \end{figure}
+  \begin{center}
+  $f_{(1)} = \textcolor{red}{AB} + \textcolor{green}{ACD}$
+\end{center}
 
 \subsection{Implementacja}
 Otrzymane z tablic Karnough funkcje zostały odpowiednio przekształcone tak,
- aby używały jedynie bramek NAND i następnie zostały one zaimplementowane.
- \subsubsection{transkoder J}
+ aby używały jedynie bramek NAND i następnie zostały one zaimplementowane. Zdecydowaliśmy się 
+ na użycie schematów hierarchicznych - subcircuit - dla zwiększenia czytelnosci schematu. 
+ Na pierwszym poziomie znajdują się same transkodery pojedynczych bitów - czarne skrzynki które otrzymują 
+ całe wejście, a w wyniku dają konkretny bit wyjścia, innymi słowy każda funkcja logiczna została zaimplementowana
+ na oddzielnym schemacie, a następnie zgromadziliśmy je w jeden podschemat stanowiący cały projektowany układ "Prime transkoder"
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{prime_transkoder.png}
+  \label{Podschemat najwyższego rzędu, gromadzący w sobie podschematy właściwych funkcji logicznych}
+\end{figure}
+
+Użyliśmy rezystorów pull-down na wejściu układu, które ściągają niepodpięty sygnał do logicznego zera aby 
+zapewnić poprawne funkcjonowanie układu nawet gdy wejście nie jest podpięte w całości.
+
+Poniżej implementacje poszczególnych funkcji logicznych zgodnie z funkcjami otrzymanymi z tablic Karnaugh:
+\subsubsection{Transkoder J}
  \begin{figure}[H]
   \centering
   \includegraphics{schemat_J.png}
 \end{figure}
 
-\subsubsection{transkoder I}
+\subsubsection{Transkoder I}
 \begin{figure}[H]
  \centering
  \includegraphics{schemat_I.png}
 \end{figure}
 
-\subsubsection{transkoder M}
+\subsubsection{Transkoder H}
 \begin{figure}[H]
  \centering
  \includegraphics{schemat_H.png}
 \end{figure}
 
-\subsubsection{transkoder G}
+\subsubsection{Transkoder G}
 \begin{figure}[H]
  \centering
  \includegraphics{schemat_G.png}
 \end{figure}
 
-\subsubsection{transkoder F}
+\subsubsection{Transkoder F}
 \begin{figure}[H]
  \centering
  \includegraphics{schemat_F.png}
 \end{figure}
 
-\subsubsection{transkoder E}
+\subsubsection{Transkoder E}
 \begin{figure}[H]
  \centering
  \includegraphics{schemat_E.png}
 \end{figure}
+\section{Enkoder BCD}
+Aby wyświetlać liczby dwucyfrowe w poprawny sposób zdecydowaliśmy się na zaimplementowanie enkodera BCD (Binary Coded Decimal). Jest to format
+w którym liczba dziesiętna jest kodowana cyfra po cyfrze przez 4 bitowe liczby binarne. Pozwala to na łatwe wyświetlanie wielocyfrowych liczb.
+W programie Multisim nie udało nam się znaleźć gotowego układu z większą niż 4 bity liczbą wejść, dlatego sami go zaimplementowaliśmy. Jako, że 
+nie jest to bezpośredni cel ćwiczenia, nie rozpisywaliśmy ręcznie tablic Karnaugh - dla 6 zmiennych wejściowych jest to bardziej złożona operacja, lecz
+skorzystaliśmy z gotowego kalkulatora w internecie, aby wygenerować funkcję logiczną. Tabelę prawd wygenerowaliśmy samemu algorytmicznie, a następnie
+zaznaczyliśmy odpowiednie bity w kalkulatorze online w ten sposób otrzymując funkcje logiczne.
+\subsection{Black box}
+\subsection{Funkcje logiczne}
+\pagebreak
+\subsection{Tabela prawdy}
+Poniżej zapisaliśmy tabelę prawd dla projektowanego układu:
+\begin{center}
+  \begin{tabular}{|c|c|c|c|c|c||c|c|c|c|c|c|c|c|}
+  \hline \multicolumn{6}{|c||}{Wejście} & \multicolumn{8}{|c|}{Wyjście} \\
+  \hline A & B & C & D & E & F & G   &    H & I & J & K & L & M & N \\
+  \hline 0 & 0 & 0 & 0 & 0 & 0 & 0   &  	0 &	0 &	0 &	0 &	0	& 0	& 0 \\
+  \hline 0 & 0 & 0 & 0 & 0 & 1 & 0   &  	0 &	0 &	0 &	0 &	0	& 0	& 1 \\
+  \hline 0 & 0 & 0 & 0 & 1 & 0 & 0   &  	0 &	0 &	0 &	0 &	0	& 1	& 0 \\
+  \hline 0 & 0 & 0 & 0 & 1 & 1 & 0   &  	0 &	0 &	0 &	0 &	0	& 1	& 1 \\
+  \hline 0 & 0 & 0 & 1 & 0 & 0 & 0   &  	0 &	0 &	0 &	0 &	1	& 0	& 0 \\
+  \hline 0 & 0 & 0 & 1 & 0 & 1 & 0   &  	0 &	0 &	0 &	0 &	1	& 0	& 1 \\
+  \hline 0 & 0 & 0 & 1 & 1 & 0 & 0   &  	0 &	0 &	0 &	0 &	1	& 1	& 0 \\
+  \hline 0 & 0 & 0 & 1 & 1 & 1 & 0   &  	0 &	0 &	0 &	0 &	1	& 1	& 1 \\
+  \hline 0 & 0 & 1 & 0 & 0 & 0 & 0   &  	0 &	0 &	0 &	1 &	0	& 0	& 0 \\
+  \hline 0 & 0 & 1 & 0 & 0 & 1 & 0   &  	0 &	0 &	0 &	1 &	0	& 0	& 1 \\
+  \hline 0 & 0 & 1 & 0 & 1 & 0 & 0   &  	0 &	0 &	1 &	0 &	0	& 0	& 0 \\
+  \hline 0 & 0 & 1 & 0 & 1 & 1 & 0   &  	0 &	0 &	1 &	0 &	0	& 0	& 1 \\
+  \hline 0 & 0 & 1 & 1 & 0 & 0 & 0   &  	0 &	0 &	1 &	0 &	0	& 1	& 0 \\
+  \hline 0 & 0 & 1 & 1 & 0 & 1 & 0   &  	0 &	0 &	1 &	0 &	0	& 1	& 1 \\
+  \hline 0 & 0 & 1 & 1 & 1 & 0 & 0   &  	0 &	0 &	1 &	0 &	1	& 0	& 0 \\
+  \hline 0 & 0 & 1 & 1 & 1 & 1 & 0   &  	0 &	0 &	1 &	0 &	1	& 0	& 1 \\
+  \hline 0 & 1 & 0 & 0 & 0 & 0 & 0   &  	0 &	0 &	1 &	0 &	1	& 1	& 0 \\
+  \hline 0 & 1 & 0 & 0 & 0 & 1 & 0   &  	0 &	0 &	1 &	0 &	1	& 1	& 1 \\
+  \hline 0 & 1 & 0 & 0 & 1 & 0 & 0   &  	0 &	0 &	1 &	1 &	0	& 0	& 0 \\
+  \hline 0 & 1 & 0 & 0 & 1 & 1 & 0   &  	0 &	0 &	1 &	1 &	0	& 0	& 1 \\
+  \hline 0 & 1 & 0 & 1 & 0 & 0 & 0   &  	0 &	1 &	0 &	0 &	0	& 0	& 0 \\
+  \hline 0 & 1 & 0 & 1 & 0 & 1 & 0   &  	0 &	1 &	0 &	0 &	0	& 0	& 1 \\
+  \hline 0 & 1 & 0 & 1 & 1 & 0 & 0   &  	0 &	1 &	0 &	0 &	0	& 1	& 0 \\
+  \hline 0 & 1 & 0 & 1 & 1 & 1 & 0   &  	0 &	1 &	0 &	0 &	0	& 1	& 1 \\
+  \hline 0 & 1 & 1 & 0 & 0 & 0 & 0   &  	0 &	1 &	0 &	0 &	1	& 0	& 0 \\
+  \hline 0 & 1 & 1 & 0 & 0 & 1 & 0   &  	0 &	1 &	0 &	0 &	1	& 0	& 1 \\
+  \hline 0 & 1 & 1 & 0 & 1 & 0 & 0   &  	0 &	1 &	0 &	0 &	1	& 1	& 0 \\
+  \hline 0 & 1 & 1 & 0 & 1 & 1 & 0   &  	0 &	1 &	0 &	0 &	1	& 1	& 1 \\
+  \hline 0 & 1 & 1 & 1 & 0 & 0 & 0   &  	0 &	1 &	0 &	1 &	0	& 0	& 0 \\
+  \hline 0 & 1 & 1 & 1 & 0 & 1 & 0   &  	0 &	1 &	0 &	1 &	0	& 0	& 1 \\
+  \hline 0 & 1 & 1 & 1 & 1 & 0 & 0   &  	0 &	1 &	1 &	0 &	0	& 0	& 0 \\
+  \hline 0 & 1 & 1 & 1 & 1 & 1 & 0   &  	0 &	1 &	1 &	0 &	0	& 0	& 1 \\
+  \hline
+  \end{tabular}
+\end{center} 
+\pagebreak
+cd.
+\begin{center}
+  \begin{tabular}{|c|c|c|c|c|c||c|c|c|c|c|c|c|c|}
+  \hline \multicolumn{6}{|c||}{Wejście} & \multicolumn{8}{|c|}{Wyjście} \\
+  \hline A & B & C & D & E & F & G   &    H & I & J & K & L & M & N \\
+  \hline 1 & 0 & 0 & 0 & 0 & 0 & 0   &  	0 &	1 &	1 &	0 &	0	& 1	& 0 \\
+  \hline 1 & 0 & 0 & 0 & 0 & 1 & 0   &  	0 &	1 &	1 &	0 &	0	& 1	& 1 \\
+  \hline 1 & 0 & 0 & 0 & 1 & 0 & 0   &  	0 &	1 &	1 &	0 &	1	& 0	& 0 \\
+  \hline 1 & 0 & 0 & 0 & 1 & 1 & 0   &  	0 &	1 &	1 &	0 &	1	& 0	& 1 \\
+  \hline 1 & 0 & 0 & 1 & 0 & 0 & 0   &  	0 &	1 &	1 &	0 &	1	& 1	& 0 \\
+  \hline 1 & 0 & 0 & 1 & 0 & 1 & 0   &  	0 &	1 &	1 &	0 &	1	& 1	& 1 \\
+  \hline 1 & 0 & 0 & 1 & 1 & 0 & 0   &  	0 &	1 &	1 &	1 &	0	& 0	& 0 \\
+  \hline 1 & 0 & 0 & 1 & 1 & 1 & 0   &  	0 &	1 &	1 &	1 &	0	& 0	& 1 \\
+  \hline 1 & 0 & 1 & 0 & 0 & 0 & 0   &  	1 &	0 &	0 &	0 &	0	& 0	& 0 \\
+  \hline 1 & 0 & 1 & 0 & 0 & 1 & 0   &  	1 &	0 &	0 &	0 &	0	& 0	& 1 \\
+  \hline 1 & 0 & 1 & 0 & 1 & 0 & 0   &  	1 &	0 &	0 &	0 &	0	& 1	& 0 \\
+  \hline 1 & 0 & 1 & 0 & 1 & 1 & 0   &  	1 &	0 &	0 &	0 &	0	& 1	& 1 \\
+  \hline 1 & 0 & 1 & 1 & 0 & 0 & 0   &  	1 &	0 &	0 &	0 &	1	& 0	& 0 \\
+  \hline 1 & 0 & 1 & 1 & 0 & 1 & 0   &  	1 &	0 &	0 &	0 &	1	& 0	& 1 \\
+  \hline 1 & 0 & 1 & 1 & 1 & 0 & 0   &  	1 &	0 &	0 &	0 &	1	& 1	& 0 \\
+  \hline 1 & 0 & 1 & 1 & 1 & 1 & 0   &  	1 &	0 &	0 &	0 &	1	& 1	& 1 \\
+  \hline 1 & 1 & 0 & 0 & 0 & 0 & 0   &  	1 &	0 &	0 &	1 &	0	& 0	& 0 \\
+  \hline 1 & 1 & 0 & 0 & 0 & 1 & 0   &  	1 &	0 &	0 &	1 &	0	& 0	& 1 \\
+  \hline 1 & 1 & 0 & 0 & 1 & 0 & 0   &  	1 &	0 &	1 &	0 &	0	& 0	& 0 \\
+  \hline 1 & 1 & 0 & 0 & 1 & 1 & 0   &  	1 &	0 &	1 &	0 &	0	& 0	& 1 \\
+  \hline 1 & 1 & 0 & 1 & 0 & 0 & 0   &  	1 &	0 &	1 &	0 &	0	& 1	& 0 \\
+  \hline 1 & 1 & 0 & 1 & 0 & 1 & 0   &  	1 &	0 &	1 &	0 &	0	& 1	& 1 \\
+  \hline 1 & 1 & 0 & 1 & 1 & 0 & 0   &  	1 &	0 &	1 &	0 &	1	& 0	& 0 \\
+  \hline 1 & 1 & 0 & 1 & 1 & 1 & 0   &  	1 &	0 &	1 &	0 &	1	& 0	& 1 \\
+  \hline 1 & 1 & 1 & 0 & 0 & 0 & 0   &  	1 &	0 &	1 &	0 &	1	& 1	& 0 \\
+  \hline 1 & 1 & 1 & 0 & 0 & 1 & 0   &  	1 &	0 &	1 &	0 &	1	& 1	& 1 \\
+  \hline 1 & 1 & 1 & 0 & 1 & 0 & 0   &  	1 &	0 &	1 &	1 &	0	& 0	& 0 \\
+  \hline 1 & 1 & 1 & 0 & 1 & 1 & 0   &  	1 &	0 &	1 &	1 &	0	& 0	& 1 \\
+  \hline 1 & 1 & 1 & 1 & 0 & 0 & 0   &  	1 &	1 &	0 &	0 &	0	& 0	& 0 \\
+  \hline 1 & 1 & 1 & 1 & 0 & 1 & 0   &  	1 &	1 &	0 &	0 &	0	& 0	& 1 \\
+  \hline 1 & 1 & 1 & 1 & 1 & 0 & 0   &  	1 &	1 &	0 &	0 &	0	& 1	& 0 \\
+  \hline 1 & 1 & 1 & 1 & 1 & 1 & 0   &  	1 &	1 &	0 &	0 &	0	& 1	& 1 \\
+  \hline 
+  \end{tabular}
+\end{center} 
 
-Ostatecznie układ prezentuje się w następujący sposób:
+\subsection{Implementacja}
+\section{Układ testowy}
+Aby przetestować projektowany element zestawiliśmy układ zawierający:
+\begin{itemize}
+  \item Word Generator - generuje 4 bity wejściowe dla naszego układu, oraz 6 bitów oczekiwanego wyjścia - zakodowane liczby pierwsze
+  \item Comparator - porównuje wyjście układu z zakodowanym wyjściem z generatora sygnałów
+  \item Logic Analyzer - pozwala na wyświetlenie przebiegów wejścia i wyjścia układu, aby sprawdzić poprawność jego działania
+  \item Wyświetlacze HEX - wyświetlacze 7 segmentowe z enkoderem pozwalające wyświetlić liczby 0-15 jako cyfry szesnastkowe
+  \item Prime transkoder - nasz zaprojektowany układ transkodujący liczby 0-15 na liczby pierwsze
+  \item two digit display transkoder - nasz autorski enkoder BCD, pozwalający lepiej zwizualizować działanie naszego układu
+\end{itemize}
+
 \begin{figure}[H]
   \centering
-  \includegraphics{schemat.png}
+  \includegraphics[width=\linewidth]{schemat.png}
  \end{figure}
 
- Oprócz przedstawionego wyżej transkodera nazwanego na schemacie Prime transkoder w układzie znajdują się
-  także Word Generator służący do generowania wszystkich sygnałów wejsciowych i Logic Analyzer, który monitoruje sygnały wyjściowe.
-
-
+\subsection{Analiza przebiegu}
 
 
 \section{Zastosowania}
