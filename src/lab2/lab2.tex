@@ -1,0 +1,87 @@
+\documentclass[a4paper]{article}
+
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+
+\usepackage[export]{adjustbox}
+\usepackage{scrextend}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{svg}
+
+\usepackage{geometry}
+\geometry{a4paper, left=15mm, top=30mm, right=15mm, bottom=20mm}
+
+\usepackage{gensymb}
+\usepackage{graphicx} 
+\usepackage{isotope}
+\usepackage{array}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{multirow}
+
+\usepackage{hyperref}
+\usepackage{sectsty}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage[labelformat=simple]{subcaption}
+\usepackage{xcolor,colortbl}
+\usepackage{animate}
+
+\usepackage{karnaugh-map}
+
+\sectionfont{\normalfont\huge\sectionrule{0pt}{0pt}{-6pt}{1pt}}
+\subsectionfont{\normalfont\LARGE}
+\subsubsectionfont{\normalfont\Large}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,LO]{\Large Łukasz Kwinta, Kacper Kozubowski, Ida Ciepiela}
+\fancyhead[LE,RO]{\Large Układ odliczający}
+\fancyfoot[CE,CO]{\Large\thepage}
+
+\renewcommand{\footrulewidth}{1pt}
+\renewcommand{\headrulewidth}{1pt}
+
+\definecolor{Gray}{gray}{0.85}
+\definecolor{LightGray}{gray}{0.95}
+
+\newcolumntype{a}{>{\columncolor{Gray}}c}
+\newcolumntype{b}{>{\columncolor{white}}c}
+
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\counterwithin{table}{section}
+\counterwithin{figure}{section}
+
+\title{\fontsize{30pt}{30pt}\selectfont Laboratorium 2 \\ Układ odliczający}
+\author{\fontsize{20pt}{20pt}\selectfont Łukasz Kwinta, Kacper Kozubowski, Ida Ciepiela}
+\date{marzec 2024}
+
+\begin{document}
+\maketitle
+\pagebreak
+\large
+\tableofcontents
+
+\pagebreak
+\section{Cel zadania}
+\Large
+Celem zadania było zaprojektowanie układu TIMER odliczającego zadany czas w zakresie od 0 do 15. 
+Układ powinien zapewniać możliwość ustawienia długości odliczania, sygnał oznaczający koniec odliczania
+oraz wejście startujące odliczanie. 
+
+\section{Idea rozwiązania}
+\Large 
+
+
+\end{document}
+
+
