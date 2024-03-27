@@ -85,6 +85,20 @@ Aktualny wskazywany przez układ czas proszę pokazywać na wyświetlaczach sied
 \section{Idea rozwiązania}
 \Large 
 
+\section{Układ timer}
+
+\section{Zastosowania}
+\begin{itemize}
+    \item Sprzętowa obsługa timerów na mikroprocesora, wraz z mechanizmem sprzętowych przerwań stanowią przydatny mechanizm
+            pozwalający na cykliczne wywoływanie zadanego kodu bez konieczności zużywania czasu procesora na kontrolę upływu 
+            czasu. Mechanizm taki ma zastosowanie od wspomnianego cyklicznego wykonywania kodu do sprzężenia ze sobą różnych peryferiów
+            mikroprocesora ze sobą pozwalające na automatyczne dokonywanie cyklicznych pomiarów czy generowanie sygnałów jak np. 
+            sygnał Alarm timera podpięty jako sygnał wyzwalający konwersję przetwornika ADC który odczyt zapisuje bezposrednio do pamięci
+            poprzez mechanizm DMA czy timer generujący sygnał PWM przez porównanie obecnego stanu licznika z zadaną wartością - ponownie
+            w sprzężeniu z mechanizmem DMA pozwalającym odczytywać kolejne wartości do porównania w każdym okresie timera bezpośrednio z pamięci
+            można nadawać praktycznie dowolny sygnał cyfrowy.  
+\end{itemize}
+\section{Wnioski}
 
 \end{document}
 
