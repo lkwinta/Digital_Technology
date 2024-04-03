@@ -29,6 +29,31 @@
 \usepackage{xcolor,colortbl}
 \usepackage{animate}
 
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\tikzstyle{startstop} = [
+    rectangle, 
+    rounded corners, 
+    minimum width=3cm, minimum height=1cm,
+    text centered,
+    draw=black, fill=red!30]
+\tikzstyle{io} = [
+    trapezium, trapezium left angle=70, trapezium right angle=110, 
+    minimum width=3cm, minimum height=1cm, 
+    text centered, 
+    draw=black, fill=blue!30]
+\tikzstyle{process} = [
+    rectangle, 
+    minimum width=3cm, minimum height=1cm, 
+    text centered, 
+    draw=black, fill=orange!30]
+\tikzstyle{decision} = [
+    diamond, 
+    minimum width=3cm, minimum height=1cm, 
+    text centered, 
+    draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
 \usepackage{karnaugh-map}
 
 \sectionfont{\normalfont\huge\sectionrule{0pt}{0pt}{-6pt}{1pt}}
@@ -63,7 +88,7 @@
 
 \title{\fontsize{30pt}{30pt}\selectfont Laboratorium 2 \\ Układ odliczający}
 \author{\fontsize{20pt}{20pt}\selectfont Łukasz Kwinta, Kacper Kozubowski, Ida Ciepiela}
-\date{marzec 2024}
+\date{kwiecień 2024}
 
 \begin{document}
 \maketitle
@@ -83,9 +108,113 @@ układ powinien wyłączyć alarm i ponownie rozpocząć odmierzanie ustawionego
 Aktualny wskazywany przez układ czas proszę pokazywać na wyświetlaczach siedmiosegmentowych.
 
 \section{Idea rozwiązania}
-\Large 
+Do rozwiązania zadania wybraliśmy przerzutniki T - z powodu łatwości sterowania takim układem. Do sterowania przerzutnikami
+w trybie synchronicznym wykorzystaliśmy transkoder uruchamiający wejścia T kolejnych przerzutników na bazie obecnego 
+stanu wyjścia układu. Dodatkowo dodaliśmy pojedynczy sygnał kontrolujący włączenie/wyłączenie układu.
+
+Do początkowego zaprogramowania czasu odliczania na liczniku wykorzystaliśmy możliwość asynchronicznego ustawienia przerzutników
+w konkretny stan, również tutaj zaprojektowaliśmy transkoder, który porównuje stan przerzutników z wejściem do programowania 
+czasu i odpowiednio ustawia układ. 
 
 \section{Układ timer}
+\subsection{Black box}
+Pierwszym krokiem w projektowaniu układu było zaprojektowanie czarnej skrzynki i określenie wejść i wyjść 
+układu.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{timer_black_box.png}
+\end{figure}
+
+Poniżej przedstawimy specyfikację wejść i wyjść układu
+\subsubsection{Wejścia}
+\begin{itemize}
+    \item \verb|INx| - wejścia programujące czas odliczania licznika - binarny zapis liczby od której licznik powinien 
+            zacząć odliczać. 4 wejścia łącznie pozwalają na odliczanie w zakresie 0-15. \verb|IN0| oznacza najmniej 
+            znaczący bit, \verb|IN3| oznacza najbardziej znaczący bit. Wejście jest używane do zaprogramowania w momencie
+            gdy na wejściu \verb|START| pojawi się stan wysoki.
+            \begin{center}
+                \begin{tabular}{|c|c|c|c|c|}
+                  \hline Numer bitu & 3 & 2 & 1 & 0 \\ 
+                  \hline Bit & \verb|IN3| & \verb|IN2| & \verb|IN1| & \verb|IN0| \\
+                  \hline Mnożnik & $2^3$ & $2^2$ & $2^1$ & $2^0$  \\
+                  \hline
+                \end{tabular}
+                \captionof{table}{Kodowanie pinów wejściowych} 
+              \end{center}
+
+    \item \verb|START| - wejście aktywujące układ. Stan wysoki oznacza aktywację licznika, stan niski oznacza, że licznik 
+              dokończy liczenie do wyzerowania licznika.
+
+              Jeśli wejście \verb|START| będzie miało stan wysoki w czasie dojścia licznika do zera, na wyjściu \verb|ALARM|
+              pojawi się puls, a następnie licznik zostanie zaprogramowany obecnym wejściem, a następnie uruchomiony ponownie.
+              
+              Zmiany stanu na wejściu \verb|START| w czasie gdy licznik jest w stanie liczenia, nie mają żadnego efektu. 
+
+    \item \verb|CLK| - wejście zegara stanowiącego podstawę czasu licznika - określa jak szybko następować będą zmiany wyjścia
+              i odliczanie licznika do zera.
+\end{itemize}
+
+\subsubsection{Wyjścia}
+\begin{itemize}
+    \item \verb|OUTx| - wyjścia stanowiące kolejne bity aktualnego stanu licznika. Zmiana wartości licznika, następuje
+            na wznoszącym zboczu zegara wejściowego. \verb|OUT0| stanowi najmniej znaczący bit, a \verb|OUT3| najbardziej
+            znaczący bit.
+            \begin{center}
+                \begin{tabular}{|c|c|c|c|c|}
+                  \hline Numer bitu & 3 & 2 & 1 & 0 \\ 
+                  \hline Bit & \verb|OUT3| & \verb|OUT2| & \verb|OUT1| & \verb|OUT0| \\
+                  \hline Mnożnik & $2^3$ & $2^2$ & $2^1$ & $2^0$  \\
+                  \hline
+                \end{tabular}
+                \captionof{table}{Kodowanie pinów wejściowych} 
+              \end{center}
+              
+    \item \verb|ALARM| - wyjście sygnalizujące zakończenie odliczania licznika. Stan wysoki oznacza, że obecny stan licznika
+              jest równy 0.
+
+\end{itemize}
+
+\subsection{Diagram załączania układów}
+Poniżej rozpisaliśmy diagram zależności stanu załączenia poszczególnych układów od siebie z którego wynikać będą tabele prawdy.
+\small
+\begin{center}
+    \begin{tikzpicture}[node distance=2cm][H]
+        
+        \node (if_0) [decision] {Wyjście = 0};
+        
+        
+        \node (if_start_1) [decision, right of=if_0,  xshift=2.5cm] {Start = 1};
+        \node (in_start) [io, above of=if_start_1] {Start};
+
+        \node (out_alarm) [io, below of=if_start_1, yshift=-0.5cm] {Alarm};
+
+        \node (en_programming) [process, right of=if_start_1, xshift=2.5cm] {Załącz ustawianie};
+        \node (in_time) [io, above of=en_programming] {Czas};
+
+        \node (en_timer) [process, below of=if_0, yshift=-0.5cm] {Załącz kontroler licznika};
+        \node (timer) [startstop, below of=en_timer] {Licznik};
+        \node (out) [io, below of=timer] {Wyjście};
+        
+        
+        \draw [arrow] (in_start) -- (if_start_1);
+        \draw [arrow] (in_time) -- (en_programming);
+        
+        \draw [arrow] (if_0) -- (if_start_1);
+        \draw [arrow] (if_start_1) -- node[anchor=south] {Tak} (en_programming);
+        \draw [arrow] (if_start_1) -- node[anchor=west] {Nie} (out_alarm);
+
+        \draw [arrow] (if_0) -- node[anchor=west] {Nie} (en_timer);
+
+        \draw [arrow] (en_timer) -- node[anchor=west] {Kontrola przerzutników} (timer);
+        \draw [arrow] (en_programming) |- node[anchor=north] {Ustawienie przerzutników} (timer);
+
+        \draw[arrow] (timer) -- (out);
+
+        \draw [thick, ->] (out.south) -- ++(0, -1cm) -| node[anchor=north] {Odliczanie}  ++ (-3cm, 0) |- (if_0.west);
+    \end{tikzpicture}
+\end{center}
+\Large
+
 
 \section{Zastosowania}
 \begin{itemize}
@@ -96,9 +225,25 @@ Aktualny wskazywany przez układ czas proszę pokazywać na wyświetlaczach sied
             sygnał Alarm timera podpięty jako sygnał wyzwalający konwersję przetwornika ADC który odczyt zapisuje bezposrednio do pamięci
             poprzez mechanizm DMA czy timer generujący sygnał PWM przez porównanie obecnego stanu licznika z zadaną wartością - ponownie
             w sprzężeniu z mechanizmem DMA pozwalającym odczytywać kolejne wartości do porównania w każdym okresie timera bezpośrednio z pamięci
-            można nadawać praktycznie dowolny sygnał cyfrowy.  
+            można nadawać praktycznie dowolny sygnał cyfrowy.  % --TODO: moje rysunki z tableta
 \end{itemize}
 \section{Wnioski}
+Dzięki przerzutnikom możemy projektować złożone układy z pamięcią swojego stanu. 
+
+W toku rozwiązywania postawionego problemu opracowaliśmy kilka możliwych rozwiązań. Ostatecznie
+zdecydowaliśmy się na przedstawienie tego konkretnego rozwiązania ze względu na jego prostotę i 
+największą niezawodność. Zastosowanie przerzutników działających synchronicznie pozwoliło na zredukowanie
+ilości hazardów przy odliczaniu czasu.
+
+Innym sposobem było: <tu opis rozwiązanie Kacpra i schemat> % TODO: opis + schemat
+
+Pierwotnym pomysłem było użycie przerzutników T asynchronicznie - łącząc je w szeregowo dzięki czemu 
+nie było konieczne projektowanie układu kontrolującego przerzutniki. Największą wadą tego rozwiązania
+było to, że otoczka sterowania tak połączonych przerzutników była trudna do przedstawienia wzorami i 
+uzasadnienia w prosty sposób. Rozwiązanie opierało się na idei generowania kolejnych impulsów 
+synchronizujących kolejne etapy przygotowania i uruchomienia układu.
+
+<tu mój schemat> % TODO: schemat
 
 \end{document}
 
