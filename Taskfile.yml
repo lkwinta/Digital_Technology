@@ -13,4 +13,4 @@ tasks:
     sources:
       - src/lab2/*
     cmds:
-      - tectonic "./src/lab2/lab2.tex" -Z search-path="src" --outdir "pdf"
+      - tectonic "./src/lab2/lab2.tex" -Z search-path="src" -Z shell-escape --outdir "pdf"

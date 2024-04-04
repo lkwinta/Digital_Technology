@@ -1,4 +1,5 @@
 \documentclass[a4paper]{article}
+\usepackage{minted}
 
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
@@ -7,7 +8,7 @@
 \usepackage{scrextend}
 \usepackage{amsfonts}
 \usepackage{amsmath}
-\usepackage{svg}
+
 
 \usepackage{geometry}
 \geometry{a4paper, left=15mm, top=30mm, right=15mm, bottom=20mm}
@@ -27,7 +28,7 @@
 \usepackage{listings}
 \usepackage[labelformat=simple]{subcaption}
 \usepackage{xcolor,colortbl}
-\usepackage{animate}
+
 
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows}
@@ -123,7 +124,7 @@ Pierwszym krokiem w projektowaniu układu było zaprojektowanie czarnej skrzynki
 układu.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{timer_black_box.png}
+    \includegraphics[width=0.4\textwidth]{timer_black_box.png}
 \end{figure}
 
 Poniżej przedstawimy specyfikację wejść i wyjść układu
@@ -275,11 +276,82 @@ nieokreślonym stanem wejść.
 
 \pagebreak
 \subsection{Podukład ustawiający czas licznika}
-Układ nazwany na naszych schematach \verb|timer_setter| ustawia czas odliczania.
+Układ nazwany na naszych schematach \verb|timer_setter| ustawia czas odliczania 
+gdy układ zostanie załączony. Układ ma na celu wysterowanie asynchronicznych wejść przerzutników T
+poprzez odpowiednie wykonanie operacji SET lub RESET w zależności od obecnego stanu przerzutnika w 
+porównaniu do odpowiadającego bitu programowania.
+
 \subsubsection{Wejścia i Wyjścia}
+Wejścia do układu stanowią bity oznaczające obecny stan poszczególnych wyjść przerzutnika, bity
+oznaczające stan wejścia programowania timera oraz sygnał załączający układ. Wyjścia natomiast 
+stanowią pary pinów SET i RESET dla poszczególnych przerzutników. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{timer_setter_black_box.png}
+\end{figure}
+Poniżej opis wejść układu:
+\begin{itemize}
+    \item \verb|EN| - wejście aktywujące układ, gdy wejście jest w stanie wysokim, na wyjściach układu
+            pojawiają się odpowiednie wartości
+    \item \verb|Qx| - wejścia obecnego stanu licznika, \verb|Q0| stanowi najmniej znaczący bit obecnego stanu licznika,
+            a \verb|Q3| najbardziej znaczący bit.
+    \item \verb|INx| - wejścia programowania startowego stanu licznika, \verb|IN0| stanowi najmniej znaczący bit wejścia,
+            a \verb|IN3| najbardziej znaczący bit.
+\end{itemize}
+
+Poniżej opis wyjść układu:
+\begin{itemize}
+    \item \verb|Sx| - wyjście SET ustawiające odpowiedni przerzutnik T, wartość \verb|S0| obliczana
+            jest na podstawie wejść \verb|Q0| i \verb|IN0|, a więc odpowiada ustawieniu przerzutnika T
+            odpowiadającemu najmniej znaczącemu bitowi licznika.
+    \item \verb|Rx| - wyjście RESET resetujący odpowiedni przerzutnik T, wartość \verb|R0| obliczana
+            jest na podstawie wejść \verb|Q0| i \verb|IN0|, a więc odpowiada resetowaniu przerzutnika T
+            odpowiadającemu najmniej znaczącemu bitowi licznika.
+\end{itemize}
+
 \subsubsection{Tabele prawdy}
+Jako że, układ oblicza każdą parę wyjść dokładnie tak samo na podstawie odpowiadających sobie bitów,
+tabelę prawdy zapiszemy w postaci sparametryzowanej, tzn. parze wyjściowej \verb|Sx|, \verb|Rx| odpowiadają
+wejścia \verb|INx|, \verb|Qx| oraz sygnał enable. Finalnie ostateczny układ stanowią 4 powtórzone takie formuły 
+dla każdego z bitów 0,1,2,3.
+
+Tabela prawdy wynika z następujących faktów:
+\begin{itemize}
+    \item jeśli $ \verb|EN| = 0 $ to żadne wyjście nie jest aktywne
+    \item jeśli $ \verb|INx| = \verb|Qx| $ to nie musimy zmieniać stanu przerzutnika
+    \item w pozostałych przypadków wykonujemy odpowiednio albo operację SET albo RESET
+\end{itemize}
+
+\begin{center}
+    \begin{tabular}{|c|c|c||c|c|}
+    \hline \multicolumn{3}{|c||}{Wejście} & \multicolumn{2}{|c|}{Wyjście} \\
+    \hline \verb|EN| & \verb|INx| & \verb|Qx| &  \verb|Sx| & \verb|Rx| \\
+    \hline 0 & 0 & 0 & 0 & 0 \\
+    \hline 0 & 0 & 1 & 0 & 0 \\
+    \hline 0 & 1 & 0 & 0 & 0 \\
+    \hline 0 & 1 & 1 & 0 & 0 \\
+    \hline 1 & 0 & 0 & 0 & 0 \\
+    \hline 1 & 0 & 1 & 0 & 1 \\
+    \hline 1 & 1 & 0 & 1 & 0 \\
+    \hline 1 & 1 & 1 & 0 & 0 \\
+    \hline 
+    \end{tabular}
+    \captionof{table}{Tabela prawdy dla układu programującego początkowy stan licznika} 
+\end{center}
+
 \subsubsection{Wyprowadzenie formuł}
+Na podstawie tabli prawd możemy wyprowadzić formułę na wyjścia \verb|Sx| i \verb|Rx|
+\[\verb|Sx| = \verb|EN| \cdot \verb|INx| \cdot \overline{\texttt{Qx}}\]
+\[\verb|Rx| = \verb|EN| \cdot \overline{\texttt{INx}} \cdot \texttt{Qx}\]
+
 \subsubsection{Realizacja formuł}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{timer_setter_subsheet.pdf}
+\end{figure}
+Układ składa się z powielonej 4 razy implementacji powyżej wyprowadzonych formuł.
+
 
 \subsection{Podukład kontrolujący przerzutniki}
 Układ nazwany na naszych schematach \verb|timer_driver| kontroluje wejścia $T$ przerzutników.
@@ -291,12 +363,128 @@ Układ nazwany na naszych schematach \verb|timer_driver| kontroluje wejścia $T$
 \section{Przykład implementacji układu w obwodzie}
 % TODO: rysunek showup_scheme
 
+\pagebreak
 \section{Testy}
 \subsection{Testy podukładów}
 \subsection{Test timera}
-% TODO: skrypt w pythonie który wygeneruje input do generatora jako clk do timera, sprawdzający
-% czy wykona się odliczanie w określonej ilości cyklów
+Zdecydowaliśmy się przeprowadzić ogólny test układu timer - na najwyższym poziomie abstrakcji.
+W tym celu zestawiliśmy układ składający się z generatora słów, naszego układu \verb|timer|, komparatora oraz analizatora
+stanów logicznych. Generator słów obsługuje nasz timer zapewniając mu cykle zegara w kolejnych 
+generowanych słowach oraz generujący dane porównawcze dla każdego cyklu.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{general_test.pdf}
+\end{figure}
+
+Zastosowaliśmy przerzutnik JK próbkujący wyjście komparatora, gdy generator słów generuje wyjście R(READY)
+oznaczające, że skończył on generować dane słowo. Pojawienie się stanu wysokiego na wejściu J przerzutnika JK
+powoduje jego ustawienie, a pojawienie się stanu wysokiego na wyjściu K resetuje ten przerzutnik.
+
+Do wygenerowanie pliku wejściowego dla generatora słów, napisaliśmy skrypt w języku python, który 
+symuluje kolejne kroki odliczania timera w zmiennych i zapisuje je do pliku w formacie, który można zaimportować 
+do multisima.
+
+Poniżej kod skryptu generującego dane:
+\small
+\begin{minted}[
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=LightGray,
+    fontsize=\footnotesize,
+    linenos
+]{python}
+f = open("test_data.dp", "w")
+f.write("Data:\n")
+
+##################################################################
+# |SR_RESET|ALARM|OUT3|OUT2|OUT1|OUT0|CLK|START|IN3|IN2|IN1|IN0| #
+##################################################################
+
+class TestOutput: 
+    def __init__(self):
+        self.in_data = 0
+        self.start = 0
+        self.clk = 0
+        self.output_data = 0
+        self.alarm = 0
+        self.reset_sr = 0
+
+    def to_bin_string(self):
+        input_binary = str(bin(self.in_data)).removeprefix("0b").rjust(4, '0')
+        start_binary = str(bin(self.start)).removeprefix("0b")
+        clk_binary = str(bin(self.clk)).removeprefix("0b")
+        output_binary = str(bin(self.output_data)).removeprefix("0b").rjust(4, '0')
+        alarm_binary = str(bin(self.alarm)).removeprefix("0b")
+        reset_sr_binary = str(bin(self.reset_sr)).removeprefix("0b")
+
+        return reset_sr_binary + alarm_binary + output_binary + clk_binary + start_binary + input_binary
+    
+
+    def to_hex_string(self, pad):
+        hex_val = hex(int(self.to_bin_string(), 2))
+        return hex_val.removeprefix("0x").rjust(pad, '0')
+
+
+####################################
+# Test cycle to reset JK flip flop #
+####################################
+
+reset_to = TestOutput()
+reset_to.alarm = 1
+reset_to.reset_sr = 1
+f.write(reset_to.to_hex_string(8) + "\n")
+f.write(reset_to.to_hex_string(8) + "\n")
+reset_to.reset_sr = 0
+f.write(reset_to.to_hex_string(8) + "\n")
+data_count = 3
+
+for i in range(16):
+    to = TestOutput()
+    to.in_data = i
+    to.start = 1
+    to.output_data = i 
+    to.alarm = int(i == 0)
+
+    f.write(to.to_hex_string(8) + "\n")
+    data_count += 1
+
+    to.in_data = 0
+    to.start = 0
+    to.alarm = int(i == 0)
+
+    for k in range(i):
+        to.clk = 1
+        to.output_data -= 1
+        if to.output_data == 0:
+            to.alarm = 1
+
+        f.write(to.to_hex_string(8) + "\n")
+        data_count += 1
+
+        to.clk = 0
+
+        f.write(to.to_hex_string(8) + "\n")
+        data_count += 1
+
+    f.write(to.to_hex_string(8) + "\n")
+    data_count += 1
+
+f.write("Initial:\n")
+f.write("0000\n")
+f.write("Final:\n")
+f.write(str(hex(data_count)).capitalize().removeprefix("0x").rjust(4, '0'))
+
+f.close()
+\end{minted}
+\Large
+W wyniku testu otrzymujemy informację poprzez zaświecenie się lampki jeśli gdziekolwiek wystąpił błąd oraz 
+przebieg sygnałów z analizatora stanów logicznych:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{general_test_logic_analyzer.png}
+\end{figure}
 \pagebreak
 \section{Zastosowania}
 \begin{itemize}
