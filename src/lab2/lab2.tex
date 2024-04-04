@@ -246,7 +246,7 @@ Tabela prawdy wynika z schematu kontroli przedstawionego powyżej.
     \captionof{table}{Tabela prawdy dla stanów aktywacji podukładów} 
 \end{center}
 
-\subsection{Wyprowadzenie formuł}
+\subsubsection{Wyprowadzenie formuł}
 Dla wyjścia \verb|EN_SET| możemy odczytać formułę w prost z tabeli:
 \[ \verb|EN_SET| = \verb|EQ0| \cdot \verb|START|  \] 
 Dla wyjścia \verb|EN_DRV| możemy pokusić się o próbę optymalizacji formuły
@@ -262,7 +262,7 @@ Możemy z niej odczytać zoptymalizowaną formułę:
 \[ \verb|EN_DRV| = \textcolor{red}{\overline{\texttt{EQ0}}} \]
 
 \pagebreak
-\subsection{Realizacja formuł}
+\subsubsection{Realizacja formuł}
 Poniżej przedstawiamy realizację wcześniej wyprowadzonych formuł:
 \[ \verb|EN_SET| = \verb|EQ0| \cdot \verb|START|  \] 
 \[ \verb|EN_DRV| = \overline{\texttt{EQ0}} \]
@@ -275,7 +275,27 @@ nieokreślonym stanem wejść.
 
 \pagebreak
 \subsection{Podukład ustawiający czas licznika}
-Układ nazwany na naszych schematach \verb|timer_setter| ustawia czas odliczania
+Układ nazwany na naszych schematach \verb|timer_setter| ustawia czas odliczania.
+\subsubsection{Wejścia i Wyjścia}
+\subsubsection{Tabele prawdy}
+\subsubsection{Wyprowadzenie formuł}
+\subsubsection{Realizacja formuł}
+
+\subsection{Podukład kontrolujący przerzutniki}
+Układ nazwany na naszych schematach \verb|timer_driver| kontroluje wejścia $T$ przerzutników.
+\subsubsection{Wejścia i Wyjścia}
+\subsubsection{Tabele prawdy}
+\subsubsection{Wyprowadzenie formuł}
+\subsubsection{Realizacja formuł}
+
+\section{Przykład implementacji układu w obwodzie}
+% TODO: rysunek showup_scheme
+
+\section{Testy}
+\subsection{Testy podukładów}
+\subsection{Test timera}
+% TODO: skrypt w pythonie który wygeneruje input do generatora jako clk do timera, sprawdzający
+% czy wykona się odliczanie w określonej ilości cyklów
 
 \pagebreak
 \section{Zastosowania}
