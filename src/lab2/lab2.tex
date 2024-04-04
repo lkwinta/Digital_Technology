@@ -116,6 +116,7 @@ Do początkowego zaprogramowania czasu odliczania na liczniku wykorzystaliśmy m
 w konkretny stan, również tutaj zaprojektowaliśmy transkoder, który porównuje stan przerzutników z wejściem do programowania 
 czasu i odpowiednio ustawia układ. 
 
+\pagebreak
 \section{Układ timer}
 \subsection{Black box}
 Pierwszym krokiem w projektowaniu układu było zaprojektowanie czarnej skrzynki i określenie wejść i wyjść 
@@ -174,6 +175,7 @@ Poniżej przedstawimy specyfikację wejść i wyjść układu
 
 \end{itemize}
 
+\pagebreak
 \subsection{Diagram załączania układów}
 Poniżej rozpisaliśmy diagram zależności stanu załączenia poszczególnych układów od siebie z którego wynikać będą tabele prawdy.
 \small
@@ -199,7 +201,7 @@ Poniżej rozpisaliśmy diagram zależności stanu załączenia poszczególnych u
         \draw [arrow] (in_start) -- (if_start_1);
         \draw [arrow] (in_time) -- (en_programming);
         
-        \draw [arrow] (if_0) -- (if_start_1);
+        \draw [arrow] (if_0) -- node[anchor=south] {Tak} (if_start_1);
         \draw [arrow] (if_start_1) -- node[anchor=south] {Tak} (en_programming);
         \draw [arrow] (if_start_1) -- node[anchor=west] {Nie} (out_alarm);
 
@@ -215,7 +217,67 @@ Poniżej rozpisaliśmy diagram zależności stanu załączenia poszczególnych u
 \end{center}
 \Large
 
+\subsection{Kontrola działania licznika}
+Na najwyższym poziomie nasz układ \verb|timer| składa się z dwóch podukładów: \verb|timer_setter| - układu ustawiającego czas odliczania
+oraz \verb|timer_driver| układu kontrolującego wejścia T przerzutników. Na tym samym poziomie znajdują się 
+przerzutniki stanowiące faktyczny licznik oraz implementacja formuł załączających te układy opisanych tutaj.
 
+Dla czytelności poniżej przyjmujemy następujące oznaczenia:
+\begin{itemize}
+    \item \verb|EN_SET| - wejście aktywujące w układzie \verb|timer_setter|
+    \item \verb|EN_DRV| - wejście aktywujące w układzie \verb|timer_driver|
+    \item \verb|EQ0| - wyjście układu \verb|timer_driver| mówiące o tym czy obecny stan licznika to 0 (stan wysoki).
+    \item \verb|START| - wejście startowe timera
+\end{itemize}
+
+\subsubsection{Tablice prawdy}
+
+Tabela prawdy wynika z schematu kontroli przedstawionego powyżej.
+\begin{center}
+    \begin{tabular}{|c|c||c|c|}
+    \hline \multicolumn{2}{|c||}{Wejście} & \multicolumn{2}{|c|}{Wyjście} \\
+    \hline \verb|EQ0| & \verb|START| & \verb|EN_SET| & \verb|EN_DRV| \\
+    \hline 0 & 0 & 0 & 1 \\
+    \hline 0 & 1 & 0 & 1 \\
+    \hline 1 & 0 & 0 & 0 \\
+    \hline 1 & 1 & 1 & 0 \\
+    \hline 
+    \end{tabular}
+    \captionof{table}{Tabela prawdy dla stanów aktywacji podukładów} 
+\end{center}
+
+\subsection{Wyprowadzenie formuł}
+Dla wyjścia \verb|EN_SET| możemy odczytać formułę w prost z tabeli:
+\[ \verb|EN_SET| = \verb|EQ0| \cdot \verb|START|  \] 
+Dla wyjścia \verb|EN_DRV| możemy pokusić się o próbę optymalizacji formuły
+przy pomocy tablicy Karnaugh:
+\begin{center}
+    \begin{karnaugh-map}[2][2][1][$\texttt{START}$][$\texttt{EQ0}$]
+      \manualterms{1,0,1,0}
+      \implicant{0}{2}
+    \end{karnaugh-map}
+    \captionof{table}{Tablica Karanugh dla formuły aktywującej układ kontrolujący licznik} 
+\end{center}
+Możemy z niej odczytać zoptymalizowaną formułę:
+\[ \verb|EN_DRV| = \textcolor{red}{\overline{\texttt{EQ0}}} \]
+
+\pagebreak
+\subsection{Realizacja formuł}
+Poniżej przedstawiamy realizację wcześniej wyprowadzonych formuł:
+\[ \verb|EN_SET| = \verb|EQ0| \cdot \verb|START|  \] 
+\[ \verb|EN_DRV| = \overline{\texttt{EQ0}} \]
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{timer_subsheet.pdf}
+\end{figure}
+Na schemacie znajdują się również rezystory pull-down zabezpieczające wejścia układu przed 
+nieokreślonym stanem wejść.
+
+\pagebreak
+\subsection{Podukład ustawiający czas licznika}
+Układ nazwany na naszych schematach \verb|timer_setter| ustawia czas odliczania
+
+\pagebreak
 \section{Zastosowania}
 \begin{itemize}
     \item Sprzętowa obsługa timerów na mikroprocesora, wraz z mechanizmem sprzętowych przerwań stanowią przydatny mechanizm
