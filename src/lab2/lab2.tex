@@ -345,17 +345,25 @@ Tabela prawdy wynika z następujących faktów:
 \end{center}
 
 \subsubsection{Wyprowadzenie formuł}
-Na podstawie tabli prawd możemy wyprowadzić formułę na wyjścia \verb|Sx| i \verb|Rx|
+Na podstawie tabeli prawd możemy wyprowadzić formułę na wyjścia \verb|Sx| i \verb|Rx|
 \[\verb|Sx| = \verb|EN| \cdot \verb|INx| \cdot \overline{\texttt{Qx}}\]
 \[\verb|Rx| = \verb|EN| \cdot \overline{\texttt{INx}} \cdot \texttt{Qx}\]
 
 \subsubsection{Realizacja formuł}
+Wyżej wymienione formuły można w multisimie przedstawić w następujący sposób:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{model1.png}
+    \captionof{figure}{Realizacja funkcji logicznych w Multisimie}
+\end{figure}
+Układ timer\_setter został zaimplementowany jako czterokrotne powielenie powyższej struktury.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{timer_setter_subsheet.pdf}
     \captionof{figure}{Schemat podukładu: timer\_setter}
 \end{figure}
-Układ składa się z powielonej 4 razy implementacji powyżej wyprowadzonych formuł.
+% Układ składa się z powielonej 4 razy implementacji powyżej wyprowadzonych formuł.
 
 \pagebreak
 \subsection{Podukład kontrolujący przerzutniki}
