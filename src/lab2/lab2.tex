@@ -125,6 +125,7 @@ układu.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.4\textwidth]{timer_black_box.png}
+    \captionof{figure}{Czarna skrzynka timera}
 \end{figure}
 
 Poniżej przedstawimy specyfikację wejść i wyjść układu
@@ -148,7 +149,7 @@ Poniżej przedstawimy specyfikację wejść i wyjść układu
               dokończy liczenie do wyzerowania licznika.
 
               Jeśli wejście \verb|START| będzie miało stan wysoki w czasie dojścia licznika do zera, na wyjściu \verb|ALARM|
-              pojawi się puls, a następnie licznik zostanie zaprogramowany obecnym wejściem, a następnie uruchomiony ponownie.
+              pojawi się puls, po czym licznik zostanie zaprogramowany obecnym wejściem, a następnie uruchomiony ponownie.
               
               Zmiany stanu na wejściu \verb|START| w czasie gdy licznik jest w stanie liczenia, nie mają żadnego efektu. 
 
@@ -215,6 +216,7 @@ Poniżej rozpisaliśmy diagram zależności stanu załączenia poszczególnych u
 
         \draw [thick, ->] (out.south) -- ++(0, -1cm) -| node[anchor=north] {Odliczanie}  ++ (-3cm, 0) |- (if_0.west);
     \end{tikzpicture}
+    \captionof{figure}{Diagram załączania układów}
 \end{center}
 \Large
 
@@ -254,8 +256,8 @@ Dla wyjścia \verb|EN_DRV| możemy pokusić się o próbę optymalizacji formuł
 przy pomocy tablicy Karnaugh:
 \begin{center}
     \begin{karnaugh-map}[2][2][1][$\texttt{START}$][$\texttt{EQ0}$]
-      \manualterms{1,0,1,0}
-      \implicant{0}{2}
+      \manualterms{1,1,0,0}
+      \implicant{0}{1}
     \end{karnaugh-map}
     \captionof{table}{Tablica Karanugh dla formuły aktywującej układ kontrolujący licznik} 
 \end{center}
@@ -270,6 +272,7 @@ Poniżej przedstawiamy realizację wcześniej wyprowadzonych formuł:
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{timer_subsheet.pdf}
+    \captionof{figure}{Ogólny schemat timera}
 \end{figure}
 Na schemacie znajdują się również rezystory pull-down zabezpieczające wejścia układu przed 
 nieokreślonym stanem wejść.
@@ -289,6 +292,7 @@ stanowią pary pinów SET i RESET dla poszczególnych przerzutników.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.4\textwidth]{timer_setter_black_box.png}
+    \captionof{figure}{Czarna skrzynka podukładu time\_setter}
 \end{figure}
 Poniżej opis wejść układu:
 \begin{itemize}
@@ -349,6 +353,7 @@ Na podstawie tabli prawd możemy wyprowadzić formułę na wyjścia \verb|Sx| i 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{timer_setter_subsheet.pdf}
+    \captionof{figure}{Schemat podukładu: timer\_setter}
 \end{figure}
 Układ składa się z powielonej 4 razy implementacji powyżej wyprowadzonych formuł.
 
@@ -359,6 +364,7 @@ Układ nazwany na naszych schematach \verb|timer_driver| kontroluje wejścia $T$
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{timer_driver_black_box.png}
+    \captionof{figure}{Czarna skrzynka podukładu: time\_driver}
 \end{figure}
 
 \subsubsection{Wejścia i Wyjścia}
@@ -385,6 +391,7 @@ Układ nazwany na naszych schematach \verb|timer_driver| kontroluje wejścia $T$
     1  & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\ \hline
     0  & 0 & 0 & 0 & 0 & x & x & x & x & x & x & x & x \\ \hline
     \end{tabular}
+    \captionof{table}{Tabela prawdy z uwzględnieniem stanu następnego}
     \end{center}
 
 
@@ -411,6 +418,7 @@ Układ nazwany na naszych schematach \verb|timer_driver| kontroluje wejścia $T$
         1  & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\ \hline
         0  & 0 & 0 & 0 & 0 & x & x & x & x \\ \hline
         \end{tabular}
+        \captionof{table}{Tablea prawdy podukładu: time\_driver}
         \end{center}
 
 \subsubsection{Wyprowadzenie formuł}
@@ -458,6 +466,7 @@ Możemy z niej odczytać zoptymalizowaną formułę:
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{timer_driver.pdf}
+    \captionof{figure}{Schemat podukładu: time\_driver}
 \end{figure}
 \[ T_0 = \textcolor{red}{1}\]
 \[ T_1 = \textcolor{red}{\overline{Q_0}}\]
@@ -480,6 +489,7 @@ generowanych słowach oraz generujący dane porównawcze dla każdego cyklu.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{general_test.pdf}
+    \captionof{figure}{Schemat układu testującego}
 \end{figure}
 
 Zastosowaliśmy przerzutnik JK próbkujący wyjście komparatora, gdy generator słów generuje wyjście R(READY)
@@ -583,21 +593,23 @@ f.write(str(hex(data_count)).capitalize().removeprefix("0x").rjust(4, '0'))
 
 f.close()
 \end{minted}
+\captionof{figure}{Skrypt generujący dane do testów, napisany w języku Python}
 \Large
 W wyniku testu otrzymujemy informację poprzez zaświecenie się lampki jeśli gdziekolwiek wystąpił błąd oraz 
 przebieg sygnałów z analizatora stanów logicznych:
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{general_test_logic_analyzer.png}
+    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych}
 \end{figure}
 \pagebreak
 \section{Zastosowania}
 \begin{itemize}
-    \item Sprzętowa obsługa timerów na mikroprocesora, wraz z mechanizmem sprzętowych przerwań stanowią przydatny mechanizm
+    \item Sprzętowa obsługa timerów na mikroprocesorach, wraz z mechanizmem sprzętowych przerwań stanowią przydatny mechanizm
             pozwalający na cykliczne wywoływanie zadanego kodu bez konieczności zużywania czasu procesora na kontrolę upływu 
             czasu. Mechanizm taki ma zastosowanie od wspomnianego cyklicznego wykonywania kodu do sprzężenia ze sobą różnych peryferiów
-            mikroprocesora ze sobą pozwalające na automatyczne dokonywanie cyklicznych pomiarów czy generowanie sygnałów jak np. 
-            sygnał Alarm timera podpięty jako sygnał wyzwalający konwersję przetwornika ADC który odczyt zapisuje bezposrednio do pamięci
+            mikroprocesora, pozwalające na automatyczne dokonywanie cyklicznych pomiarów czy generowanie sygnałów, jak np. 
+            sygnał Alarm timera podpięty jako sygnał wyzwalający konwersję przetwornika ADC, który odczyt zapisuje bezposrednio do pamięci
             poprzez mechanizm DMA czy timer generujący sygnał PWM przez porównanie obecnego stanu licznika z zadaną wartością - ponownie
             w sprzężeniu z mechanizmem DMA pozwalającym odczytywać kolejne wartości do porównania w każdym okresie timera bezpośrednio z pamięci
             można nadawać praktycznie dowolny sygnał cyfrowy.  % --TODO: moje rysunki z tableta
