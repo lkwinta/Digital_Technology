@@ -292,7 +292,7 @@ stanowią pary pinów SET i RESET dla poszczególnych przerzutników.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.4\textwidth]{timer_setter_black_box.png}
-    \captionof{figure}{Czarna skrzynka podukładu time\_setter}
+    \captionof{figure}{Czarna skrzynka podukładu timer\_setter}
 \end{figure}
 Poniżej opis wejść układu:
 \begin{itemize}
@@ -387,7 +387,7 @@ Poniżej znajduje się opis wejść układu:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{timer_driver_black_box.png}
-    \captionof{figure}{Czarna skrzynka podukładu: time\_driver}
+    \captionof{figure}{Czarna skrzynka podukładu: timer\_driver}
 \end{figure}
 \subsubsection{Tabele prawdy}
 
@@ -711,8 +711,7 @@ W toku rozwiązywania postawionego problemu opracowaliśmy kilka możliwych rozw
 zdecydowaliśmy się na przedstawienie tego konkretnego rozwiązania ze względu na jego prostotę i 
 największą niezawodność. Zastosowanie przerzutników działających synchronicznie pozwoliło na zredukowanie
 ilości hazardów przy odliczaniu czasu.
-
-Innym sposobem było: <tu opis rozwiązanie Kacpra i schemat> % TODO: opis + schemat
+\pagebreak
 
 Pierwotnym pomysłem było użycie przerzutników T asynchronicznie - łącząc je w szeregowo dzięki czemu 
 nie było konieczne projektowanie układu kontrolującego przerzutniki. Największą wadą tego rozwiązania
@@ -720,7 +719,28 @@ było to, że otoczka sterowania tak połączonych przerzutników była trudna d
 uzasadnienia w prosty sposób. Rozwiązanie opierało się na idei generowania kolejnych impulsów 
 synchronizujących kolejne etapy przygotowania i uruchomienia układu.
 
-<tu mój schemat> % TODO: schemat
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{lab2_1.pdf}
+    \captionof{figure}{Schemat pierwszego rozwiązania}
+\end{figure}
+\pagebreak
+
+Kolejne rozwiązanie opierało się na wykorzystaniu przerzutników JK do zrobienia synchronicznego licznika.
+W tym układzie, czas był ustawiany bezpośrednio na przerzutnikach za pomocą przycisków (+) i (-). Było to możliwe
+dzięki zaimplementowaniu licznika w sposób pozwalający na jego odliczanie zarówno do przodu jak i do tyłu.
+Po wciśnięciu przycisku "start" wybrany czas zostawał zapisywany w rejestrze o równoległych wejściach i wyjściach (PIPO),
+a licznik zaczynał odmierzać czas. Po dojściu licznika do zera, aktywował się alarm, a po kolejnym naciśnięciu
+przycisku "start" wartość zapisana w rejestrze była wczytywana na licznik i odliczanie zaczynało się od początku.
+Ostatecznie zrezygnowaliśmy z tego rozwiązania, ponieważ było ono skomplikowane i pełne trudnych do rozwiązania błędów.
+Przede wszystkim jednak, znacznie odbiegało ono od wymogów zadania. Z tych właśnie powodów sama implementacja nigdy
+nie została całkowicie dokończona i na schemacie przedstawionym poniżej występują liczne błędy i niedociągnięcia. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{lab2-alt.pdf}
+    \captionof{figure}{Scheamt drugiego rozwiązania}
+\end{figure}
 
 \end{document}
 
