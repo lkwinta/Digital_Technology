@@ -1,5 +1,5 @@
 \documentclass[a4paper]{article}
-\usepackage{minted}
+% \usepackage{minted}
 
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
@@ -371,12 +371,14 @@ Układ nazwany na naszych schematach \verb|timer_driver| kontroluje wejścia $T$
 
 
 \subsubsection{Wejścia i Wyjścia}
-Poniżej znajduje się opis wejść układu:
+Opis wejść układu:
 \begin{itemize}
     \item \verb|EN| - Wejście aktywujące układ. Pozwala, aby na wyjściu pojawiały się odpowiednie wartości kiedy jest w stanie wysokim
     \item \verb|Qx| - wejścia obecnego stanu licznika, \verb|Q0| stanowi najmniej znaczący bit obecnego stanu licznika,
             a \verb|Q3| najbardziej znaczący bit.
 \end{itemize}
+
+Opis wyjść układu:
 
 \begin{itemize}
     \item \verb|EQ0| - Wyjście informujące o tym czy obecny stan licznika jest równy 0.
@@ -561,7 +563,83 @@ Dla czytelności przeprowadzanie operacji AND z każdym z bitów zostało zaimpl
 
 \pagebreak
 \subsection{Podukład enabler}
-% TODO: ja to skończe chyba że ktoś z was uzna że to bedzie mega nieczytelne :<
+Podukład który zwraca bity wejściowe jeśli \verb|EN| równy jest 1 lub 0 jeśli \verb|EN| jest równy 0 
+\subsubsection{Wejścia i Wyjścia}
+
+Opis wejść układu:
+\begin{itemize}
+    \item \verb|EN| - Wejście aktywujące układ. Pozwala, aby na wyjściu pojawiały się odpowiednie wartości kiedy jest w stanie wysokim
+    \item \verb|A, B, C, D| - 4 bity wejściowe 
+\end{itemize}
+
+Opis wyjść układu:
+
+\begin{itemize}
+    \item \verb|A_EN, B_EN, C_EN, D_EN| - 4 bity wyjściowe 
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{enabler_black_box.png}
+    \captionof{figure}{Czarna skrzynka podukładu: enabler}
+\end{figure}
+\subsubsection{Tabele prawdy}
+
+\begin{center}
+    \begin{tabular}{|l|l|l|l|l||l|l|l|l|}
+    \hline
+    \multicolumn{5}{|c||}{Wejście} & \multicolumn{4}{|c|}{Wyjście} \\\hline
+    \verb|EN| &\verb|A| & \verb|B| & \verb|C| & \verb|D| & \verb|A_EN| & \verb|B_EN| & \verb|C_EN| & \verb|D_EN|  \\ \hline
+    1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\ \hline
+    1 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 \\ \hline
+    1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 \\ \hline
+    1 & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 0 \\ \hline
+    1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 \\ \hline
+    1 & 1 & 0 & 1 & 0 & 1 & 0 & 1 & 0 \\ \hline
+    1 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1 \\ \hline
+    1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\ \hline
+    1 & 0 & 1 & 1 & 1 & 0 & 1 & 1 & 1 \\ \hline
+    1 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 0 \\ \hline
+    1 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 1 \\ \hline
+    1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 \\ \hline
+    1 & 0 & 0 & 1 & 1 & 0 & 0 & 1 & 1 \\ \hline
+    1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
+    1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\ \hline
+    1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+
+    0 & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\ \hline
+    0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
+    0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+    
+    \end{tabular}
+    \captionof{table}{Tablea prawdy dla podukładu: enabler}
+    \end{center}
+
+
+    \subsubsection{Wyprowadzenie i realizacja formuł}
+    Do implementacji tego układu wystarczy jednynie zastosowanie bramki AND dla bitu \verb|EN| z każdym z bitów:
+    \[\verb|A_EN| = \verb|A| \cdot \verb|EN| \]
+    \[\verb|B_EN| = \verb|B| \cdot \verb|EN| \]
+    \[\verb|C_EN| = \verb|C| \cdot \verb|EN| \]
+    \[\verb|D_EN| = \verb|D| \cdot \verb|EN| \]
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{enabler.png}
+    \captionof{figure}{Schemat podukładu: enabler}
+\end{figure}
 
 
 \section{Przykład implementacji układu w obwodzie}
@@ -592,97 +670,97 @@ do multisima.
 
 Poniżej kod skryptu generującego dane:
 \small
-\begin{minted}[
-    frame=lines,
-    framesep=2mm,
-    baselinestretch=1.2,
-    bgcolor=LightGray,
-    fontsize=\footnotesize,
-    linenos
-]{python}
-f = open("test_data.dp", "w")
-f.write("Data:\n")
+% \begin{minted}[
+%     frame=lines,
+%     framesep=2mm,
+%     baselinestretch=1.2,
+%     bgcolor=LightGray,
+%     fontsize=\footnotesize,
+%     linenos
+% ]{python}
+% f = open("test_data.dp", "w")
+% f.write("Data:\n")
 
-##################################################################
-# |SR_RESET|ALARM|OUT3|OUT2|OUT1|OUT0|CLK|START|IN3|IN2|IN1|IN0| #
-##################################################################
+% ##################################################################
+% # |SR_RESET|ALARM|OUT3|OUT2|OUT1|OUT0|CLK|START|IN3|IN2|IN1|IN0| #
+% ##################################################################
 
-class TestOutput: 
-    def __init__(self):
-        self.in_data = 0
-        self.start = 0
-        self.clk = 0
-        self.output_data = 0
-        self.alarm = 0
-        self.reset_sr = 0
+% class TestOutput: 
+%     def __init__(self):
+%         self.in_data = 0
+%         self.start = 0
+%         self.clk = 0
+%         self.output_data = 0
+%         self.alarm = 0
+%         self.reset_sr = 0
 
-    def to_bin_string(self):
-        input_binary = str(bin(self.in_data)).removeprefix("0b").rjust(4, '0')
-        start_binary = str(bin(self.start)).removeprefix("0b")
-        clk_binary = str(bin(self.clk)).removeprefix("0b")
-        output_binary = str(bin(self.output_data)).removeprefix("0b").rjust(4, '0')
-        alarm_binary = str(bin(self.alarm)).removeprefix("0b")
-        reset_sr_binary = str(bin(self.reset_sr)).removeprefix("0b")
+%     def to_bin_string(self):
+%         input_binary = str(bin(self.in_data)).removeprefix("0b").rjust(4, '0')
+%         start_binary = str(bin(self.start)).removeprefix("0b")
+%         clk_binary = str(bin(self.clk)).removeprefix("0b")
+%         output_binary = str(bin(self.output_data)).removeprefix("0b").rjust(4, '0')
+%         alarm_binary = str(bin(self.alarm)).removeprefix("0b")
+%         reset_sr_binary = str(bin(self.reset_sr)).removeprefix("0b")
 
-        return reset_sr_binary + alarm_binary + output_binary + clk_binary + start_binary + input_binary
+%         return reset_sr_binary + alarm_binary + output_binary + clk_binary + start_binary + input_binary
     
 
-    def to_hex_string(self, pad):
-        hex_val = hex(int(self.to_bin_string(), 2))
-        return hex_val.removeprefix("0x").rjust(pad, '0')
+%     def to_hex_string(self, pad):
+%         hex_val = hex(int(self.to_bin_string(), 2))
+%         return hex_val.removeprefix("0x").rjust(pad, '0')
 
 
-####################################
-# Test cycle to reset JK flip flop #
-####################################
+% ####################################
+% # Test cycle to reset JK flip flop #
+% ####################################
 
-reset_to = TestOutput()
-reset_to.alarm = 1
-reset_to.reset_sr = 1
-f.write(reset_to.to_hex_string(8) + "\n")
-f.write(reset_to.to_hex_string(8) + "\n")
-reset_to.reset_sr = 0
-f.write(reset_to.to_hex_string(8) + "\n")
-data_count = 3
+% reset_to = TestOutput()
+% reset_to.alarm = 1
+% reset_to.reset_sr = 1
+% f.write(reset_to.to_hex_string(8) + "\n")
+% f.write(reset_to.to_hex_string(8) + "\n")
+% reset_to.reset_sr = 0
+% f.write(reset_to.to_hex_string(8) + "\n")
+% data_count = 3
 
-for i in range(16):
-    to = TestOutput()
-    to.in_data = i
-    to.start = 1
-    to.output_data = i 
-    to.alarm = int(i == 0)
+% for i in range(16):
+%     to = TestOutput()
+%     to.in_data = i
+%     to.start = 1
+%     to.output_data = i 
+%     to.alarm = int(i == 0)
 
-    f.write(to.to_hex_string(8) + "\n")
-    data_count += 1
+%     f.write(to.to_hex_string(8) + "\n")
+%     data_count += 1
 
-    to.in_data = 0
-    to.start = 0
-    to.alarm = int(i == 0)
+%     to.in_data = 0
+%     to.start = 0
+%     to.alarm = int(i == 0)
 
-    for k in range(i):
-        to.clk = 1
-        to.output_data -= 1
-        if to.output_data == 0:
-            to.alarm = 1
+%     for k in range(i):
+%         to.clk = 1
+%         to.output_data -= 1
+%         if to.output_data == 0:
+%             to.alarm = 1
 
-        f.write(to.to_hex_string(8) + "\n")
-        data_count += 1
+%         f.write(to.to_hex_string(8) + "\n")
+%         data_count += 1
 
-        to.clk = 0
+%         to.clk = 0
 
-        f.write(to.to_hex_string(8) + "\n")
-        data_count += 1
+%         f.write(to.to_hex_string(8) + "\n")
+%         data_count += 1
 
-    f.write(to.to_hex_string(8) + "\n")
-    data_count += 1
+%     f.write(to.to_hex_string(8) + "\n")
+%     data_count += 1
 
-f.write("Initial:\n")
-f.write("0000\n")
-f.write("Final:\n")
-f.write(str(hex(data_count)).capitalize().removeprefix("0x").rjust(4, '0'))
+% f.write("Initial:\n")
+% f.write("0000\n")
+% f.write("Final:\n")
+% f.write(str(hex(data_count)).capitalize().removeprefix("0x").rjust(4, '0'))
 
-f.close()
-\end{minted}
+% f.close()
+% \end{minted}
 \captionof{figure}{Skrypt generujący dane do testów, napisany w języku Python}
 \Large
 W wyniku testu otrzymujemy informację poprzez zaświecenie się lampki jeśli gdziekolwiek wystąpił błąd oraz 
