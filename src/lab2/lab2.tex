@@ -425,7 +425,7 @@ co odpowiada funkcji \verb|XOR|.
     \captionof{table}{Tabela prawdy z uwzględnieniem stanu następnego}
     \end{center}
 
-
+    \pagebreak
     Uwzględniając wejście \verb|EN| tabela prawdy prezentuje się następująco:
         \begin{center}
             \begin{tabular}{|l|l|l|l|l||l|l|l|l|l|}
@@ -554,6 +554,277 @@ transkodera BCD który zaprojektowaliśmy podczas pierwszego laboratorium. Przek
 \pagebreak
 \section{Testy}
 \subsection{Testy podukładów}
+\subsubsection{Testy timer\_driver}
+Aby przetestować układ \verb|timer_driver| użyliśmy układu z generatorem słów który nadaj dane testowe,
+komparatorem do wykrywania błędów, analizatorem stanów logicznych do przedstawienia przebiegu testu oraz
+przerzutnikiem JK do sygnalizowania, końcowego wyniku testu na podstawie wszystkich.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{component_tests_driver.pdf}
+    \captionof{figure}{Schemat układu testującego}
+\end{figure}
+
+\pagebreak
+Aby łatwo wygenerować dane testowe napisaliśmy skrypt w języku python, który generuje 
+każdą możliwość danych testowych oraz poprawny dla nich wynik. Kod skryptu:
+
+\small
+\begin{minted}[
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=LightGray,
+    fontsize=\footnotesize,
+    linenos
+]{python}
+    f = open("driver_test_data.dp", "w")
+    f.write("Data:\n")
+
+    ###############################################################################
+    # |SR_RESET|EQ0|T3|T2|T1|T0|EN|Q3|Q2|Q1|Q0| #
+    ###############################################################################
+
+    class TestOutput: 
+        def __init__(self):
+            self.in_data = 0
+            self.en = 0
+            self.output_data = 0
+            self.eq0 = 0
+            self.reset_sr = 0
+
+        def to_bin_string(self):
+            input_binary = str(bin(self.in_data)).removeprefix("0b").rjust(4, '0')
+            en_binary = str(bin(self.en)).removeprefix("0b")
+            output_binary = str(bin(self.output_data)).removeprefix("0b").rjust(4, '0')
+            eq0_binary = str(bin(self.eq0)).removeprefix("0b")
+            reset_sr_binary = str(bin(self.reset_sr)).removeprefix("0b")
+
+            return reset_sr_binary + eq0_binary + output_binary + en_binary + input_binary
+        
+
+        def to_hex_string(self, pad):
+            hex_val = hex(int(self.to_bin_string(), 2))
+            return hex_val.removeprefix("0x").rjust(pad, '0')
+
+
+    ####################################
+    # Test cycle to reset JK flip flop #
+    ####################################
+
+    reset_to = TestOutput()
+    reset_to.eq0 = 1
+    reset_to.reset_sr = 1
+    f.write(reset_to.to_hex_string(8) + "\n")
+    f.write(reset_to.to_hex_string(8) + "\n")
+    reset_to.reset_sr = 0
+    f.write(reset_to.to_hex_string(8) + "\n")
+    data_count = 3
+
+    to = TestOutput()
+    for input in range(15, -1, -1):
+        to.in_data = input
+        to.eq0 = 1 if input == 0 else 0
+
+        f.write(to.to_hex_string(8) + "\n")
+        data_count += 1
+
+    to.en = 1
+    for input in range(15, -1, -1):
+        to.in_data = input
+        to.output_data = input ^ 15 if input == 0 else input ^ (input - 1)
+        to.eq0 = 1 if input == 0 else 0
+
+        f.write(to.to_hex_string(8) + "\n")
+        data_count += 1
+
+
+    f.write("Initial:\n")
+    f.write("0000\n")
+    f.write("Final:\n")
+    f.write(str(hex(data_count)).capitalize().removeprefix("0x").rjust(4, '0'))
+
+    f.close()
+\end{minted}
+\captionof{figure}{Skrypt generujący dane do testów, napisany w języku Python}
+\Large
+
+Po zaimportowaniu pliku, który wygenerował skrypt generator słów przedstawia się następująco:
+\begin{figure}[H]
+    \centering
+
+    \includegraphics{driver_test_word_generator.png}
+    \caption{Dane zaimportowane do generatora słów}
+\end{figure}
+\pagebreak
+Poniżej wynik testu w postaci przebiegu analizatora stanów logicznych:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{component_test_logic_analyzer_xla1_driver.png}
+    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podpiętego do wyjścia układu}
+\end{figure}
+\pagebreak
+\subsubsection{Testy timer\_setter}
+Układ dla testów układu \verb|timer_setter| jest podobny do poprzedniego układu tylko z różnicą, że
+z powodu ilości wyjść i wejść musieliśmy użyć dwóch analizatorów stanów logicznych - ich wynik 
+można zsynchronizować na podstawie przebiegu sygnału READY oraz czasu rozpoczęcia i zakończenia testu.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{component_tests_setter.pdf}
+    \captionof{figure}{Schemat układu testującego}
+\end{figure}
+\pagebreak
+Podobnie jak wcześniej napisaliśmy skrypt generujący dane:
+\small
+\begin{minted}[
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=LightGray,
+    fontsize=\footnotesize,
+    linenos
+]{python}
+    f = open("setter_test_data.dp", "w")
+    f.write("Data:\n")
+
+    ###############################################################################
+    # |SR_RESET|S3|R3|S2|R2|S1|R1|S0|R0|IN3|IN2|IN1|IN0|EN|Q3|Q2|Q1|Q0| #
+    ###############################################################################
+
+    class TestOutput: 
+        def __init__(self):
+            self.q_in_data = 0
+            self.en = 0
+            self.in_data = 0
+            
+            self.s0 = 0
+            self.r0 = 0
+            self.s1 = 0
+            self.r1 = 0
+            self.s2 = 0
+            self.r2 = 0
+            self.s3 = 0
+            self.r3 = 0
+
+            self.reset_sr = 0
+
+        def to_bin_string(self):
+            q_input_binary = str(bin(self.q_in_data)).removeprefix("0b").rjust(4, '0')
+            en_binary = str(bin(self.en)).removeprefix("0b")
+            input_binary = str(bin(self.in_data)).removeprefix("0b").rjust(4, '0')
+            
+            s0_binary = str(bin(self.s0)).removeprefix("0b")
+            r0_binary = str(bin(self.r0)).removeprefix("0b")
+            s1_binary = str(bin(self.s1)).removeprefix("0b")
+            r1_binary = str(bin(self.r1)).removeprefix("0b")
+            s2_binary = str(bin(self.s2)).removeprefix("0b")
+            r2_binary = str(bin(self.r2)).removeprefix("0b")
+            s3_binary = str(bin(self.s3)).removeprefix("0b")
+            r3_binary = str(bin(self.r3)).removeprefix("0b")
+            
+            reset_sr_binary = str(bin(self.reset_sr)).removeprefix("0b")
+
+            return (reset_sr_binary + 
+                    r3_binary + 
+                    s3_binary + 
+                    r2_binary + 
+                    s2_binary + 
+                    r1_binary + 
+                    s1_binary + 
+                    r0_binary + 
+                    s0_binary + 
+                    input_binary + 
+                    en_binary +
+                    q_input_binary)
+        
+
+        def to_hex_string(self, pad):
+            hex_val = hex(int(self.to_bin_string(), 2))
+            return hex_val.removeprefix("0x").rjust(pad, '0')
+
+
+    ####################################
+    # Test cycle to reset JK flip flop #
+    ####################################
+
+    reset_to = TestOutput()
+    reset_to.reset_sr = 1
+    f.write(reset_to.to_hex_string(8) + "\n")
+    f.write(reset_to.to_hex_string(8) + "\n")
+    reset_to.reset_sr = 0
+    f.write(reset_to.to_hex_string(8) + "\n")
+    data_count = 3
+
+    to = TestOutput()
+    for input in range(15, -1, -1):
+        for q_input in range(15, -1, -1):
+            to.in_data = input
+            to.q_input = q_input
+            
+
+            f.write(to.to_hex_string(8) + "\n")
+            data_count += 1
+
+    to.en = 1
+    for input in range(15, -1, -1):
+        for q_input in range(15, -1, -1):
+            to.in_data = input
+            to.q_in_data = q_input
+            
+            in_bin = bin(input).removeprefix("0b").rjust(4, '0')
+            q_in_bin = bin(q_input).removeprefix("0b").rjust(4, '0')
+
+            to.s0 = 1 if in_bin[3] == "1" and q_in_bin[3] == "0" else 0
+            to.r0 = 1 if in_bin[3] == "0" and q_in_bin[3] == "1" else 0
+
+            to.s1 = 1 if in_bin[2] == "1" and q_in_bin[2] == "0" else 0
+            to.r1 = 1 if in_bin[2] == "0" and q_in_bin[2] == "1" else 0
+
+            to.s2 = 1 if in_bin[1] == "1" and q_in_bin[1] == "0" else 0
+            to.r2 = 1 if in_bin[1] == "0" and q_in_bin[1] == "1" else 0
+
+            to.s3 = 1 if in_bin[0] == "1" and q_in_bin[0] == "0" else 0
+            to.r3 = 1 if in_bin[0] == "0" and q_in_bin[0] == "1" else 0
+
+            f.write(to.to_hex_string(8) + "\n")
+            data_count += 1
+
+
+    f.write("Initial:\n")
+    f.write("0000\n")
+    f.write("Final:\n")
+    f.write(str(hex(data_count)).capitalize().removeprefix("0x").rjust(4, '0'))
+
+    f.close()
+\end{minted}
+\captionof{figure}{Skrypt generujący dane do testów, napisany w języku Python}
+\Large
+
+\pagebreak
+Po zaimportowaniu pliku, który wygenerował skrypt generator słów przedstawia się następująco:
+\begin{figure}[H]
+    \centering
+
+    \includegraphics{setter_test_word_generator.png}
+    \caption{Dane zaimportowane do generatora słów}
+\end{figure}
+
+\pagebreak
+Poniżej przebieg obu analizatorów stanów logicznych:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{component_test_logic_analyzer_xla2_setter.png}
+    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podpiętego do wyjścia układu}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{component_test_logic_analyzer_xla3_setter.png}
+    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podpiętego do wyjścia danych porównawczych}
+\end{figure}
+
+\pagebreak
 \subsection{Test timera}
 Zdecydowaliśmy się przeprowadzić ogólny test układu timer - na najwyższym poziomie abstrakcji.
 W tym celu zestawiliśmy układ składający się z generatora słów, naszego układu \verb|timer|, komparatora oraz analizatora
@@ -573,7 +844,7 @@ powoduje jego ustawienie, a pojawienie się stanu wysokiego na wyjściu K resetu
 Do wygenerowanie pliku wejściowego dla generatora słów, napisaliśmy skrypt w języku python, który 
 symuluje kolejne kroki odliczania timera w zmiennych i zapisuje je do pliku w formacie, który można zaimportować 
 do multisima.
-
+\pagebreak
 Poniżej kod skryptu generującego dane:
 \small
 \begin{minted}[
@@ -669,6 +940,17 @@ f.close()
 \end{minted}
 \captionof{figure}{Skrypt generujący dane do testów, napisany w języku Python}
 \Large
+
+\pagebreak
+Po zaimportowaniu danych do generatora słów przedstawia się on następująco:
+\begin{figure}[H]
+    \centering
+
+    \includegraphics{general_test_word_generator.png}
+    \caption{Dane zaimportowane do generatora słów}
+\end{figure}
+
+\pagebreak
 W wyniku testu otrzymujemy informację poprzez zaświecenie się lampki jeśli gdziekolwiek wystąpił błąd oraz 
 przebieg sygnałów z analizatora stanów logicznych:
 \begin{figure}[H]
@@ -679,15 +961,21 @@ przebieg sygnałów z analizatora stanów logicznych:
 \pagebreak
 \section{Zastosowania}
 \begin{itemize}
-    \item Sprzętowa obsługa timerów na mikroprocesorach, wraz z mechanizmem sprzętowych przerwań stanowią przydatny mechanizm
-            pozwalający na cykliczne wywoływanie zadanego kodu bez konieczności zużywania czasu procesora na kontrolę upływu 
-            czasu. Mechanizm taki ma zastosowanie od wspomnianego cyklicznego wykonywania kodu do sprzężenia ze sobą różnych peryferiów
-            mikroprocesora, pozwalające na automatyczne dokonywanie cyklicznych pomiarów czy generowanie sygnałów, jak np. 
-            sygnał Alarm timera podpięty jako sygnał wyzwalający konwersję przetwornika ADC, który odczyt zapisuje bezposrednio do pamięci
-            poprzez mechanizm DMA czy timer generujący sygnał PWM przez porównanie obecnego stanu licznika z zadaną wartością - ponownie
-            w sprzężeniu z mechanizmem DMA pozwalającym odczytywać kolejne wartości do porównania w każdym okresie timera bezpośrednio z pamięci
-            można nadawać praktycznie dowolny sygnał cyfrowy.  % --TODO: moje rysunki z tableta
+    \item Jednym z zastosowań układów timer jest umieszczanie ich w mikroprocesorach. Są one jednym 
+            z podstawowych układów peryferyjnych pozwalających na wykonywanie periodycznych 
+            zadań. Najbardziej podstawowym zadaniem może być periodyczne wykonywanie specjalnie
+            zdefiniowanego fragmentu kodu aktywowanego sygnałem \verb|ALARM| - przerwanie sprzętowe.
+            W ten sposób nie musimy tracić czasu procesora na kontrolę czasu aby wykonywać kod. 
+            Taki mechanizm można też wykorzystać do periodycznej obsługi innych peryferiów jak np.
+            przetwornik analogowo-cyfrowy czy kontrolery magistrali komunikacyjnych.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{timer_use_mcu.png}
+        \caption{Przykładowe zastosowanie układu timer w mikroprocesorach}
+    \end{figure}
 \end{itemize}
+
+\pagebreak
 \section{Wnioski}
 Dzięki przerzutnikom możemy projektować złożone układy z pamięcią swojego stanu. 
 
@@ -695,7 +983,6 @@ W toku rozwiązywania postawionego problemu opracowaliśmy kilka możliwych rozw
 zdecydowaliśmy się na przedstawienie tego konkretnego rozwiązania ze względu na jego prostotę i 
 największą niezawodność. Zastosowanie przerzutników działających synchronicznie pozwoliło na zredukowanie
 ilości hazardów przy odliczaniu czasu.
-\pagebreak
 
 Pierwotnym pomysłem było użycie przerzutników T asynchronicznie - łącząc je w szeregowo dzięki czemu 
 nie było konieczne projektowanie układu kontrolującego przerzutniki. Największą wadą tego rozwiązania
