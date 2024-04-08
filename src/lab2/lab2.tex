@@ -356,14 +356,13 @@ Wyżej wymienione formuły można w multisimie przedstawić w następujący spos
     \includegraphics[width=\textwidth]{model1.png}
     \captionof{figure}{Realizacja funkcji logicznych w Multisimie}
 \end{figure}
-Układ timer\_setter został zaimplementowany jako czterokrotne powielenie powyższej struktury.
+Układ \texttt{timer\_setter} został zaimplementowany jako czterokrotne powielenie powyższej struktury.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{timer_setter_subsheet.pdf}
-    \captionof{figure}{Schemat podukładu: timer\_setter}
+    \captionof{figure}{Schemat podukładu: \texttt{timer\_setter}}
 \end{figure}
-% Układ składa się z powielonej 4 razy implementacji powyżej wyprowadzonych formuł.
 
 \pagebreak
 \subsection{Podukład kontrolujący przerzutniki}
@@ -389,13 +388,18 @@ Opis wyjść układu:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{timer_driver_black_box.png}
-    \captionof{figure}{Czarna skrzynka podukładu: timer\_driver}
+    \captionof{figure}{Czarna skrzynka podukładu: \texttt{timer\_driver}}
 \end{figure}
+
+\pagebreak
 \subsubsection{Tabele prawdy}
 
 Tabela prawdy została skonstruowana na podstawie formuły 
-\[\verb|Tx| =  \verb|XOR|(Q_{n_x},  Q_{n_x+1})\],
-gdzie $Q_{n_x}$ oznacza stan obecny, a $Q_{n_x+1}$ oznacza stan następny
+\[T_x =  \verb|XOR|(Q_{n_x},  Q_{n_x+1})\]
+gdzie $Q_{n_x}$ oznacza stan obecny, a $Q_{n_x+1}$ oznacza stan następny. Bierze się to z faktu, 
+że musimy zmienić stan przerzutnika tylko w momencie kiedy obecny stan nie odpowiada stanowi następnemu
+co odpowiada funkcji \verb|XOR|.
+
 \begin{center}
     \begin{tabular}{|l|l|l|l|l||l|l|l|l||l|l|l|l|}
     \hline
@@ -416,35 +420,18 @@ gdzie $Q_{n_x}$ oznacza stan obecny, a $Q_{n_x+1}$ oznacza stan następny
     3  & 0 & 0 & 1 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 \\ \hline
     2  & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 1 \\ \hline
     1  & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\ \hline
-    0  & 0 & 0 & 0 & 0 & x & x & x & x & x & x & x & x \\ \hline
+    0  & 0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\ \hline
     \end{tabular}
     \captionof{table}{Tabela prawdy z uwzględnieniem stanu następnego}
     \end{center}
 
 
-    Wtedy tabela prawdy prezentuje się następująco:
+    Uwzględniając wejście \verb|EN| tabela prawdy prezentuje się następująco:
         \begin{center}
             \begin{tabular}{|l|l|l|l|l||l|l|l|l|l|}
             \hline
             \multicolumn{5}{|c||}{Wejście} & \multicolumn{5}{|c|}{Wyjście} \\\hline
             \verb|EN| &\verb|Q3| & \verb|Q2| & \verb|Q1| & \verb|Q0| & \verb|T3| & \verb|T2| & \verb|T1| & \verb|T0| & \verb|EQ0| \\ \hline
-            1 & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
-            1 & 1 & 1 & 1 & 0 & 0 & 0 & 1 & 1 & 0 \\ \hline
-            1 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
-            1 & 1 & 1 & 0 & 0 & 0 & 1 & 1 & 1 & 0 \\ \hline
-            1 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
-            1 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 0 \\ \hline
-            1 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
-            1 & 1 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 0 \\ \hline
-            1 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
-            1 & 0 & 1 & 1 & 0 & 0 & 0 & 1 & 1 & 0 \\ \hline
-            1 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
-            1 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 1 & 0 \\ \hline
-            1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
-            1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 0 \\ \hline
-            1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
-            1 & 0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 1 \\ \hline
-
             0 & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
             0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
             0 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
@@ -462,188 +449,107 @@ gdzie $Q_{n_x}$ oznacza stan obecny, a $Q_{n_x+1}$ oznacza stan następny
             0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
             0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\ \hline
             
+            1 & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
+            1 & 1 & 1 & 1 & 0 & 0 & 0 & 1 & 1 & 0 \\ \hline
+            1 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
+            1 & 1 & 1 & 0 & 0 & 0 & 1 & 1 & 1 & 0 \\ \hline
+            1 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
+            1 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 0 \\ \hline
+            1 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
+            1 & 1 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 0 \\ \hline
+            1 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
+            1 & 0 & 1 & 1 & 0 & 0 & 0 & 1 & 1 & 0 \\ \hline
+            1 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
+            1 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 1 & 0 \\ \hline
+            1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
+            1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 0 \\ \hline
+            1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
+            1 & 0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 1 \\ \hline
+            
             \end{tabular}
-            \captionof{table}{Tablea prawdy dla podukładu: timer\_driver}
+            \captionof{table}{Tabela prawdy dla podukładu: \texttt{timer\_driver}}
             \end{center}
 
 \subsubsection{Wyprowadzenie formuł}
-Na podstawie poniższej tabeli wyprowadzone zostały Tablice Karnaugh
+Na podstawie powyższej tabeli stworzyliśmy tablice karnaugh i wyprowadziliśmy formuły
 \begin{center}
-    \begin{tabular}{|l|l|l|l|l||l|l|l|l|}
-    \hline
-    &\multicolumn{4}{c||}{Stan Obecny} & \multicolumn{4}{|c|}{Przerzutniki} \\\hline
-       &$Q_{n_3}$ & $Q_{n_2}$ & $Q_{n_1}$ & $Q_{n_0}$ & $T_3$ & $T_2$ & $T_1$ & $T_0$ \\ \hline
-    15 & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 1 \\ \hline
-    14 & 1 & 1 & 1 & 0 & 0 & 0 & 1 & 1 \\ \hline
-    13 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 1 \\ \hline
-    12 & 1 & 1 & 0 & 0 & 0 & 1 & 1 & 1 \\ \hline
-    11 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 1 \\ \hline
-    10 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 1 \\ \hline
-    9  & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\ \hline
-    8  & 1 & 0 & 0 & 0 & 1 & 1 & 1 & 1 \\ \hline
-    7  & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 1 \\ \hline
-    6  & 0 & 1 & 1 & 0 & 0 & 0 & 1 & 1 \\ \hline
-    5  & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 1 \\ \hline
-    4  & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 1 \\ \hline
-    3  & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 1 \\ \hline
-    2  & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 1 \\ \hline
-    1  & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\ \hline
-    0  & 0 & 0 & 0 & 0 & x & x & x & x \\ \hline
-    \end{tabular}
-    \captionof{table}{Tabela prawdy z wyłączeniem pinów EN i EQ0}
-    \end{center}
-\begin{center}
-    \begin{karnaugh-map}[4][4][1][$Q1Q0$][$Q3Q2$]
-      \manualterms{x,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0}
-      \implicantedge{0}{0}{8}{8}
+    \begin{karnaugh-map}[4][4][2][$\texttt{Q1Q0}$][$\texttt{Q3Q2}$][$\texttt{EN}$]
+      \manualterms{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0}
+      \implicantedge{0}{0}{8}{8}[1]
     \end{karnaugh-map}
-    \captionof{table}{Tabela Karnaugh dla przerzutnika $T_3$} 
+    \captionof{table}{Tabela Karnaugh dla przerzutnika \texttt{T3}} 
   \end{center}
 Możemy z niej odczytać zoptymalizowaną formułę:
-\[ T_3 = \textcolor{red}{\overline{Q_2Q_1Q_0}}\]
+\[ \texttt{T3} = \textcolor{red}{\overline{\texttt{Q2}}\cdot\overline{\text{Q1}}\cdot\overline{\texttt{Q0}}\cdot\texttt{EN}}\]
 
 \begin{center}
-    \begin{karnaugh-map}[4][4][1][$Q1Q0$][$Q3Q2$]
-      \manualterms{x,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0}
-      \implicant{0}{8}
+    \begin{karnaugh-map}[4][4][2][$\texttt{Q1Q0}$][$\texttt{Q3Q2}$][$\texttt{EN}$]
+      \manualterms{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0}
+      \implicant{0}{8}[1]
     \end{karnaugh-map}
-    \captionof{table}{Tabela Karnaugh dla przerzutnika $T_2$} 
+    \captionof{table}{Tabela Karnaugh dla przerzutnika \texttt{T2}} 
   \end{center}
 Możemy z niej odczytać zoptymalizowaną formułę:
-\[ T_2 = \textcolor{red}{\overline{Q_1Q_0}}\]
+\[ \texttt{T2} = \textcolor{red}{\overline{\texttt{Q1}}\cdot\overline{\texttt{Q0}}\cdot\texttt{EN}}\]
 
 \begin{center}
-    \begin{karnaugh-map}[4][4][1][$Q1Q0$][$Q3Q2$]
-      \manualterms{x,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0}
-      \implicantedge{0}{8}{2}{10}
+    \begin{karnaugh-map}[4][4][2][$\texttt{Q1Q0}$][$\texttt{Q3Q2}$][$\texttt{EN}$]
+      \manualterms{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0}
+      \implicantedge{0}{8}{2}{10}[1]
     \end{karnaugh-map}
-    \captionof{table}{Tabela Karnaugh dla przerzutnika $T_1$} 
+    \captionof{table}{Tabela Karnaugh dla przerzutnika \texttt{T1}} 
   \end{center}
 Możemy z niej odczytać zoptymalizowaną formułę:
-\[ T_1 = \textcolor{red}{\overline{Q_0}}\]
+\[ \texttt{T1} = \textcolor{red}{\overline{\texttt{Q0}}\cdot\texttt{EN}}\]
 
 \begin{center}
-    \begin{karnaugh-map}[4][4][1][$Q1Q0$][$Q3Q2$]
-      \manualterms{x,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-      \implicant{0}{10}
+    \begin{karnaugh-map}[4][4][2][$\texttt{Q1Q0}$][$\texttt{Q3Q2}$][$\texttt{EN}$]
+      \manualterms{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+      \implicant{0}{10}[1]
     \end{karnaugh-map}
-    \captionof{table}{Tabela Karnaugh dla przerzutnika $T_0$} 
+    \captionof{table}{Tabela Karnaugh dla przerzutnika \texttt{T0}} 
   \end{center}
 Możemy z niej odczytać zoptymalizowaną formułę:
-\[ T_0 = \textcolor{red}{1}\]
+\[ \texttt{T0} = \textcolor{red}{\texttt{EN}}\]
+\pagebreak
+\begin{center}
+    \begin{karnaugh-map}[4][4][2][$\texttt{Q1Q0}$][$\texttt{Q3Q2}$][$\texttt{EN}$]
+      \manualterms{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+      \implicant{0}{0}[0,1]
+    \end{karnaugh-map}
+    \captionof{table}{Tabela Karnaugh dla przerzutnika \texttt{EQ0}} 
+  \end{center}
+  Możemy z niej odczytać zoptymalizowaną formułę:
+\[ \texttt{EQ0} = \textcolor{red}{\overline{\texttt{Q0}}\cdot\overline{\texttt{Q1}}\cdot\overline{\texttt{Q2}}\cdot\overline{\texttt{Q3}}}\]
 
-Oprócz bitów licznika na wyjście ma także wpływ \verb|EN|, czyli bit aktywujący. Aby poprawnie zaiplemnetować formuły potrzebujemy go uwzględnić
-\[ T_0 = \verb|EN|\]
-\[ T_1 = \overline{Q_0}\verb|EN|\]
-\[ T_2 = \overline{Q_1Q_0}\verb|EN|\]
-\[ T_3 = \overline{Q_2Q_1Q_0}\verb|EN|\]
-
-\verb|EQ0| ma za zadanie informować kiedy wszystkie bity stanu obecnego licznika \verb|Qx| będą równe 0, więc formuła będzie wyglądać następująco:
-\[ \verb|EQ0| = \overline{Q_0Q_1Q_2Q_3}\]
-
-
+\pagebreak
 \subsubsection{Realizacja formuł}
 
 Układ został stworzony na postawie poniższych formuł
-\[ T_0 = \verb|EN|\]
-\[ T_1 = \overline{Q_0}\verb|EN|\]
-\[ T_2 = \overline{Q_1Q_0}\verb|EN|\]
-\[ T_3 = \overline{Q_2Q_1Q_0}\verb|EN|\]
-\[ \verb|EQ0| = \overline{Q_0Q_1Q_2Q_3}\]
-
-Dla czytelności przeprowadzanie operacji AND z każdym z bitów zostało zaimplementowane w podukładzie enabler,
- który szczegółowo opisany jest w kolejnym paragrafie.
-
+\[ \texttt{T0} = \texttt{EN}\]
+\[ \texttt{T1} = \overline{\texttt{Q0}}\cdot\texttt{EN}\]
+\[ \texttt{T2} = \overline{\texttt{Q1}}\cdot\overline{\texttt{Q0}}\cdot\texttt{EN}\]
+\[ \texttt{T3} = \overline{\texttt{Q2}}\cdot\overline{\text{Q1}}\cdot\overline{\texttt{Q0}}\cdot\texttt{EN}\]
+\[ \texttt{EQ0} = \overline{\texttt{Q0}}\cdot\overline{\texttt{Q1}}\cdot\overline{\texttt{Q2}}\cdot\overline{\texttt{Q3}}\]
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{timer_driver.pdf}
-    \captionof{figure}{Schemat podukładu: time\_driver}
+    \captionof{figure}{Schemat podukładu: \texttt{timer\_driver}}
 \end{figure}
 
 \pagebreak
-\subsection{Podukład enabler}
-Podukład który zwraca bity wejściowe jeśli \verb|EN| równy jest 1 lub 0 jeśli \verb|EN| jest równy 0 
-\subsubsection{Wejścia i Wyjścia}
-
-Opis wejść układu:
-\begin{itemize}
-    \item \verb|EN| - Wejście aktywujące układ. Pozwala, aby na wyjściu pojawiały się odpowiednie wartości kiedy jest w stanie wysokim
-    \item \verb|A, B, C, D| - 4 bity wejściowe 
-\end{itemize}
-
-Opis wyjść układu:
-
-\begin{itemize}
-    \item \verb|A_EN, B_EN, C_EN, D_EN| - 4 bity wyjściowe 
-\end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{enabler_black_box.png}
-    \captionof{figure}{Czarna skrzynka podukładu: enabler}
-\end{figure}
-\subsubsection{Tabele prawdy}
-
-\begin{center}
-    \begin{tabular}{|l|l|l|l|l||l|l|l|l|}
-    \hline
-    \multicolumn{5}{|c||}{Wejście} & \multicolumn{4}{|c|}{Wyjście} \\\hline
-    \verb|EN| &\verb|A| & \verb|B| & \verb|C| & \verb|D| & \verb|A_EN| & \verb|B_EN| & \verb|C_EN| & \verb|D_EN|  \\ \hline
-    1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\ \hline
-    1 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 \\ \hline
-    1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 \\ \hline
-    1 & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 0 \\ \hline
-    1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 \\ \hline
-    1 & 1 & 0 & 1 & 0 & 1 & 0 & 1 & 0 \\ \hline
-    1 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1 \\ \hline
-    1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\ \hline
-    1 & 0 & 1 & 1 & 1 & 0 & 1 & 1 & 1 \\ \hline
-    1 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 0 \\ \hline
-    1 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 1 \\ \hline
-    1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 \\ \hline
-    1 & 0 & 0 & 1 & 1 & 0 & 0 & 1 & 1 \\ \hline
-    1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\ \hline
-    1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\ \hline
-    1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
-
-    0 & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\ \hline
-    0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
-    0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
-    
-    \end{tabular}
-    \captionof{table}{Tablea prawdy dla podukładu: enabler}
-    \end{center}
-
-
-    \subsubsection{Wyprowadzenie i realizacja formuł}
-    Do implementacji tego układu wystarczy jednynie zastosowanie bramki AND dla bitu \verb|EN| z każdym z bitów:
-    \[\verb|A_EN| = \verb|A| \cdot \verb|EN| \]
-    \[\verb|B_EN| = \verb|B| \cdot \verb|EN| \]
-    \[\verb|C_EN| = \verb|C| \cdot \verb|EN| \]
-    \[\verb|D_EN| = \verb|D| \cdot \verb|EN| \]
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{enabler.png}
-    \captionof{figure}{Schemat podukładu: enabler}
-\end{figure}
-
-
 \section{Przykład implementacji układu w obwodzie}
-% TODO: rysunek showup_scheme
+Zestawiliśmy przykładowy układ prezentujący jak zaimplementować układ w obwodzie. Użyliśmy
+transkodera BCD który zaprojektowaliśmy podczas pierwszego laboratorium. Przekształca on 
+6 bitową liczbę zakodowaną binarnie na dwie 4 bitowe liczby binarne będące cyframi wejściowej liczby.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{showup_scheme.pdf}
+    \captionof{figure}{Przykładowa implementacja obwodu z wykorzystaniem układu \texttt{timer}}
+\end{figure}
+
 
 \pagebreak
 \section{Testy}
