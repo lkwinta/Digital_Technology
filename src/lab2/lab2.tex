@@ -555,8 +555,8 @@ transkodera BCD który zaprojektowaliśmy podczas pierwszego laboratorium. Przek
 \section{Testy}
 \subsection{Testy podukładów}
 \subsubsection{Testy timer\_driver}
-Aby przetestować układ \verb|timer_driver| użyliśmy układu z generatorem słów który nadaj dane testowe,
-komparatorem do wykrywania błędów, analizatorem stanów logicznych do przedstawienia przebiegu testu oraz
+Aby przetestować układ \verb|timer_driver| użyliśmy układu z generatorem słów, który nadaje dane testowe,
+komparatorem do wykrywania błędów, analizatorami stanów logicznych do przedstawienia przebiegu testu i wejść układu oraz
 przerzutnikiem JK do sygnalizowania, końcowego wyniku testu na podstawie wszystkich.
 
 \begin{figure}[H]
@@ -657,17 +657,23 @@ Po zaimportowaniu pliku, który wygenerował skrypt generator słów przedstawia
     \caption{Dane zaimportowane do generatora słów}
 \end{figure}
 \pagebreak
-Poniżej wynik testu w postaci przebiegu analizatora stanów logicznych:
+Poniżej wynik testu w postaci przebiegu analizatorów stanów logicznych:
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{component_test_logic_analyzer_xla1_driver.png}
-    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podpiętego do wyjścia układu}
+    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podpiętym do wyjścia układu}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{component_test_logic_analyzer_xla2_driver.png}
+    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podiętego do wejścia układu}
 \end{figure}
 \pagebreak
 \subsubsection{Testy timer\_setter}
 Układ dla testów układu \verb|timer_setter| jest podobny do poprzedniego układu tylko z różnicą, że
-z powodu ilości wyjść i wejść musieliśmy użyć dwóch analizatorów stanów logicznych - ich wynik 
+z powodu ilości wyjść i wejść musieliśmy użyć dwóch analizatorów stanów logicznych do śledzenia przebiegu testu - ich wynik 
 można zsynchronizować na podstawie przebiegu sygnału READY oraz czasu rozpoczęcia i zakończenia testu.
+Dodaliśmy również trzeci analizator w celu przedstawia wejść testowanego układu.
 
 \begin{figure}[H]
     \centering
@@ -811,17 +817,23 @@ Po zaimportowaniu pliku, który wygenerował skrypt generator słów przedstawia
 \end{figure}
 
 \pagebreak
-Poniżej przebieg obu analizatorów stanów logicznych:
+Poniżej przebieg wszystkich trzech analizatorów stanów logicznych:
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{component_test_logic_analyzer_xla2_setter.png}
-    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podpiętego do wyjścia układu}
+    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podpiętym do wyjścia układu}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{component_test_logic_analyzer_xla3_setter.png}
-    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podpiętego do wyjścia danych porównawczych}
+    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podpiętym do wyjścia danych porównawczych}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{component_test_logic_analyzer_xla1_setter.png}
+    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podpiętym do wejścia układu}
 \end{figure}
 
 \pagebreak
@@ -942,22 +954,27 @@ f.close()
 \captionof{figure}{Skrypt generujący dane do testów, napisany w języku Python}
 \Large
 
-\pagebreak
+% \pagebreak
 Po zaimportowaniu danych do generatora słów przedstawia się on następująco:
 \begin{figure}[H]
     \centering
-
     \includegraphics[width=\textwidth]{general_test_word_generator.png}
     \caption{Dane zaimportowane do generatora słów}
 \end{figure}
 
 \pagebreak
 W wyniku testu otrzymujemy informację poprzez zaświecenie się lampki jeśli gdziekolwiek wystąpił błąd oraz 
-przebieg sygnałów z analizatora stanów logicznych:
+przebieg sygnałów z analizatorów stanów logicznych:
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{general_test_logic_analyzer.png}
-    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych}
+    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podpiętym do wyjścia układu}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{general_test_logic_analyzer_xla2.png}
+    \captionof{figure}{Przebieg sygnałów w analizatorze stanów logicznych podpiętym do wejścia układu}
 \end{figure}
 \pagebreak
 \section{Zastosowania}
@@ -975,7 +992,7 @@ przebieg sygnałów z analizatora stanów logicznych:
         \caption{Przykładowe zastosowanie układu timer w mikroprocesorach}
     \end{figure}
 
-    \item W systemach automatycznych systemach nawadniających do roślin,
+    \item W automatycznych systemach nawadniających do roślin,
     odliczający się licznik może być używany do kontrolowania czasu podlewania różnych obszarów ogrodu lub roślin doniczkowych.
 
     \begin{figure}[H]
@@ -984,9 +1001,9 @@ przebieg sygnałów z analizatora stanów logicznych:
         \caption{Przykładowe zastosowanie układu timer w systemach nawadniających}
     \end{figure}
 
-    \item Dany układ można z również zastosować w lampkach migających, takich jak te używane w alarmach lub sygnalizacji.
+    \item Dany układ można również zastosować w lampkach migających, takich jak te używane w alarmach lub sygnalizacji.
     Te lampki mogą zaświecać się cyklicznie co określoną ilość sekund, tworząc efekt migotania lub pulsowania światła.
-   Jest to przydatne w przypadku systemów alarmowych lub ostrzegawczych lub sygnalizacyjnych. Przykładowo, sygnalizująca awarię sprzętu.
+   Jest to przydatne w przypadku systemów alarmowych, ostrzegawczych lub sygnalizacyjnych. Przykładowo, sygnalizujące awarię sprzętu.
 
     \item Na liniach produkcyjnych, gdzie maszyny wykonują kolejne etapy produkcji,
      odliczający się licznik może być użyty do synchronizacji czasu między różnymi maszynami.
