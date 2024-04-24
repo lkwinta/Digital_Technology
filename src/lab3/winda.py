@@ -35,6 +35,8 @@ while True:
         case ElevatorState.FLOOR_1_DOOR_OPEN:
             if door_close_button == 1 or door_should_close == 1:
                 current_state = ElevatorState.FLOOR_1_DOOR_CLOSED
+                door_close_button = 0
+                door_should_close = 0
 
         case ElevatorState.FLOOR_2_DOOR_CLOSED:
             if door_button_floor_2 == 1:
@@ -48,6 +50,8 @@ while True:
         case ElevatorState.FLOOR_2_DOOR_OPEN:
             if door_close_button == 1 or door_should_close == 1:
                 current_state = ElevatorState.FLOOR_2_DOOR_CLOSED
+                door_close_button = 0
+                door_should_close = 0
 
         case ElevatorState.FLOOR_3_DOOR_CLOSED:
             if door_button_floor_3 == 1:
@@ -59,6 +63,8 @@ while True:
         case ElevatorState.FLOOR_3_DOOR_OPEN:
             if door_close_button == 1 or door_should_close == 1:
                 current_state = ElevatorState.FLOOR_3_DOOR_CLOSED
+                door_close_button = 0
+                door_should_close = 0
 
         case ElevatorState.GOING_UP:
             time.sleep(2)
