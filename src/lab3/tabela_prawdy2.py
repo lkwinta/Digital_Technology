@@ -3,6 +3,7 @@ import logicmin
 direction_controller_tt = logicmin.TT(6, 4)
 floor_controller_tt = logicmin.TT(5, 4)
 door_controller_tt = logicmin.TT(5, 4)
+elevator_motor_mux_tt = logicmin.TT(4, 2)
 
 for i in range(64):
     permutation = bin(i).removeprefix("0b").rjust(6, '0')
@@ -64,13 +65,13 @@ for i in range(32):
         set_dn = '0'
         reset_dn = '1'
 
-    elif variables['ACTIVE'] and variables['BELOW'] :
+    elif variables['ACTIVE'] and variables['BELOW'] and not variables['DOOR_OPEN']:
         set_up = '0'
         reset_up = '0'
         set_dn = '1'
         reset_dn = '0'
 
-    elif variables['ACTIVE'] and variables['ABOVE']:
+    elif variables['ACTIVE'] and variables['ABOVE'] and not variables['DOOR_OPEN']:
         set_up = '1'
         reset_up = '0'
         set_dn = '0'
@@ -102,14 +103,37 @@ for i in range(32):
 
     door_controller_tt.add(permutation, [r1, r2, r3, door_open])
 
+for i in range(16):
+    permutation = bin(i).removeprefix("0b").rjust(4, '0')
+    
+    a1 = '1'
+    b1 = '1'
+
+    if i == 0:
+        a1 = '0'
+        b1 = '0'
+    elif i == 8:
+        a1 = '1'
+        b1 = '0'
+    elif i == 15:
+        a1 = '0'
+        b1 = '1'
+
+
+    elevator_motor_mux_tt.add(permutation, [a1, b1])
+
 print("--------------------------------direction_controller_tt")
 sols = direction_controller_tt.solve()
 print(sols.printN(xnames=['F1', 'F2', 'F3', 'S1', 'S2', 'S3'],ynames=['ABOVE','BELOW', 'AT_STOP', 'ACTIVE']))
 
 print("--------------------------------floor_controller_tt")
 sols = floor_controller_tt.solve()
-print(sols.printN(xnames=['DOOR_OPEN', 'ACTIVE', 'BELOW', 'ABOVE'],ynames=['SET_UP', 'RESET_UP','SET_DN', 'RESET_DN']))
+print(sols.printN(xnames=['DOOR_OPEN', 'ACTIVE', 'BELOW', 'ABOVE', 'AT_STOP'],ynames=['SET_UP', 'RESET_UP','SET_DN', 'RESET_DN']))
 
 print("--------------------------------door_controller_tt")
 sols = door_controller_tt.solve()
 print(sols.printN(xnames=['CLOSE_DOOR_PB', 'AT_STOP', 'F1', 'F2', 'F3'],ynames=['R1','R2', 'R3', 'DOOR_OPEN']))
+
+print("--------------------------------elevator_motor_tt")
+sols = elevator_motor_mux_tt.solve()
+print(sols.printN(xnames=['QD', 'QC', 'QB', 'QA'],ynames=['1A', '1B']))
