@@ -1,0 +1,124 @@
+\documentclass[a4paper]{article}
+\usepackage{minted}
+
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+
+\usepackage[export]{adjustbox}
+\usepackage{scrextend}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+
+\usepackage{geometry}
+\geometry{a4paper, left=15mm, top=30mm, right=15mm, bottom=20mm}
+
+\usepackage{gensymb}
+\usepackage{graphicx} 
+\usepackage{isotope}
+\usepackage{array}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{multirow}
+
+\usepackage{hyperref}
+\usepackage{sectsty}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage[labelformat=simple]{subcaption}
+\usepackage{xcolor,colortbl}
+
+
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\tikzstyle{startstop} = [
+    rectangle, 
+    rounded corners, 
+    minimum width=3cm, minimum height=1cm,
+    text centered,
+    draw=black, fill=red!30]
+\tikzstyle{io} = [
+    trapezium, trapezium left angle=70, trapezium right angle=110, 
+    minimum width=3cm, minimum height=1cm, 
+    text centered, 
+    draw=black, fill=blue!30]
+\tikzstyle{process} = [
+    rectangle, 
+    minimum width=3cm, minimum height=1cm, 
+    text centered, 
+    draw=black, fill=orange!30]
+\tikzstyle{decision} = [
+    diamond, 
+    minimum width=3cm, minimum height=1cm, 
+    text centered, 
+    draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\usepackage{karnaugh-map}
+
+\sectionfont{\normalfont\huge\sectionrule{0pt}{0pt}{-6pt}{1pt}}
+\subsectionfont{\normalfont\LARGE}
+\subsubsectionfont{\normalfont\Large}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,LO]{\Large Łukasz Kwinta, Kacper Kozubowski, Ida Ciepiela}
+\fancyhead[LE,RO]{\Large Sterownik windy}
+\fancyfoot[CE,CO]{\Large\thepage}
+
+\renewcommand{\footrulewidth}{1pt}
+\renewcommand{\headrulewidth}{1pt}
+
+\definecolor{Gray}{gray}{0.85}
+\definecolor{LightGray}{gray}{0.95}
+
+\newcolumntype{a}{>{\columncolor{Gray}}c}
+\newcolumntype{b}{>{\columncolor{white}}c}
+
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\counterwithin{table}{section}
+\counterwithin{figure}{section}
+
+\title{\fontsize{30pt}{30pt}\selectfont Laboratorium 3 \\ Sterownik windy}
+\author{\fontsize{20pt}{20pt}\selectfont Łukasz Kwinta, Kacper Kozubowski, Ida Ciepiela}
+\date{maj 2024}
+
+\begin{document}
+\maketitle
+\pagebreak
+\large
+\tableofcontents
+
+\pagebreak
+\section{Cel zadania}
+\Large
+Proszę zaproponować, zbudować i przetestować układ sterujący windą w przykładowym trzykondygnacyjnym budynku.
+
+Winda posiada:
+\begin{itemize}
+    \item wskaźnik ruchu windy
+    \item wskaźnik kierunku ruchu windy
+    \item trzy czujniki otwarcia drzwi, po jednym na każdej kondygnacji
+    \item trzy przyciski przywołania windy, po jednym na każdej kondygnacji
+    \item trzy przyciski wyboru piętra w kabinie windy.
+\end{itemize}
+
+Winda powinna posiadać stale aktualizowany wskaźnik aktualnego piętra.
+
+Rzeczy niedopowiedziane w treści zadania, proszę ustalić, doprecyzować i opisać samodzielnie.
+
+\section{Idea rozwiązania}
+
+\section{Testy}
+\section{Zastosowania}
+\section{Wnioski}
+
+\end{document}

@@ -14,3 +14,10 @@ tasks:
       - src/lab2/*
     cmds:
       - tectonic "./src/lab2/lab2.tex" -Z search-path="src" -Z shell-escape --outdir "pdf"
+
+  lab3:
+    desc: Compile lab3.tex to pdf
+    sources:
+      - src/lab3/*
+    cmds:
+      - tectonic "./src/lab3/lab3.tex" -Z search-path="src" -Z shell-escape --outdir "pdf"
