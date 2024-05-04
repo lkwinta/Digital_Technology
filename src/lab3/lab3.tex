@@ -217,7 +217,7 @@ print("--------------------------------elevator_motor_tt")
 sols = elevator_motor_mux_tt.solve()
 print(sols.printN(xnames=['QD', 'QC', 'QB', 'QA'],ynames=['1A', '1B']))
 \end{minted}
-Wynikiem działania skryptu są zminimializowane formuły logiczne:
+Wynikiem działania skryptu są zminimalizowane formuły logiczne:
 
 \begin{verbatim}
 --------------------------------elevator_motor_tt
@@ -236,6 +236,308 @@ Bramki logiczne \verb|NOT| i \verb|OR| na wejściu układu służą do przekazyw
 lub zegara na wejście licznika. Zgodnie z tabelką działania układu zapewniają one, że 
 w momencie gdy chcemy liczyć do góry, układ przekazuje stan wysoki na wejście licznika \verb|DOWN|
 oraz sygnał zegara na wejście licznika \verb|UP|.
+
+\subsection{Kontroler ruchu windy}
+
+Prosty układ kombinacyjny przekazujący silnikowi sygnał o ruchu w danym kierunku gdy wszystkie warunki
+na ruszenie windą zostaną spełnione.
+
+\subsubsection{Black box}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{floor_controller.png}
+    \caption{Black box układu inicjującego ruch windy}
+\end{figure}
+
+\subsubsection{Wejścia}
+\begin{itemize}
+    \item \verb|DOOR_OPEN| - sygnał wejściowy informujący o stanie otwarcia drzwi
+    \item \verb|ACTIVE| - sygnał wejściowy informujący, że widna otrzymała wezwanie
+    \item \verb|BELOW| - sygnał wejściowy informujący, że piętro docelowe znajduje się poniżej obencej pozycji windy
+    \item \verb|ABOVE| - sygnał wejściowy informujący, że piętro docelowe znajduje się powyżej obencej pozycji windy
+    \item \verb|AT_STOP| - sygnał wejściowy informując, że widna znajduje się na piętrze na, które została wezwana
+\end{itemize}
+
+\subsubsection{Wyjścia}
+\begin{itemize}
+    \item \verb|UP| - sygnał wyjściowy informujący o gotowośći do ruchu w górę
+    \item \verb|DN| - sygnał wyjściowy informujący o gotowośći do ruchu w dół
+\end{itemize}
+
+\subsubsection{Realizacja układu}
+W realizacji układu wykorzystaliśmy dwa przerzutniki SR, które są ustawiane w momencie gdy wszystkie
+warunki do ruchu w danym kierunku są spełnione i resetowane gdy spełnione są wszystkie warunki konieczne
+do zatrzymania windy.
+
+Poniżej przedstawiony został kod programu w języku Python, który wykorzystaliśmy do wyprowadzenia
+formuł logicznych.
+\begin{minted}[
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=LightGray,
+    fontsize=\footnotesize,
+    linenos
+]{python}
+import logicmin
+floor_controller_tt = logicmin.TT(5, 4)
+
+for i in range(32):
+    permutation = bin(i).removeprefix("0b").rjust(5, '0')
+    
+    variables = {
+        'DOOR_OPEN': int(permutation[0]),
+        'ACTIVE': int(permutation[1]),
+        'BELOW': int(permutation[2]),
+        'ABOVE': int(permutation[3]),
+        'AT_STOP': int(permutation[4])
+    }
+
+    set_up = '0'
+    reset_up = '0'
+    set_dn = '0'
+    reset_dn = '0'
+
+    if not variables['ABOVE'] and not variables['BELOW'] and variables['AT_STOP']:
+        set_up = '0'
+        reset_up = '1'
+        set_dn = '0'
+        reset_dn = '1'
+
+    elif variables['ACTIVE'] and variables['BELOW'] and not variables['DOOR_OPEN']:
+        set_up = '0'
+        reset_up = '0'
+        set_dn = '1'
+        reset_dn = '0'
+
+    elif variables['ACTIVE'] and variables['ABOVE'] and not variables['DOOR_OPEN']:
+        set_up = '1'
+        reset_up = '0'
+        set_dn = '0'
+        reset_dn = '0'
+
+    floor_controller_tt.add(permutation, [set_up, reset_up, set_dn, reset_dn])
+
+print("--------------------------------floor_controller_tt")
+sols = floor_controller_tt.solve()
+print(sols.printN(xnames=['DOOR_OPEN', 'ACTIVE', 'BELOW', 'ABOVE', 'AT_STOP'],ynames=['SET_UP', 'RESET_UP','SET_DN', 'RESET_DN']))
+\end{minted}
+Wynikiem działania skryptu są zminimalizowane formuły logiczne:
+
+\begin{verbatim}
+--------------------------------floor_controller_tt
+RESET_DN <= BELOW'.ABOVE'.AT_STOP
+SET_DN <= DOOR_OPEN'.ACTIVE.BELOW
+RESET_UP <= BELOW'.ABOVE'.AT_STOP
+SET_UP <= DOOR_OPEN'.ACTIVE.BELOW'.ABOVE
+\end{verbatim}
+
+Na podstawie otrzymanych formuł zaimplementowaliśmy w programie Multisim,
+niżej przedstawiony schemat.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{floor_controller_schemat.pdf}
+    \caption{Schemat układu inicjującego ruch windy}
+\end{figure}
+
+\subsection{Kontroler kierunku ruchu}
+
+Układ, który na podstawie otrzymanego wezwania rozpoznaje względną pozycję piętra docelowego
+w odniesieniu do obecnego położenia windy.
+
+\subsubsection{Black box}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{direction_controller.png}
+    \caption{Black box układu przetwarzającego wezwanie}
+\end{figure}
+
+\subsubsection{Wejścia}
+\begin{itemize}
+    \item \verb|F1| - sygnał wejściowy informujący o tym, że winda znajduje się na 1. piętrze
+    \item \verb|F2| - sygnał wejściowy informujący o tym, że winda znajduje się na 2. piętrze
+    \item \verb|F3| - sygnał wejściowy informujący o tym, że winda znajduje się na 3. piętrze
+    \item \verb|S1| - sygnał wejściowy informujący o wezwaniu windy na 1. piętro
+    \item \verb|S2| - sygnał wejściowy informujący o wezwaniu windy na 2. piętro
+    \item \verb|S3| - sygnał wejściowy informujący o wezwaniu windy na 3. piętro
+\end{itemize}
+
+\subsubsection{Wyjścia}
+\begin{itemize}
+    \item \verb|ABOVE| - sygnał wyjściowy informujący, że piętro docelowe znajduje się powyżej obencej pozycji windy  
+    \item \verb|BELOW| - sygnał wyjściowy informujący, że piętro docelowe znajduje się poniżej obencej pozycji windy
+    \item \verb|AT_STOP| - sygnał wyjściowy informujący, że widna znajduje się na piętrze docelowym
+    \item \verb|ACTIVE| - sygnał wyjściowy przekazujący dalej informację o otrzymaniu wezwania
+\end{itemize}
+
+\subsubsection{Realizacja układu}
+
+Poniżej przedstawiony został kod programu w języku Python, który wykorzystaliśmy do wyprowadzenia
+formuł logicznych.
+\begin{minted}[
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=LightGray,
+    fontsize=\footnotesize,
+    linenos
+]{python}
+import logicmin
+direction_controller_tt = logicmin.TT(6, 4)
+
+for i in range(64):
+    permutation = bin(i).removeprefix("0b").rjust(6, '0')
+    
+    variables = {
+        'F1': int(permutation[0]),
+        'F2': int(permutation[1]),
+        'F3': int(permutation[2]),
+        'S1': int(permutation[3]),
+        'S2': int(permutation[4]),
+        'S3': int(permutation[5])
+    }
+
+    above = '0'
+    below = '0'
+    at_stop = '0'
+    active = '0'
+
+    if variables['F1'] and (variables['S2'] or variables['S3']):
+        above = '1'
+    
+    elif variables['F2'] and variables['S1']:
+        below = '1'
+
+    elif variables['F2'] and variables['S3']:
+        above = '1'
+    
+    elif variables['F3']and (variables['S1'] or variables['S2']):
+        below = '1'
+
+    if (variables['F1'] and variables['S1']) or (variables['F2'] and variables['S2']) or (variables['F3'] and variables['S3']):
+        at_stop = '1'
+
+    if variables['S1'] or variables['S2'] or variables['S3']:
+        active = '1'
+
+    direction_controller_tt.add(permutation, [above, below, at_stop, active])
+
+print("--------------------------------direction_controller_tt")
+sols = direction_controller_tt.solve()
+print(sols.printN(xnames=['F1', 'F2', 'F3', 'S1', 'S2', 'S3'],ynames=['ABOVE','BELOW', 'AT_STOP', 'ACTIVE']))
+\end{minted}
+Wynikiem działania skryptu są zminimalizowane formuły logiczne:
+
+\begin{verbatim}
+--------------------------------direction_controller_tt
+ACTIVE <= S3 + S2 + S1
+AT_STOP <= F3.S3 + F2.S2 + F1.S1
+BELOW <= F1'.F2'.F3.S2 + F1'.F3.S2.S3' + F3.S1.S2'.S3' + F2.S1.S2'.S3' + 
++ F1'.F3.S1 + F1'.F2.S1
+ABOVE <= F2.S1'.S3 + F1.S3 + F1.S2
+\end{verbatim}
+
+Na podstawie otrzymanych formuł zaimplementowaliśmy w programie Multisim,
+niżej przedstawiony schemat.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{direction_controller_schemat.pdf}
+    \caption{Schemat układu przetwarzającego wezwanie}
+\end{figure}
+
+\subsection{Kontroler drzwi windy}
+
+Układ zajmujący się obsługą drzwi po znalezieniu się windy na piętrze docelowym. 
+Przetwarza on również informację o wykonaniu obsługiwanego wezwania
+i wysyła sygnał do jego resetu.
+
+\subsubsection{Black box}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{door_controller.png}
+    \caption{Black box układu kontrolującego obsługę drzwi}
+\end{figure}
+
+\subsubsection{Wejścia}
+\begin{itemize}
+    \item \verb|F1| - sygnał wejściowy informujący o tym, że winda znajduje się na 1. piętrze 
+    \item \verb|F2| - sygnał wejściowy informujący o tym, że winda znajduje się na 2. piętrze
+    \item \verb|F3| - sygnał wejściowy informujący o tym, że winda znajduje się na 3. piętrze
+    \item \verb|AT_STOP| - sygnał wejściowy informujący, że widna znajduje się na piętrze docelowym
+    \item \verb|CLOSE_DOOR_PB| - sygnał wejściowy nakazujący zamknięcie drzwi
+\end{itemize}
+
+\subsubsection{Wyjścia}
+\begin{itemize}
+    \item \verb|R1| - sygnał wyjściowy, informujący o wykonaniu wezwania na 1. piętro
+    \item \verb|R2| - sygnał wyjściowy, informujący o wykonaniu wezwania na 2. piętro
+    \item \verb|R3| - sygnał wyjściowy, informujący o wykonaniu wezwania na 3. piętro
+    \item \verb|DOOR_OPEN| - sygnał wyjściowy, informujący o otwarciu drzwi
+\end{itemize}
+
+\subsubsection{Realizacja układu}
+
+Poniżej przedstawiony został kod programu w języku Python, który wykorzystaliśmy do wyprowadzenia
+formuł logicznych.
+\begin{minted}[
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=LightGray,
+    fontsize=\footnotesize,
+    linenos
+]{python}
+import logicmin
+door_controller_tt = logicmin.TT(5, 4)
+
+for i in range(32):
+    permutation = bin(i).removeprefix("0b").rjust(5, '0')
+    
+    variables = {
+        'CLOSE_DOOR_PB': int(permutation[0]),
+        'AT_STOP': int(permutation[1]),
+        'F1': int(permutation[2]),
+        'F2': int(permutation[3]),
+        'F3': int(permutation[4])
+    }
+
+    r1 = '0'
+    r2 = '0'
+    r3 = '0'
+    door_open = '0'
+
+    if variables['AT_STOP']: door_open = '1'
+    if variables['AT_STOP'] and variables['CLOSE_DOOR_PB']:
+        if variables['F1']: r1 = '1'
+        if variables['F2']: r2 = '1'
+        if variables['F3']: r3 = '1'
+
+    door_controller_tt.add(permutation, [r1, r2, r3, door_open])
+
+print("--------------------------------door_controller_tt")
+sols = door_controller_tt.solve()
+print(sols.printN(xnames=['CLOSE_DOOR_PB', 'AT_STOP', 'F1', 'F2', 'F3'],ynames=['R1','R2', 'R3', 'DOOR_OPEN']))
+\end{minted}
+Wynikiem działania skryptu są zminimalizowane formuły logiczne:
+
+\begin{verbatim}
+--------------------------------door_controller_tt
+DOOR_OPEN <= AT_STOP
+R3 <= CLOSE_DOOR_PB.AT_STOP.F3
+R2 <= CLOSE_DOOR_PB.AT_STOP.F2
+R1 <= CLOSE_DOOR_PB.AT_STOP.F1
+\end{verbatim}
+
+Na podstawie otrzymanych formuł zaimplementowaliśmy w programie Multisim,
+niżej przedstawiony schemat.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{door_controller_schemat.pdf}
+    \caption{Schemat układu kontrolującego obsługę drzwi}
+\end{figure}
 
 \section{Testy}
 \section{Zastosowania}
