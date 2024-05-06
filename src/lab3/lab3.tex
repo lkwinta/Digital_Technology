@@ -115,9 +115,9 @@ Winda powinna posiadać stale aktualizowany wskaźnik aktualnego piętra.
 
 Rzeczy niedopowiedziane w treści zadania, proszę ustalić, doprecyzować i opisać samodzielnie.
 
-\section{Rozwiązania}
+\section{Rozwiązanie}
 Postanowiliśmy rozbić problem na wiele mniejszych problemów i rozwiązać je osobno aby 
-na końcu połączyć je w jeden działający system. Poniżej zamieszamy schemat blokowy 
+na końcu połączyć je w jeden działający system. Poniżej zamieszczamy schemat blokowy 
 przedstawiający poszczególne systemy.
 
 \subsection{Symulator silnika windy}
@@ -237,6 +237,8 @@ lub zegara na wejście licznika. Zgodnie z tabelką działania układu zapewniaj
 w momencie gdy chcemy liczyć do góry, układ przekazuje stan wysoki na wejście licznika \verb|DOWN|
 oraz sygnał zegara na wejście licznika \verb|UP|.
 
+\pagebreak
+
 \subsection{Kontroler ruchu windy}
 
 Prosty układ kombinacyjny przekazujący silnikowi sygnał o ruchu w danym kierunku gdy wszystkie warunki
@@ -323,6 +325,8 @@ sols = floor_controller_tt.solve()
 print(sols.printN(xnames=['DOOR_OPEN', 'ACTIVE', 'BELOW', 'ABOVE', 'AT_STOP'],
                 ynames=['SET_UP', 'RESET_UP','SET_DN', 'RESET_DN']))
 \end{minted}
+
+\pagebreak
 Wynikiem działania skryptu są zminimalizowane formuły logiczne:
 
 \begin{verbatim}
@@ -342,6 +346,7 @@ niżej przedstawiony schemat.
     \caption{Schemat układu inicjującego ruch windy}
 \end{figure}
 
+\pagebreak
 \subsection{Kontroler kierunku ruchu}
 
 Układ, który na podstawie otrzymanego wezwania rozpoznaje względną pozycję piętra docelowego
@@ -429,6 +434,8 @@ print("--------------------------------direction_controller_tt")
 sols = direction_controller_tt.solve()
 print(sols.printN(xnames=['F1', 'F2', 'F3', 'S1', 'S2', 'S3'],ynames=['ABOVE','BELOW', 'AT_STOP', 'ACTIVE']))
 \end{minted}
+
+\pagebreak
 Wynikiem działania skryptu są zminimalizowane formuły logiczne:
 
 \begin{verbatim}
@@ -449,6 +456,7 @@ niżej przedstawiony schemat.
     \caption{Schemat układu przetwarzającego wezwanie}
 \end{figure}
 
+\pagebreak
 \subsection{Kontroler drzwi windy}
 
 Układ zajmujący się obsługą drzwi po znalezieniu się windy na piętrze docelowym. 
@@ -532,6 +540,7 @@ R2 <= CLOSE_DOOR_PB.AT_STOP.F2
 R1 <= CLOSE_DOOR_PB.AT_STOP.F1
 \end{verbatim}
 
+\pagebreak
 Na podstawie otrzymanych formuł zaimplementowaliśmy w programie Multisim,
 niżej przedstawiony schemat.
 
@@ -541,12 +550,56 @@ niżej przedstawiony schemat.
     \caption{Schemat układu kontrolującego obsługę drzwi}
 \end{figure}
 
+\pagebreak
+\subsection{Kontroler wezwań}
+Układ zajmujący się obsługiwaniem wezwań windy w odpowiedniej kolejności.
+
+\subsubsection{Black box}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{call_controller.png}
+    \caption{Black box układu obsługującego wezwania}
+\end{figure}
+
+\subsubsection{Wejścia}
+\begin{itemize}
+    \item \verb|PB_F1| - sygnał informujący o wciśnięciu przycisku wzywającego windę na 1. piętro.
+    \item \verb|PB_F2| - sygnał informujący o wciśnięciu przycisku wzywającego windę na 2. piętro.
+    \item \verb|PB_F3| - sygnał informujący o wciśnięciu przycisku wzywającego windę na 3. piętro.
+    \item \verb|R1| - sygnał informujący o wykonaniu wezwania na 1. pietro.
+    \item \verb|R2| - sygnał informujący o wykonaniu wezwania na 2. pietro.
+    \item \verb|R3| - sygnał informujący o wykonaniu wezwania na 3. pietro.
+\end{itemize}
+
+\subsubsection{Wyjścia}
+\begin{itemize}
+    \item \verb|S1| - sygnał obecnie obsługiwanego wezwania na piętro 1.
+    \item \verb|S2| - sygnał obecnie obsługiwanego wezwania na piętro 2.
+    \item \verb|S3| - sygnał obecnie obsługiwanego wezwania na piętro 3.
+    \item \verb|Q_F1| - sygnał informujący, że wezwanie na pietro 1. znajduje się w kolejce do obsłużenia.
+    \item \verb|Q_F2| - sygnał informujący, że wezwanie na pietro 2. znajduje się w kolejce do obsłużenia.
+    \item \verb|Q_F3| - sygnał informujący, że wezwanie na pietro 3. znajduje się w kolejce do obsłużenia.
+\end{itemize}
+
+\subsubsection{Realizacja układu}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{call_controller.png_schemat.pdf}
+    \caption{Schemat układu obsługującego wezwania}
+\end{figure}
+
+W naszej implementacji wykorzystaliśmy trzy przerzutniki SR służące do przechowywania
+informacji o wezwaniu na dane piętro. Dany przerzutnik jest ustawiany w momencie naciśnięcia odpowiedniego 
+przycisku znajdującego się na piętrze lub wewnątrz windy i resetowany po obsłużeniu wezwania.
+Kolejną częścią implelementacji jest fragment układu, odpowiedzialny za przekazywanie dalej sygnału o wezwaniach.
+Sygnały są przekazywane pojedynczo z zachowaniem kolejności w jakiej się pojawiły. 
+
 \subsection{Układ zamykający drzwi}
 Układ, który od czasu dotarcia na piętro docelowe odlicza czas po upłynięciu którego wysyła 
 sygnał do zamknięcia drzwi. 
 
 \subsubsection{Black box}
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{door_auto_mechanism.png}
     \caption{Black box układu zamykającego drzwi automatycznie}
@@ -599,6 +652,7 @@ zboczu wyjścia licznika.
     \caption{Przebieg sygnału ilustrujący działanie układu z przerzutnikiem D na wyjściu układu}
 \end{figure}
 
+\pagebreak
 \section{Całość układu}
 Poniżej przedstawiamy schemat całego systemu z podpiętymi przyciskami i lampkami sygnalizującymi stan windy.
 \begin{figure}[H]
@@ -722,6 +776,7 @@ Po zaimportowaniu wygenerowanego pliku do generatora słów, wygląda on następ
     \caption{Dane zaimportowane do generatora słów}
 \end{figure}
 
+\pagebreak
 Poniżej wynik testu w postaci przebiegu analizatorów stanów logicznych:
 
 \begin{figure}[H]
@@ -736,6 +791,11 @@ Poniżej wynik testu w postaci przebiegu analizatorów stanów logicznych:
     \caption{Przebieg sygnałów w analizatorze stanów logicznych podpiętym do wejścia układu}
 \end{figure}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics{direction_controller_test_logic_analizer_settings.png}
+    \caption{Ustawienia analizatorów}
+\end{figure}
 
 \subsection{Testy układu direction\_controller}
 Układ testujący dla układu direction\_controller jest analogiczny do poprzedniego.
@@ -848,6 +908,11 @@ Poniżej wynik testu w postaci przebiegu analizatorów stanów logicznych:
     \caption{Przebieg sygnałów w analizatorze stanów logicznych podpiętym do wejścia układu}
 \end{figure}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics{direction_controller_test_logic_analizer_settings.png}
+    \caption{Ustawienia analizatorów}
+\end{figure}
 
 
 \subsection{Testy układu door\_controller}
@@ -943,8 +1008,14 @@ Poniżej wynik testu w postaci przebiegu analizatorów stanów logicznych:
     \caption{Przebieg sygnałów w analizatorze stanów logicznych podpiętym do wejścia układu}
 \end{figure}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics{direction_controller_test_logic_analizer_settings.png}
+    \caption{Ustawienia analizatorów}
+\end{figure}
 
 \section{Zastosowania}
+Winda?
 \section{Wnioski}
 Inne sposoby realizacji które rozważaliśmy:
  - stworzenie automatu ze wszystkimi potencjalnymi stanami - nasze pomysły były bardzo skomplikowane
