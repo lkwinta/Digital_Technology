@@ -599,6 +599,29 @@ zboczu wyjścia licznika.
     \caption{Przebieg sygnału ilustrujący działanie układu z przerzutnikiem D na wyjściu układu}
 \end{figure}
 
+\section{Całość układu}
+Poniżej przedstawiamy schemat całego systemu z podpiętymi przyciskami i lampkami sygnalizującymi stan windy.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{elevator_system_schemat.pdf}
+    \caption{Schemat układu sterującego windą}
+\end{figure}
+Sterowanie windą odbywa się poprzez 3 przyciski na każdym piętrze przywołujące windę oraz
+4 przycisków w kabinie windy: 3 przyciski odpowiadające piętrom docelowym oraz przycisk przyspieszający
+zamknięcie drzwi. 
+
+Stan windy sygnalizowany jest przez:
+\begin{itemize}
+    \item 3 zielone ledy określające stan ruchu windy (czy jedzie, jeśli tak to
+w którą stronę)
+    \item czerwonego LEDa sygnalizującego otwarcie drzwi
+    \item 3 żółtych LED sygnalizujących na które piętro winda jest wezwana
+    \item wyświetlacza 7 segmentowego wraz z paskiem LED pokazującym obecne piętro na którym jest winda
+\end{itemize}
+
+Winda jest zabezpieczona przed ruszaniem w przypadku otwarcia drzwi. Winda pojedzie tylko wtedy, gdy upłynie
+czas automatycznego zamknięcia drzwi lub samemu wciśniemy wcześniej przycisk zamykający drzwi.
+
 \section{Testy}
 \section{Zastosowania}
 \section{Wnioski}
