@@ -602,5 +602,13 @@ zboczu wyjścia licznika.
 \section{Testy}
 \section{Zastosowania}
 \section{Wnioski}
+Inne sposoby realizacji które rozważaliśmy:
+ - stworzenie automatu ze wszystkimi potencjalnymi stanami - nasze pomysły były bardzo skomplikowane
+    i trudne do realizacji poprzez ręczne układanie bramek w multisimie, w przypadku układu FPGA
+    przy użyciu języku typu VHDL reprezentacja stanów automatu byłaby dużo prostsza
+
+- rozbicie systemu na mniejsze bloczki stosowane na każdych piętrach które mogłyby być 
+    spinane w dowolnej ilości, nie udało nam się tego zrealizować, a dla 3 pięter nasz układ
+    nie ma dużej złożoności
 
 \end{document}
