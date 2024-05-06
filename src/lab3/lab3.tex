@@ -1015,15 +1015,42 @@ Poniżej wynik testu w postaci przebiegu analizatorów stanów logicznych:
 \end{figure}
 
 \section{Zastosowania}
-Winda?
+- Oczywistym rozwiązaniem jest zastosowanie windy w trzykondygnacyjnym budynku. Jest to szczególnie potrzebne w miejscach do których uczęszczają osoby niepełnosprawne lub starsze.
+ W miejsce segmentu odpowiedzialnego za symulację windy,
+  wprowadzono rzeczywistą windę wyposażoną w wbudowane czujniki określające czy na danym piętrze znajduje się winda.
+     Informacje te są następnie przekazywane do układu sterującego silnikiem windy.
+      Układ ten, opierając się na danych z czujników oraz sygnałach z przycisków na poszczególnych piętrach,
+       generuje odpowiednie komendy dotyczące kierunku poruszania się windy.
+       
+       \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{elevator.png}
+        \caption{schemat windy}
+    \end{figure}
+- nie oznacza to jednak, że takiego układu nie można zastasować poza mechanizmem windy. Można zastosować to również w wózku na szynach,
+ który służyłby do pomocy w przenoszeniu ciężkich rzeczy. Tak samo jak w powyższym przykładzie segment odpowiedzialny za symulacje windy został zastąpiony wózkiem.
+ \begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{nieelevator.png}
+    \caption{schemat wózka na szynach}
+\end{figure}
+
+
 \section{Wnioski}
 Inne sposoby realizacji które rozważaliśmy:
- - stworzenie automatu ze wszystkimi potencjalnymi stanami - nasze pomysły były bardzo skomplikowane
-    i trudne do realizacji poprzez ręczne układanie bramek w multisimie, w przypadku układu FPGA
-    przy użyciu języku typu VHDL reprezentacja stanów automatu byłaby dużo prostsza
 
-- rozbicie systemu na mniejsze bloczki stosowane na każdych piętrach które mogłyby być 
-    spinane w dowolnej ilości, nie udało nam się tego zrealizować, a dla 3 pięter nasz układ
-    nie ma dużej złożoności
+    - próbowaliśmy stworzyć automat skończony, opisujący stany w których aktualnie znajduje się winda. 
+    Niestety implementacja tego w Multisimie była nieefektywna i 
+    skomplikowana, co sprawiło, że zrezygnowaliśmy z tego pomysłu.
+    Automat ten byłby łatwiejszy przy wykorzystaniu układu FPGA używając języka HDL,
+    takiego jak VHDL, który pozwala na opisanie zachowania automatu na wyższym poziomie abstrakcji 
+    niż ręczne układanie bramek. 
 
+
+    - Planowaliśmy przekształcić nasz układ w modularną strukturę, 
+gdzie każdy blok odpowiadałby za jedno piętro. 
+Ta koncepcja miała na celu uczynienie całego systemu bardziej elastycznym i 
+łatwym do rozbudowy. Niestety, napotkaliśmy trudności w jej implementacji, 
+co zmusiło nas do ograniczenia systemu do obsługi nie więcej niż trzech pięter. 
+Rozbudowa układu wymagałaby modyfikacji znacznej liczby segmentów, jednak nie jest to niemożliwe. 
 \end{document}
