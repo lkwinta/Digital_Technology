@@ -701,7 +701,8 @@ for i in range(32):
     up_b = str(bin(up)).removeprefix("0b")
     dn_b = str(bin(dn)).removeprefix("0b")
 
-    hex_val = hex(int(dn_b + up_b + door_open_b + active_b + at_stop_b + below_b + above_b, 2)).removeprefix("0x").rjust(8, '0')
+    hex_val = hex(int(dn_b + up_b + door_open_b + active_b + at_stop_b + below_b + above_b, 2))
+        .removeprefix("0x").rjust(8, '0')
     f.write(hex_val + "\n")
     data_count += 1
 
@@ -793,7 +794,8 @@ for i in range(64):
     elif variables['F3']and (variables['S1'] or variables['S2']):
         below = '1'
 
-    if (variables['F1'] and variables['S1']) or (variables['F2'] and variables['S2']) or (variables['F3'] and variables['S3']):
+    if (variables['F1'] and variables['S1']) or (variables['F2'] and variables['S2']) 
+            or (variables['F3'] and variables['S3']):
         at_stop = '1'
 
     if variables['S1'] or variables['S2'] or variables['S3']:
@@ -810,7 +812,8 @@ for i in range(64):
     at_stop_b = str(bin(int(at_stop))).removeprefix("0b")
     active_b = str(bin(int(active))).removeprefix("0b")
 
-    hex_val = hex(int(active_b + at_stop + below_b + above_b + S3_b + S2_b + S1_b + F3_b + F2_b + F1_b, 2)).removeprefix("0x").rjust(8, '0')
+    hex_val = hex(int(active_b + at_stop + below_b + above_b + S3_b + S2_b + S1_b + F3_b + F2_b + F1_b, 2))
+                    .removeprefix("0x").rjust(8, '0')
     f.write(hex_val + "\n")
     data_count += 1
 
@@ -905,7 +908,8 @@ for i in range(32):
     r3_b = str(bin(int(r3))).removeprefix("0b")
     door_open_b = str(bin(int(door_open))).removeprefix("0b")
 
-    hex_val = hex(int(door_open_b + r3_b + r2_b + r1_b + close_door_pb_b + at_stop_b + F3_b + F2_b + F1_b, 2)).removeprefix("0x").rjust(8, '0')
+    hex_val = hex(int(door_open_b + r3_b + r2_b + r1_b + close_door_pb_b + at_stop_b + F3_b + F2_b + F1_b, 2))
+                    .removeprefix("0x").rjust(8, '0')
     f.write(hex_val + "\n")
     data_count += 1
 
