@@ -320,7 +320,8 @@ for i in range(32):
 
 print("--------------------------------floor_controller_tt")
 sols = floor_controller_tt.solve()
-print(sols.printN(xnames=['DOOR_OPEN', 'ACTIVE', 'BELOW', 'ABOVE', 'AT_STOP'],ynames=['SET_UP', 'RESET_UP','SET_DN', 'RESET_DN']))
+print(sols.printN(xnames=['DOOR_OPEN', 'ACTIVE', 'BELOW', 'ABOVE', 'AT_STOP'],
+                ynames=['SET_UP', 'RESET_UP','SET_DN', 'RESET_DN']))
 \end{minted}
 Wynikiem działania skryptu są zminimalizowane formuły logiczne:
 
@@ -415,7 +416,8 @@ for i in range(64):
     elif variables['F3']and (variables['S1'] or variables['S2']):
         below = '1'
 
-    if (variables['F1'] and variables['S1']) or (variables['F2'] and variables['S2']) or (variables['F3'] and variables['S3']):
+    if (variables['F1'] and variables['S1']) or (variables['F2'] and variables['S2']) 
+                    or (variables['F3'] and variables['S3']):
         at_stop = '1'
 
     if variables['S1'] or variables['S2'] or variables['S3']:
@@ -537,6 +539,64 @@ niżej przedstawiony schemat.
     \centering
     \includegraphics[width=\textwidth]{door_controller_schemat.pdf}
     \caption{Schemat układu kontrolującego obsługę drzwi}
+\end{figure}
+
+\subsection{Układ zamykający drzwi}
+Układ, który od czasu dotarcia na piętro docelowe odlicza czas po upłynięciu którego wysyła 
+sygnał do zamknięcia drzwi. 
+
+\subsubsection{Black box}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{door_auto_mechanism.png}
+    \caption{Black box układu zamykającego drzwi automatycznie}
+\end{figure}
+
+\subsubsection{Wejścia}
+\begin{itemize}
+    \item \verb|AT_STOP| - sygnał wejściowy informujący, że winda znalazła się na piętrze docelowym
+\end{itemize}
+\subsubsection{Wyjścia}
+\begin{itemize}
+    \item \verb|CLOSE_DOOR| - sygnał wyjściowy będący sygnałem dla zamknięcia drzwi, jest to krótki puls 
+        gdy licznik zakończy działanie.
+\end{itemize}
+\subsubsection{Realizacja układu}
+Do realizacji układu użyliśmy przerzutników D, które generują puls w momencie gdy wartość zmienia stan - wykorzystujemy
+je do wygenerowania pulsu startującego licznik oraz do wygenerowania sygnału wyjściowego po zakończeniu działania licznika.
+Jako licznik użyliśmy układu typu \verb|555| w trybie monostabilnym (\url{https://en.wikipedia.org/wiki/555_timer_IC#Monostable}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{door_auto_mechanism_schemat.pdf}
+    \caption{Schemat układu zamykającego drzwi automatycznie}
+\end{figure}
+
+Czas odliczania licznika można regulować za pomocą pojemności kondensatora
+\verb|C1| oraz rezystora \verb|R12|. Nasze wartości dobraliśmy z tabelki zamieszczonej na
+Wikipedii układu, odpowiadające czasowi odliczania 100ms - co zapewnia dobrze 
+widoczny efekt przy tempie symulacji w programie Multisim. Czas można też obliczyć ze wzoru:
+\[ t = ln(3) \cdot R_{12} \cdot C_1 \]
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{NE555_Monotable.png}
+    \caption{Wykres sygnałów w układzie monostabilnym timera 555}
+\end{figure}
+
+Za pomocą przerzutników D generujemy impuls na wejście wyzwalające licznika, a poprzez drugi przerzutnik D generujemy impuls przy opadającym
+zboczu wyjścia licznika.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{trigger_waveform.pdf}
+    \caption{Przebieg sygnału ilustrujący działanie układu z przerzutnikiem D na wejściu układu}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{output_waveform.pdf}
+    \caption{Przebieg sygnału ilustrujący działanie układu z przerzutnikiem D na wyjściu układu}
 \end{figure}
 
 \section{Testy}
