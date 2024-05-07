@@ -149,7 +149,7 @@ Poniżej zamieszczamy schemat wyjść i wejść oraz opis logiki układu.
 \end{itemize}
 \subsubsection{Realizacja układu}
 Do realizacji układu wykorzystaliśmy 4 bitowy licznik z biblioteki komponentów programu Multisim,
-układ \verb|74LS193N|. Poniżej zamieszczamy tabelkę przedstawiającą działanie układu:
+układ \verb|74LS193N|. Poniżej zamieszczamy tabelkę przedstawiającą działanie licznika:
 \begin{center}
     \begin{tabular}{|c|c|c|c||c|}
         \hline \verb|CLR| & \verb|~LOAD| & \verb|Up| & \verb|Down| & Mode \\
@@ -162,8 +162,9 @@ układ \verb|74LS193N|. Poniżej zamieszczamy tabelkę przedstawiającą działa
     \end{tabular}
     \captionof{table}{Źródło: \url{https://www.multisim.com/help/components/binary-counters/}}
 \end{center}
+
 \begin{abstract}
-    \begin{itemize}
+    \noindent \begin{itemize}
         \item H - stan wysoki na wejściu
         \item L - stan niski na wejściu
         \item X - dowolny stan na wejściu
@@ -233,7 +234,7 @@ Po zaimplementowaniu układu w programie Multisim, uzyskaliśmy następujący sc
 \end{figure}
 
 Bramki logiczne \verb|NOT| i \verb|OR| na wejściu układu służą do przekazywania stanu wysokiego 
-lub zegara na wejście licznika. Zgodnie z tabelką działania układu zapewniają one, że 
+lub zegara na wejście licznika. Zgodnie z tabelką działania licznika zapewniają one, że 
 w momencie gdy chcemy liczyć do góry, układ przekazuje stan wysoki na wejście licznika \verb|DOWN|
 oraz sygnał zegara na wejście licznika \verb|UP|.
 
@@ -1015,7 +1016,8 @@ Poniżej wynik testu w postaci przebiegu analizatorów stanów logicznych:
 \end{figure}
 
 \section{Zastosowania}
-- Oczywistym rozwiązaniem jest zastosowanie windy w trzykondygnacyjnym budynku. Jest to szczególnie potrzebne w miejscach do których uczęszczają osoby niepełnosprawne lub starsze.
+\begin{itemize}
+    \item Oczywistym rozwiązaniem jest zastosowanie windy w trzykondygnacyjnym budynku. Jest to szczególnie potrzebne w miejscach do których uczęszczają osoby niepełnosprawne lub starsze.
  W miejsce segmentu odpowiedzialnego za symulację windy,
   wprowadzono rzeczywistą windę wyposażoną w wbudowane czujniki określające czy na danym piętrze znajduje się winda.
      Informacje te są następnie przekazywane do układu sterującego silnikiem windy.
@@ -1027,9 +1029,11 @@ Poniżej wynik testu w postaci przebiegu analizatorów stanów logicznych:
         \includegraphics[width=\textwidth]{elevator.png}
         \caption{schemat windy}
     \end{figure}
-- nie oznacza to jednak, że takiego układu nie można zastasować poza mechanizmem windy. Można zastosować to również w wózku na szynach,
+    \item nie oznacza to jednak, że takiego układu nie można zastasować poza mechanizmem windy. Można zastosować to również w wózku na szynach,
  który służyłby do pomocy w przenoszeniu ciężkich rzeczy. Tak samo jak w powyższym przykładzie segment odpowiedzialny za symulacje windy został zastąpiony wózkiem.
- \begin{figure}[H]
+\end{itemize}
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{nieelevator.png}
     \caption{schemat wózka na szynach}
@@ -1039,18 +1043,26 @@ Poniżej wynik testu w postaci przebiegu analizatorów stanów logicznych:
 \section{Wnioski}
 Inne sposoby realizacji które rozważaliśmy:
 
-    - próbowaliśmy stworzyć automat skończony, opisujący stany w których aktualnie znajduje się winda. 
-    Niestety implementacja tego w Multisimie była nieefektywna i 
-    skomplikowana, co sprawiło, że zrezygnowaliśmy z tego pomysłu.
-    Automat ten byłby łatwiejszy przy wykorzystaniu układu FPGA używając języka HDL,
-    takiego jak VHDL, który pozwala na opisanie zachowania automatu na wyższym poziomie abstrakcji 
-    niż ręczne układanie bramek. 
+\begin{itemize} 
+\item Próbowaliśmy stworzyć automat skończony, opisujący stany w których aktualnie znajduje się winda. 
+Niestety implementacja tego w Multisimie była nieefektywna i 
+skomplikowana, co sprawiło, że zrezygnowaliśmy z tego pomysłu.
+Automat ten byłby łatwiejszy przy wykorzystaniu układu FPGA używając języka HDL,
+takiego jak VHDL, który pozwala na opisanie zachowania automatu na wyższym poziomie abstrakcji 
+niż ręczne układanie bramek. 
 
 
-    - Planowaliśmy przekształcić nasz układ w modularną strukturę, 
+\item Planowaliśmy przekształcić nasz układ w modularną strukturę, 
 gdzie każdy blok odpowiadałby za jedno piętro. 
 Ta koncepcja miała na celu uczynienie całego systemu bardziej elastycznym i 
 łatwym do rozbudowy. Niestety, napotkaliśmy trudności w jej implementacji, 
 co zmusiło nas do ograniczenia systemu do obsługi nie więcej niż trzech pięter. 
-Rozbudowa układu wymagałaby modyfikacji znacznej liczby segmentów, jednak nie jest to niemożliwe. 
+Rozbudowa układu wymagałaby modyfikacji znacznej liczby segmentów, co jednak znacznie zwiększyło by 
+złożoność układu.
+\end{itemize}
+
+Innym wnioskiem który możemy wyciągnąć z wykonania tego ćwiczenia, może być też to, że korzystając 
+z gotowych komponentów, takich jak liczniki, timery czy multipleksery, można ułatwić rozwiązanie problemu.
+Nauczyliśmy się też korzystać z języków programowania jako narzędzia wspomagającego kreację rozwiązań problemów
+projektowania układów.
 \end{document}
