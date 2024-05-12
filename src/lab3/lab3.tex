@@ -115,11 +115,19 @@ Winda powinna posiadać stale aktualizowany wskaźnik aktualnego piętra.
 
 Rzeczy niedopowiedziane w treści zadania, proszę ustalić, doprecyzować i opisać samodzielnie.
 
+\pagebreak
 \section{Rozwiązanie}
 Postanowiliśmy rozbić problem na wiele mniejszych problemów i rozwiązać je osobno aby 
-na końcu połączyć je w jeden działający system. Poniżej zamieszczamy schemat blokowy 
-przedstawiający poszczególne systemy.
+na końcu połączyć je w jeden działający system. Poniżej zamieszczamy schemat 
+przedstawiający połączenie poszczególnych układów, których działanie opiszemy szczegółowo poniżej.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{elevator_system_schemat.pdf}
+    \caption{Schemat całego układu}
+\end{figure}
+
+\pagebreak
 \subsection{Symulator silnika windy}
 Aby zasymulować ruch windy wraz z czasem przemieszczania się między piętrami, zdecydowaliśmy się 
 zaimplementować układ bazujący na liczniku i demultiplexerze.
@@ -255,16 +263,16 @@ na ruszenie windą zostaną spełnione.
 \subsubsection{Wejścia}
 \begin{itemize}
     \item \verb|DOOR_OPEN| - sygnał wejściowy informujący o stanie otwarcia drzwi
-    \item \verb|ACTIVE| - sygnał wejściowy informujący, że widna otrzymała wezwanie
-    \item \verb|BELOW| - sygnał wejściowy informujący, że piętro docelowe znajduje się poniżej obencej pozycji windy
-    \item \verb|ABOVE| - sygnał wejściowy informujący, że piętro docelowe znajduje się powyżej obencej pozycji windy
-    \item \verb|AT_STOP| - sygnał wejściowy informując, że widna znajduje się na piętrze na, które została wezwana
+    \item \verb|ACTIVE| - sygnał wejściowy informujący, że winda otrzymała wezwanie
+    \item \verb|BELOW| - sygnał wejściowy informujący, że piętro docelowe znajduje się poniżej obecnej pozycji windy
+    \item \verb|ABOVE| - sygnał wejściowy informujący, że piętro docelowe znajduje się powyżej obecnej pozycji windy
+    \item \verb|AT_STOP| - sygnał wejściowy informując, że winda znajduje się na piętrze na, które została wezwana
 \end{itemize}
 
 \subsubsection{Wyjścia}
 \begin{itemize}
-    \item \verb|UP| - sygnał wyjściowy informujący o gotowośći do ruchu w górę
-    \item \verb|DN| - sygnał wyjściowy informujący o gotowośći do ruchu w dół
+    \item \verb|UP| - sygnał wyjściowy informujący o gotowości do ruchu w górę
+    \item \verb|DN| - sygnał wyjściowy informujący o gotowości do ruchu w dół
 \end{itemize}
 
 \subsubsection{Realizacja układu}
@@ -372,9 +380,9 @@ w odniesieniu do obecnego położenia windy.
 
 \subsubsection{Wyjścia}
 \begin{itemize}
-    \item \verb|ABOVE| - sygnał wyjściowy informujący, że piętro docelowe znajduje się powyżej obencej pozycji windy  
-    \item \verb|BELOW| - sygnał wyjściowy informujący, że piętro docelowe znajduje się poniżej obencej pozycji windy
-    \item \verb|AT_STOP| - sygnał wyjściowy informujący, że widna znajduje się na piętrze docelowym
+    \item \verb|ABOVE| - sygnał wyjściowy informujący, że piętro docelowe znajduje się powyżej obecnej pozycji windy  
+    \item \verb|BELOW| - sygnał wyjściowy informujący, że piętro docelowe znajduje się poniżej obecnej pozycji windy
+    \item \verb|AT_STOP| - sygnał wyjściowy informujący, że winda znajduje się na piętrze docelowym
     \item \verb|ACTIVE| - sygnał wyjściowy przekazujący dalej informację o otrzymaniu wezwania
 \end{itemize}
 
@@ -476,7 +484,7 @@ i wysyła sygnał do jego resetu.
     \item \verb|F1| - sygnał wejściowy informujący o tym, że winda znajduje się na 1. piętrze 
     \item \verb|F2| - sygnał wejściowy informujący o tym, że winda znajduje się na 2. piętrze
     \item \verb|F3| - sygnał wejściowy informujący o tym, że winda znajduje się na 3. piętrze
-    \item \verb|AT_STOP| - sygnał wejściowy informujący, że widna znajduje się na piętrze docelowym
+    \item \verb|AT_STOP| - sygnał wejściowy informujący, że winda znajduje się na piętrze docelowym
     \item \verb|CLOSE_DOOR_PB| - sygnał wejściowy nakazujący zamknięcie drzwi
 \end{itemize}
 
@@ -592,7 +600,7 @@ Układ zajmujący się obsługiwaniem wezwań windy w odpowiedniej kolejności.
 W naszej implementacji wykorzystaliśmy trzy przerzutniki SR służące do przechowywania
 informacji o wezwaniu na dane piętro. Dany przerzutnik jest ustawiany w momencie naciśnięcia odpowiedniego 
 przycisku znajdującego się na piętrze lub wewnątrz windy i resetowany po obsłużeniu wezwania.
-Kolejną częścią implelementacji jest fragment układu, odpowiedzialny za przekazywanie dalej sygnału o wezwaniach.
+Kolejną częścią implementacji jest fragment układu, odpowiedzialny za przekazywanie dalej sygnału o wezwaniach.
 Sygnały są przekazywane pojedynczo z zachowaniem kolejności w jakiej się pojawiły. 
 
 \subsection{Układ zamykający drzwi}
@@ -800,7 +808,7 @@ Poniżej wynik testu w postaci przebiegu analizatorów stanów logicznych:
 
 \subsection{Testy układu direction\_controller}
 Układ testujący dla układu direction\_controller jest analogiczny do poprzedniego.
-Tutaj również wykorzystaliśmy generator słów, kompratator, dwa analizatory stanów logicznych
+Tutaj również wykorzystaliśmy generator słów, komparator, dwa analizatory stanów logicznych
 i przerzutnik JK. 
 
 \begin{figure}[H]
@@ -1029,7 +1037,7 @@ Poniżej wynik testu w postaci przebiegu analizatorów stanów logicznych:
         \includegraphics[width=\textwidth]{elevator.png}
         \caption{schemat windy}
     \end{figure}
-    \item nie oznacza to jednak, że takiego układu nie można zastasować poza mechanizmem windy. Można zastosować to również w wózku na szynach,
+    \item nie oznacza to jednak, że takiego układu nie można zastosować poza mechanizmem windy. Można zastosować to również w wózku na szynach,
  który służyłby do pomocy w przenoszeniu ciężkich rzeczy. Tak samo jak w powyższym przykładzie segment odpowiedzialny za symulacje windy został zastąpiony wózkiem.
 \end{itemize}
 
