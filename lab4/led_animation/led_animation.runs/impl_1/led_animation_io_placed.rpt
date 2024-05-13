@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version              : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-| Date                      : Sun May 12 15:55:39 2024
+| Date                      : Mon May 13 14:52:42 2024
 | Host                      : DESKTOP-LBE2VK7 running 64-bit major release  (build 9200)
 | Command                   : report_io -file led_animation_io_placed.rpt
 | Design                    : led_animation

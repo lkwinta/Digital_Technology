@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-| Date         : Sun May 12 15:56:08 2024
+| Date         : Mon May 13 14:53:11 2024
 | Host         : DESKTOP-LBE2VK7 running 64-bit major release  (build 9200)
 | Command      : report_methodology -file led_animation_methodology_drc_routed.rpt -pb led_animation_methodology_drc_routed.pb -rpx led_animation_methodology_drc_routed.rpx
 | Design       : led_animation
@@ -23,11 +23,11 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 65
+             Violations found: 61
 +-----------+------------------+-------------------------------+------------+
 | Rule      | Severity         | Description                   | Violations |
 +-----------+------------------+-------------------------------+------------+
-| TIMING-17 | Critical Warning | Non-clocked sequential cell   | 61         |
+| TIMING-17 | Critical Warning | Non-clocked sequential cell   | 57         |
 | TIMING-18 | Warning          | Missing input or output delay | 4          |
 +-----------+------------------+-------------------------------+------------+
 
@@ -280,62 +280,42 @@ Related violations: <none>
 
 TIMING-17#50 Critical Warning
 Non-clocked sequential cell  
-The clock pin display_driver/sseg_cathodes_reg[7]/C is not reached by a timing clock
+The clock pin display_reg[0][0]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#51 Critical Warning
 Non-clocked sequential cell  
-The clock pin display_driver/sseg_cathodes_reg[7]_lopt_replica/C is not reached by a timing clock
+The clock pin display_reg[0][1]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#52 Critical Warning
 Non-clocked sequential cell  
-The clock pin display_reg[0][0]/C is not reached by a timing clock
+The clock pin display_reg[0][2]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#53 Critical Warning
 Non-clocked sequential cell  
-The clock pin display_reg[0][1]/C is not reached by a timing clock
+The clock pin display_reg[0][3]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#54 Critical Warning
 Non-clocked sequential cell  
-The clock pin display_reg[0][2]/C is not reached by a timing clock
+The clock pin display_reg[1][0]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#55 Critical Warning
 Non-clocked sequential cell  
-The clock pin display_reg[0][3]/C is not reached by a timing clock
+The clock pin display_reg[1][3]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#56 Critical Warning
 Non-clocked sequential cell  
-The clock pin display_reg[0][7]/C is not reached by a timing clock
+The clock pin display_reg[1][4]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-17#57 Critical Warning
 Non-clocked sequential cell  
-The clock pin display_reg[1][0]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#58 Critical Warning
-Non-clocked sequential cell  
-The clock pin display_reg[1][3]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#59 Critical Warning
-Non-clocked sequential cell  
-The clock pin display_reg[1][4]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#60 Critical Warning
-Non-clocked sequential cell  
 The clock pin display_reg[1][5]/C is not reached by a timing clock
-Related violations: <none>
-
-TIMING-17#61 Critical Warning
-Non-clocked sequential cell  
-The clock pin display_reg[1][7]/C is not reached by a timing clock
 Related violations: <none>
 
 TIMING-18#1 Warning

@@ -10,7 +10,7 @@ module clock_divider(
 
 
 initial
-    divided_clock = 0;
+    divided_clock <= 0;
 
 longint counter_value = 0;
 

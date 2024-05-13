@@ -1,16 +1,16 @@
 `timescale 1ns / 1ps // tylko dla symulacji
 
 // Przydatne makra dla wyswietlaczow
-`define SET_ACTIVE(mask) (~mask)
+`define SET_ACTIVE(mask) 8'(~mask)
 
-`define SEGMENT_A_MASK ( 1 << 0)
-`define SEGMENT_B_MASK ( 1 << 1)
-`define SEGMENT_C_MASK ( 1 << 2)
-`define SEGMENT_D_MASK ( 1 << 3)
-`define SEGMENT_E_MASK ( 1 << 4)
-`define SEGMENT_F_MASK ( 1 << 5)
-`define SEGMENT_G_MASK ( 1 << 6)
-`define SEGMENT_DOT_MASK ( 1 << 7)
+`define SEGMENT_A_MASK 8'(1 << 0)
+`define SEGMENT_B_MASK 8'( 1 << 1)
+`define SEGMENT_C_MASK 8'( 1 << 2)
+`define SEGMENT_D_MASK 8'( 1 << 3)
+`define SEGMENT_E_MASK 8'( 1 << 4)
+`define SEGMENT_F_MASK 8'( 1 << 5)
+`define SEGMENT_G_MASK 8'( 1 << 6)
+`define SEGMENT_DOT_MASK 8'( 1 << 7)
 `define DISPLAY_CLEAR '0
 `define DISPLAY_ALL '1
 
@@ -36,6 +36,12 @@ module led_animation(
     output wire clk_led
 );
 
+initial
+begin
+    sseg_cathodes <= '1;
+    sseg_anodes <= '1;
+end
+
 // startowy okres spowolnionego zegara
 longint clock_period = 1000*100*1000 / 4;
 
@@ -55,6 +61,16 @@ displays_driver display_driver (
     .sseg_anodes(sseg_anodes),
     .sseg_cathodes(sseg_cathodes)
 );
+defparam display_driver.REFERESH_PERIOD = 100 * 1000 / 8;
+
+//assign display[0] = `SEGMENT_A_MASK;
+//assign display[1] = `SEGMENT_B_MASK;
+//assign display[2] = `SEGMENT_C_MASK;
+//assign display[3] = `SEGMENT_DOT_MASK;
+//assign display[4] = `SEGMENT_D_MASK;
+//assign display[5] = `SEGMENT_E_MASK;
+//assign display[6] = `SEGMENT_F_MASK;
+//assign display[7] = `SEGMENT_G_MASK;
 
 //definicja stanow dla maszyny stanow
 enum {
@@ -83,44 +99,44 @@ begin
     case(current_state)
         SEGMENT_A0:
             begin
-                display[1] <= `SET_ACTIVE(`DISPLAY_CLEAR);
-                display[0] <= `SET_ACTIVE(`SEGMENT_A_MASK);
+                display[1] <= `DISPLAY_CLEAR;
+                display[0] <= `SEGMENT_A_MASK;
             end
         SEGMENT_B0:
             begin
-                display[1] <= `SET_ACTIVE(`DISPLAY_CLEAR);
-                display[0] <= `SET_ACTIVE(`SEGMENT_B_MASK);
+                display[1] <= `DISPLAY_CLEAR;
+                display[0] <= `SEGMENT_B_MASK;
             end
         SEGMENT_C0:
             begin
-                display[1] <= `SET_ACTIVE(`DISPLAY_CLEAR);
-                display[0] <= `SET_ACTIVE(`SEGMENT_C_MASK);
+                display[1] <= `DISPLAY_CLEAR;
+                display[0] <= `SEGMENT_C_MASK;
             end
         SEGMENT_D0:
             begin
-                display[1] <= `SET_ACTIVE(`DISPLAY_CLEAR);
-                display[0] <= `SET_ACTIVE(`SEGMENT_D_MASK);
+                display[1] <= `DISPLAY_CLEAR;
+                display[0] <= `SEGMENT_D_MASK;
             end
             
          SEGMENT_D1:
             begin
-                display[0] <= `SET_ACTIVE(`DISPLAY_CLEAR);
-                display[1] <= `SET_ACTIVE(`SEGMENT_D_MASK);
+                display[0] <= `DISPLAY_CLEAR;
+                display[1] <= `SEGMENT_D_MASK;
             end
         SEGMENT_E1:
             begin
-                display[0] <= `SET_ACTIVE(`DISPLAY_CLEAR);
-                display[1] <= `SET_ACTIVE(`SEGMENT_E_MASK);
+                display[0] <= `DISPLAY_CLEAR;
+                display[1] <= `SEGMENT_E_MASK;
             end
         SEGMENT_F1:
             begin
-                display[0] <= `SET_ACTIVE(`DISPLAY_CLEAR);
-                display[1] <= `SET_ACTIVE(`SEGMENT_F_MASK);
+                display[0] <= `DISPLAY_CLEAR;
+                display[1] <= `SEGMENT_F_MASK;
             end
         SEGMENT_A1:
             begin
-                display[0] <= `SET_ACTIVE(`DISPLAY_CLEAR);
-                display[1] <= `SET_ACTIVE(`SEGMENT_A_MASK);
+                display[0] <= `DISPLAY_CLEAR;
+                display[1] <= `SEGMENT_A_MASK;
             end
     endcase
 end

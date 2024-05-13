@@ -20,8 +20,8 @@ module displays_driver #(parameter REFERESH_PERIOD = 100 * 1000)(
 
 initial 
 begin
-    sseg_anodes = '1;
-    sseg_cathodes = '1;
+    sseg_anodes <= '1;
+    sseg_cathodes <= '1;
 end
 
 reg refresh_clk; //1 khz refresh clock
@@ -31,16 +31,17 @@ clock_divider clk_div (
     .divided_clock(refresh_clk)
 );
 
-reg [2:0] display_number = 0;
+reg [3:0] display_number = 0;
+
 always@ (posedge refresh_clk)
 begin 
     sseg_anodes = '1;
     sseg_anodes[display_number] <= 0;
-    sseg_cathodes <= display[display_number];
+    sseg_cathodes <= 8'(~display[display_number]);
     
     display_number = display_number + 1;
     if (display_number >= `DISPLAY_COUNT)
-        display_number = 0;
+        display_number <= 0;
 end
 
 endmodule
