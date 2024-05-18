@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="synth_1" LaunchPart="xc7a50tcsg324-1" LaunchTime="1716051970" LaunchIncrCheckpoint="$PSRCDIR/utils_1/imports/synth_1/led_animation.dcp">
   <File Type="PA-TCL" Name="led_animation.tcl"/>
-  <File Type="RDS-PROPCONSTRS" Name="led_animation_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="led_animation_reports.tcl"/>
   <File Type="RDS-RDS" Name="led_animation.vds"/>
   <File Type="RDS-UTIL" Name="led_animation_utilization_synth.rpt"/>
   <File Type="RDS-UTIL-PB" Name="led_animation_utilization_synth.pb"/>
   <File Type="RDS-DCP" Name="led_animation.dcp"/>
-  <File Type="VDS-TIMINGSUMMARY" Name="led_animation_timing_summary_synth.rpt"/>
-  <File Type="VDS-TIMING-PB" Name="led_animation_timing_summary_synth.pb"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
     <Filter Type="Srcs"/>
     <File Path="$PSRCDIR/sources_1/new/clock_divider.sv">

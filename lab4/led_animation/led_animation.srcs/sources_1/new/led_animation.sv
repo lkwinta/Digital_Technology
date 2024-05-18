@@ -21,7 +21,7 @@
 `define DISPLAY_COUNT 8 // liczba wykorzystywanych wyœwietlaczy
 
 `define MAX_SNAKE_LENGTH (`DISPLAY_COUNT*2 + 3)
-`define START_SNAKE_LENGTH 3
+`define START_SNAKE_LENGTH 1
 `define MIN_SNAKE_LENGTH 1
 
 
@@ -122,13 +122,18 @@ always@ (posedge divided_clk)
 begin
     if (old_length > length) 
         begin
-            tail <= tail + 1;
-            old_length <= old_length - 1;
+            tail = tail + 1;
+            old_length = old_length - 1;
+            if (tail == num_of_segments)
+                tail = 0;
+            display[snake[tail][0]] = display[snake[tail][0]] - 2**(snake[tail][1]);
         end
     else if (old_length < length) 
         begin
-            tail <= tail - 1;
-            old_length <= old_length + 1;
+            tail = tail - 1;
+            old_length = old_length + 1;
+            if (tail < 0)
+                tail = num_of_segments - 1;
         end
         
     else if (snake[tail][0] != -1) // gasimy ogon
