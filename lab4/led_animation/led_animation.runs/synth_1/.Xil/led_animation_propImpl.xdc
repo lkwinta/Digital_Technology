@@ -8,9 +8,9 @@ set_property -dict { PACKAGE_PIN P18   IOSTANDARD LVCMOS33 } [get_ports {btn_fre
 set_property src_info {type:XDC file:1 line:13 export:INPUT save:INPUT read:READ} [current_design]
 set_property -dict { PACKAGE_PIN N17   IOSTANDARD LVCMOS33 } [get_ports {btn_dir}];      #IO_L9P_T1_DQS_14 Sch=btnc
 set_property src_info {type:XDC file:1 line:14 export:INPUT save:INPUT read:READ} [current_design]
-set_property -dict { PACKAGE_PIN P17   IOSTANDARD LVCMOS33 } [get_ports {len_up}];      #IO_L9P_T1_DQS_14 Sch=btnc
+set_property -dict { PACKAGE_PIN M17   IOSTANDARD LVCMOS33 } [get_ports {len_up}];      #IO_L9P_T1_DQS_14 Sch=btnc
 set_property src_info {type:XDC file:1 line:15 export:INPUT save:INPUT read:READ} [current_design]
-set_property -dict { PACKAGE_PIN M17   IOSTANDARD LVCMOS33 } [get_ports {len_dn}];      #IO_L9P_T1_DQS_14 Sch=btnc
+set_property -dict { PACKAGE_PIN P17   IOSTANDARD LVCMOS33 } [get_ports {len_dn}];      #IO_L9P_T1_DQS_14 Sch=btnc
 set_property src_info {type:XDC file:1 line:22 export:INPUT save:INPUT read:READ} [current_design]
 set_property -dict { PACKAGE_PIN T10   IOSTANDARD LVCMOS33 } [get_ports { sseg_cathodes[0] }]; #IO_L24N_T3_A00_D16_14 Sch=ca
 set_property src_info {type:XDC file:1 line:24 export:INPUT save:INPUT read:READ} [current_design]

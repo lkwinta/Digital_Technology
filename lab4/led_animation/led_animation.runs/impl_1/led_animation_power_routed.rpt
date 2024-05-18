@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-| Date             : Sat May 18 19:09:09 2024
+| Date             : Sat May 18 22:37:09 2024
 | Host             : DESKTOP-LBE2VK7 running 64-bit major release  (build 9200)
 | Command          : report_power -file led_animation_power_routed.rpt -pb led_animation_power_summary_routed.pb -rpx led_animation_power_routed.rpx
 | Design           : led_animation
@@ -30,14 +30,14 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.130        |
+| Total On-Chip Power (W)  | 0.139        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.058        |
+| Dynamic (W)              | 0.067        |
 | Device Static (W)        | 0.072        |
 | Effective TJA (C/W)      | 4.8          |
-| Max Ambient (C)          | 84.4         |
-| Junction Temperature (C) | 25.6         |
+| Max Ambient (C)          | 84.3         |
+| Junction Temperature (C) | 25.7         |
 | Confidence Level         | Low          |
 | Setting File             | ---          |
 | Simulation Activity File | ---          |
@@ -53,17 +53,17 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.002 |        3 |       --- |             --- |
-| Slice Logic    |     0.009 |     3121 |       --- |             --- |
-|   LUT as Logic |     0.008 |     1226 |     32600 |            3.76 |
-|   CARRY4       |    <0.001 |      239 |      8150 |            2.93 |
+| Slice Logic    |     0.013 |     3460 |       --- |             --- |
+|   LUT as Logic |     0.012 |     1533 |     32600 |            4.70 |
+|   CARRY4       |    <0.001 |      241 |      8150 |            2.96 |
 |   Register     |    <0.001 |     1287 |     65200 |            1.97 |
 |   F7/F8 Muxes  |    <0.001 |       33 |     32600 |            0.10 |
 |   BUFG         |    <0.001 |        1 |        32 |            3.13 |
 |   Others       |     0.000 |       18 |       --- |             --- |
-| Signals        |     0.010 |     2307 |       --- |             --- |
+| Signals        |     0.014 |     2680 |       --- |             --- |
 | I/O            |     0.037 |       23 |       210 |           10.95 |
 | Static Power   |     0.072 |          |           |                 |
-| Total          |     0.130 |          |           |                 |
+| Total          |     0.139 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -73,7 +73,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.031 |       0.021 |      0.010 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.040 |       0.030 |      0.010 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.014 |       0.001 |      0.013 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.011 |       0.011 |      0.001 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -142,7 +142,7 @@ Table of Contents
 +------------------+-----------+
 | Name             | Power (W) |
 +------------------+-----------+
-| led_animation    |     0.058 |
+| led_animation    |     0.067 |
 |   display_driver |     0.001 |
 +------------------+-----------+
 

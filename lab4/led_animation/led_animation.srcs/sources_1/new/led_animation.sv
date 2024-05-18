@@ -122,6 +122,8 @@ always@ (posedge divided_clk)
 begin
     if (old_length > length) 
         begin
+            display[snake[tail][0]] = display[snake[tail][0]] - 2**(snake[tail][1]);
+            
             tail = tail + 1;
             old_length = old_length - 1;
             if (tail == num_of_segments)
@@ -277,7 +279,7 @@ begin
         else            dir <= LEFT;
     
     if (button_len_up_raise == 1)
-        if (length <= `MAX_SNAKE_LENGTH) 
+        if (length < `MAX_SNAKE_LENGTH) 
             length <= length + 1;
             
     if (button_len_dn_raise == 1)
