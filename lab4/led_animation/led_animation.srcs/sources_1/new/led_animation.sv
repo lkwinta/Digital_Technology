@@ -67,11 +67,28 @@ defparam display_driver.REFERESH_PERIOD = 100 * 1000 / 8;
 enum {LEFT, RIGHT} dir = RIGHT;
 
 
-localparam num_of_displays = 8; // liczba wykorzystywanych wy?wietlaczy
+localparam num_of_displays = 4; // liczba wykorzystywanych wy?wietlaczy
+localparam length = 3; // d?ugo?? wy?wietlanej sekwencji
+
 localparam num_of_segments = (4 + num_of_displays * 2);
 integer curr_state = 0;
 integer curr_display = 0;
 integer prev = 0;
+
+// robimy cykliczn? kolejk? do przechowywania informacji o za?wieconych segmentach
+integer snake[0:num_of_segments][0:1]; 
+integer head = length - 1;
+integer tail = 0;
+integer i; 
+initial begin
+    for (i = 0; i < num_of_segments; i = i + 1)
+        begin
+            snake[i][0] = -1;
+            snake[i][1] = 0;
+        end 
+    for (i = 0; i < num_of_displays; i = i + 1)
+        display[i] = `DISPLAY_CLEAR;
+end
 
 // przej?cie na kolejny segment
 always@ (posedge divided_clk)
@@ -90,53 +107,65 @@ end
 
 always@ (posedge divided_clk)
 begin
-    if (curr_display == 0) // obs?uga prawego wy?wietlacza
+    if (snake[tail][0] != -1) // gasimy ogon
         begin
-            display[prev] = `DISPLAY_CLEAR;
-            display[0] = 8'(1 << curr_state);
-            prev = curr_display;
+            display[snake[tail][0]] = display[snake[tail][0]] - 2**(snake[tail][1]);
+        end
+        
+    // uaktualnienie wska?ników
+    tail = tail + 1;
+    head = head + 1;
+    if (head == num_of_segments)
+        head = 0;
+    if (tail == num_of_segments)
+        tail = 0;
+    
+    snake[head][0] = curr_display;
+
+    if (curr_display == 0) // obs?uga prawego wy?wietlacza
+        begin           
+            snake[head][1] = curr_state;
+            
+            display[0] = display[0] + 2**curr_state;
             if ((dir == LEFT && curr_state == 0) || (dir == RIGHT && curr_state == 3))
                 curr_display = curr_display + 1;
         end
     
-    else if (curr_display == (num_of_displays - 1)) // obs?uga dolnego wy?wietlacza
+    else if (curr_display == (num_of_displays - 1)) // obs?uga lewego wy?wietlacza
         begin
-            display[prev] = `DISPLAY_CLEAR;
-            display[num_of_displays - 1] = 8'(1 << (curr_state - (num_of_displays - 1) < 6 ? curr_state - (num_of_displays - 1) : 0));
-            prev = curr_display;
+            snake[head][1] = (curr_state - (num_of_displays - 1) < 6 ? curr_state - (num_of_displays - 1) : 0);
+            
+            display[num_of_displays - 1] = display[num_of_displays - 1] + 2**(curr_state - (num_of_displays - 1) < 6 ? curr_state - (num_of_displays - 1) : 0);
             if ((dir == LEFT && curr_state == (num_of_displays + 2)) || (dir == RIGHT && curr_state == (num_of_displays + 5)))
                 curr_display = curr_display - 1;
         end
                 
     else if (curr_state > 3 && curr_state < (num_of_displays + 2)) // obs?uga dolnych segmentów
         begin
-            display[prev] = `DISPLAY_CLEAR;
-            prev = curr_display;
+            snake[head][1] = 3;
+            
+            display[curr_display] = display[curr_display] + 2**3;
             if (dir == RIGHT)
                 begin
-                    display[curr_display] = 8'(1 << 3);
                     curr_display = (curr_display + 1) & (num_of_displays - 1);
                 end
             
             else
                 begin
-                    display[curr_display] = 8'(1 << 3);
                     curr_display = (curr_display - 1) & (num_of_displays - 1);
                 end
         end
     else // obs?uga górnych segmentów
         begin
-        display[prev] = `DISPLAY_CLEAR;
-        prev = curr_display;
+            snake[head][1] = 0;
+            display[curr_display] = display[curr_display] + 2**0;
             if (dir == RIGHT)
                 begin
-                    display[curr_display] = 8'(1 << 0);
                     curr_display = (curr_display - 1) & (num_of_displays - 1);
                 end
             
             else
                 begin
-                    display[curr_display] = 8'(1 << 0);
                     curr_display = (curr_display + 1) & (num_of_displays - 1);
                 end
         end
