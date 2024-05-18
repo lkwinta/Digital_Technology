@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-| Date         : Tue May 14 23:25:52 2024
-| Host         : LAPTOP-TU02N1Q0 running 64-bit major release  (build 9200)
+| Date         : Sat May 18 13:21:12 2024
+| Host         : DESKTOP-LBE2VK7 running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file led_animation_control_sets_placed.rpt
 | Design       : led_animation
 | Device       : xc7a50t
@@ -23,11 +23,11 @@ Table of Contents
 +----------------------------------------------------------+-------+
 |                          Status                          | Count |
 +----------------------------------------------------------+-------+
-| Total control sets                                       |    11 |
-|    Minimum number of control sets                        |    11 |
+| Total control sets                                       |    14 |
+|    Minimum number of control sets                        |    14 |
 |    Addition due to synthesis replication                 |     0 |
 |    Addition due to physical synthesis replication        |     0 |
-| Unused register locations in slices containing registers |    21 |
+| Unused register locations in slices containing registers |    32 |
 +----------------------------------------------------------+-------+
 * Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
 ** Run report_qor_suggestions for automated merging and remapping suggestions
@@ -39,15 +39,15 @@ Table of Contents
 +--------------------+-------+
 |       Fanout       | Count |
 +--------------------+-------+
-| Total control sets |    11 |
+| Total control sets |    14 |
 | >= 0 to < 4        |     0 |
-| >= 4 to < 6        |     2 |
+| >= 4 to < 6        |     4 |
 | >= 6 to < 8        |     0 |
-| >= 8 to < 10       |     0 |
-| >= 10 to < 12      |     0 |
+| >= 8 to < 10       |     1 |
+| >= 10 to < 12      |     1 |
 | >= 12 to < 14      |     1 |
 | >= 14 to < 16      |     1 |
-| >= 16              |     7 |
+| >= 16              |     6 |
 +--------------------+-------+
 * Control sets can be remapped at either synth_design or opt_design
 
@@ -58,12 +58,12 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |              61 |           19 |
+| No           | No                    | No                     |              74 |           32 |
 | No           | No                    | Yes                    |               0 |            0 |
-| No           | Yes                   | No                     |             174 |           44 |
-| Yes          | No                    | No                     |              64 |            9 |
+| No           | Yes                   | No                     |             182 |           47 |
+| Yes          | No                    | No                     |              72 |           11 |
 | Yes          | No                    | Yes                    |               0 |            0 |
-| Yes          | Yes                   | No                     |               8 |            4 |
+| Yes          | Yes                   | No                     |               8 |            3 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 
@@ -73,16 +73,19 @@ Table of Contents
 +---------------------------------------------+--------------------------+---------------------------------------------------------+------------------+----------------+--------------+
 |                 Clock Signal                |       Enable Signal      |                     Set/Reset Signal                    | Slice Load Count | Bel Load Count | Bels / Slice |
 +---------------------------------------------+--------------------------+---------------------------------------------------------+------------------+----------------+--------------+
-|  clk_led_OBUF_BUFG                          | display[1][5]_i_2_n_0    | display[1][5]_i_1_n_0                                   |                2 |              4 |         2.00 |
-|  clk_led_OBUF_BUFG                          | display[1][5]_i_2_n_0    | display[1][4]_i_1_n_0                                   |                2 |              4 |         2.00 |
-|  clk_IBUF_BUFG                              |                          |                                                         |                6 |             12 |         2.00 |
+|  display_driver/clk_div/divided_clock_reg_0 |                          | display_driver/sseg_anodes[7]_i_1_n_0                   |                1 |              4 |         4.00 |
+|  display_driver/clk_div/divided_clock_reg_0 |                          | display_driver/display_number_reg[2]                    |                2 |              4 |         2.00 |
+|  clk_led_OBUF_BUFG                          | display[0][7]_i_2_n_0    | display[0][3]_i_1_n_0                                   |                2 |              4 |         2.00 |
+|  clk_led_OBUF_BUFG                          | display[0][7]_i_2_n_0    | display[0][7]_i_1_n_0                                   |                1 |              4 |         4.00 |
+|  clk_led_OBUF_BUFG                          | display_reg[7]0          |                                                         |                2 |              8 |         4.00 |
+|  display_driver/clk_div/divided_clock_reg_0 |                          |                                                         |                5 |             11 |         2.20 |
+|  clk_IBUF_BUFG                              |                          |                                                         |                6 |             13 |         2.17 |
 |  clk_IBUF_BUFG                              |                          | display_driver/clk_div/divided_clock0_carry__0_n_1      |                4 |             14 |         3.50 |
-|  display_driver/clk_div/divided_clock_reg_0 |                          |                                                         |                3 |             17 |         5.67 |
-|  clk_led_OBUF_BUFG                          |                          |                                                         |               10 |             32 |         3.20 |
 |  clk_IBUF_BUFG                              |                          | freq_dn_debounce/btn_clock_cycles_counter[0]_i_1__1_n_0 |                8 |             32 |         4.00 |
 |  clk_IBUF_BUFG                              |                          | freq_up_debounce/btn_clock_cycles_counter[0]_i_1__0_n_0 |                8 |             32 |         4.00 |
 |  clk_IBUF_BUFG                              |                          | dir_debounce/btn_clock_cycles_counter[0]_i_1_n_0        |                8 |             32 |         4.00 |
-|  clk_IBUF_BUFG                              |                          | clk_div/divided_clock0_carry__6_n_0                     |               16 |             64 |         4.00 |
+|  clk_led_OBUF_BUFG                          |                          |                                                         |               21 |             50 |         2.38 |
+|  clk_IBUF_BUFG                              |                          | clk_div/clear                                           |               16 |             64 |         4.00 |
 |  clk_IBUF_BUFG                              | clock_period[63]_i_1_n_0 |                                                         |                9 |             64 |         7.11 |
 +---------------------------------------------+--------------------------+---------------------------------------------------------+------------------+----------------+--------------+
 

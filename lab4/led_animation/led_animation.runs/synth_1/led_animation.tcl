@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "C:/DT/Digital_Technology/lab4/led_animation/led_animation.runs/synth_1/led_animation.tcl"
+  variable script "D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.runs/synth_1/led_animation.tcl"
   variable category "vivado_synth"
 }
 
@@ -71,7 +71,9 @@ proc create_report { reportName command } {
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
 set_param checkpoint.writeSynthRtdsInDcp 1
-set_param synth.incrementalSynthesisCache C:/DT/Digital_Technology/lab4/led_animation/.Xil/Vivado-7372-LAPTOP-TU02N1Q0/incrSyn
+set_param chipscope.maxJobs 3
+set_param synth.incrementalSynthesisCache C:/Users/lukasz/AppData/Roaming/Xilinx/Vivado/.Xil/Vivado-4768-DESKTOP-LBE2VK7/incrSyn
+set_param xicom.use_bs_reader 1
 set_msg_config -id {Synth 8-256} -limit 10000
 set_msg_config -id {Synth 8-638} -limit 10000
 OPTRACE "Creating in-memory project" START { }
@@ -80,19 +82,19 @@ create_project -in_memory -part xc7a50tcsg324-1
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
-set_property webtalk.parent_dir C:/DT/Digital_Technology/lab4/led_animation/led_animation.cache/wt [current_project]
-set_property parent.project_path C:/DT/Digital_Technology/lab4/led_animation/led_animation.xpr [current_project]
+set_property webtalk.parent_dir D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.cache/wt [current_project]
+set_property parent.project_path D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.xpr [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
-set_property ip_output_repo c:/DT/Digital_Technology/lab4/led_animation/led_animation.cache/ip [current_project]
+set_property ip_output_repo d:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_verilog -library xil_defaultlib -sv {
-  C:/DT/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/clock_divider.sv
-  C:/DT/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/debounce.sv
-  C:/DT/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/displays_driver.sv
-  C:/DT/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv
+  D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/clock_divider.sv
+  D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/debounce.sv
+  D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/displays_driver.sv
+  D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -103,12 +105,12 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc C:/DT/Digital_Technology/lab4/led_animation/led_animation.srcs/constrs_1/new/led_animation_constraints.xdc
-set_property used_in_implementation false [get_files C:/DT/Digital_Technology/lab4/led_animation/led_animation.srcs/constrs_1/new/led_animation_constraints.xdc]
+read_xdc D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/constrs_1/new/led_animation_constraints.xdc
+set_property used_in_implementation false [get_files D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/constrs_1/new/led_animation_constraints.xdc]
 
 set_param ips.enableIPCacheLiteLoad 1
 
-read_checkpoint -auto_incremental -incremental C:/DT/Digital_Technology/lab4/led_animation/led_animation.srcs/utils_1/imports/synth_1/led_animation.dcp
+read_checkpoint -auto_incremental -incremental D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/utils_1/imports/synth_1/led_animation.dcp
 close [open __synthesis_is_running__ w]
 
 OPTRACE "synth_design" START { }

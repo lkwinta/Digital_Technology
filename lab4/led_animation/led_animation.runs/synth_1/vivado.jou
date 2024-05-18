@@ -3,12 +3,12 @@
 # SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Tue May 14 23:23:23 2024
-# Process ID: 21912
-# Current directory: C:/DT/Digital_Technology/lab4/led_animation/led_animation.runs/synth_1
+# Start of session at: Sat May 18 13:19:26 2024
+# Process ID: 14256
+# Current directory: D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.runs/synth_1
 # Command line: vivado.exe -log led_animation.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source led_animation.tcl
-# Log file: C:/DT/Digital_Technology/lab4/led_animation/led_animation.runs/synth_1/led_animation.vds
-# Journal file: C:/DT/Digital_Technology/lab4/led_animation/led_animation.runs/synth_1\vivado.jou
-# Running On: LAPTOP-TU02N1Q0, OS: Windows, CPU Frequency: 2419 MHz, CPU Physical cores: 4, Host memory: 16859 MB
+# Log file: D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.runs/synth_1/led_animation.vds
+# Journal file: D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.runs/synth_1\vivado.jou
+# Running On: DESKTOP-LBE2VK7, OS: Windows, CPU Frequency: 3600 MHz, CPU Physical cores: 12, Host memory: 34307 MB
 #-----------------------------------------------------------
 source led_animation.tcl -notrace

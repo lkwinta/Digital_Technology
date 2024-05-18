@@ -67,7 +67,7 @@ defparam display_driver.REFERESH_PERIOD = 100 * 1000 / 8;
 enum {LEFT, RIGHT} dir = RIGHT;
 
 
-localparam num_of_displays = 4; // liczba wykorzystywanych wy?wietlaczy
+localparam num_of_displays = 8; // liczba wykorzystywanych wy?wietlaczy
 localparam num_of_segments = (4 + num_of_displays * 2);
 integer curr_state = 0;
 integer curr_display = 0;
@@ -102,7 +102,7 @@ begin
     else if (curr_display == (num_of_displays - 1)) // obs?uga dolnego wy?wietlacza
         begin
             display[prev] = `DISPLAY_CLEAR;
-            display[num_of_displays - 1] = 8'(1 << curr_state - (num_of_displays - 1));
+            display[num_of_displays - 1] = 8'(1 << (curr_state - (num_of_displays - 1) < 6 ? curr_state - (num_of_displays - 1) : 0));
             prev = curr_display;
             if ((dir == LEFT && curr_state == (num_of_displays + 2)) || (dir == RIGHT && curr_state == (num_of_displays + 5)))
                 curr_display = curr_display - 1;
@@ -185,10 +185,12 @@ begin
         button_dir_raise <= 1;
        
     if (button_freq_up_raise == 1)
-        clock_period <= clock_period >> 1;
+        if (clock_period > 1)
+            clock_period <= clock_period >> 1;
        
     if (button_freq_dn_raise == 1)
-        clock_period <= clock_period << 1;
+        if (clock_period < 1000*100*1000*100) // maks okres = 100s
+            clock_period <= clock_period << 1;
         
     if (button_dir_raise == 1)
         if(dir == LEFT) dir <= RIGHT;
