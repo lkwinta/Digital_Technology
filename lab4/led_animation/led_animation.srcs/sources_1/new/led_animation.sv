@@ -4,15 +4,26 @@
 `define SET_ACTIVE(mask) 8'(~mask)
 
 `define SEGMENT_A_MASK 8'(1 << 0)
-`define SEGMENT_B_MASK 8'( 1 << 1)
-`define SEGMENT_C_MASK 8'( 1 << 2)
-`define SEGMENT_D_MASK 8'( 1 << 3)
-`define SEGMENT_E_MASK 8'( 1 << 4)
-`define SEGMENT_F_MASK 8'( 1 << 5)
-`define SEGMENT_G_MASK 8'( 1 << 6)
-`define SEGMENT_DOT_MASK 8'( 1 << 7)
+`define SEGMENT_B_MASK 8'(1 << 1)
+`define SEGMENT_C_MASK 8'(1 << 2)
+`define SEGMENT_D_MASK 8'(1 << 3)
+`define SEGMENT_E_MASK 8'(1 << 4)
+`define SEGMENT_F_MASK 8'(1 << 5)
+`define SEGMENT_G_MASK 8'(1 << 6)
+`define SEGMENT_DOT_MASK 8'(1 << 7)
 `define DISPLAY_CLEAR '0
 `define DISPLAY_ALL '1
+
+`define START_ANIMATION_PERIOD (100 * 1000 / 8) // maks okres = 0,25s
+`define MAX_ANIMATION_PERIOD 1000*100*1000*100 // maks okres = 100s
+`define MIN_ANIMATION_PERIOD 1
+
+`define DISPLAY_COUNT 8 // liczba wykorzystywanych wyœwietlaczy
+
+`define MAX_SNAKE_LENGTH (`DISPLAY_COUNT*2 + 3)
+`define START_SNAKE_LENGTH 3
+`define MIN_SNAKE_LENGTH 1
+
 
 /* Definicja modu³u z wejsciami i wyjsciami zdefiniowanymi w pliku .xdc */
 module led_animation(
@@ -20,6 +31,8 @@ module led_animation(
     input wire btn_freq_up,
     input wire btn_freq_dn,
     input wire btn_dir,
+    input wire len_up,
+    input wire len_dn,
     
     input wire clk, // zegar systemowy 100Mhz
     
@@ -61,36 +74,36 @@ displays_driver display_driver (
     .sseg_anodes(sseg_anodes),
     .sseg_cathodes(sseg_cathodes)
 );
-defparam display_driver.REFERESH_PERIOD = 100 * 1000 / 8;
+defparam display_driver.REFERESH_PERIOD = `START_ANIMATION_PERIOD;
 
 // definicja kierunku poruszania sie segmentu
 enum {LEFT, RIGHT} dir = RIGHT;
 
-
-localparam num_of_displays = 4; // liczba wykorzystywanych wy?wietlaczy
-localparam length = 3; // d?ugo?? wy?wietlanej sekwencji
-
-localparam num_of_segments = (4 + num_of_displays * 2);
+localparam num_of_segments = (4 + `DISPLAY_COUNT * 2);
 integer curr_state = 0;
 integer curr_display = 0;
 integer prev = 0;
 
-// robimy cykliczn? kolejk? do przechowywania informacji o za?wieconych segmentach
+// robimy cykliczn¹ kolejkê do przechowywania informacji o zaœwieconych segmentach
 integer snake[0:num_of_segments][0:1]; 
-integer head = length - 1;
+integer head = `START_SNAKE_LENGTH - 1;
 integer tail = 0;
 integer i; 
+
+integer length = `START_SNAKE_LENGTH;
+integer old_length = `START_SNAKE_LENGTH;
+
 initial begin
     for (i = 0; i < num_of_segments; i = i + 1)
         begin
             snake[i][0] = -1;
             snake[i][1] = 0;
         end 
-    for (i = 0; i < num_of_displays; i = i + 1)
+    for (i = 0; i < `DISPLAY_COUNT; i = i + 1)
         display[i] = `DISPLAY_CLEAR;
 end
 
-// przej?cie na kolejny segment
+// przejœcie na kolejny segment
 always@ (posedge divided_clk)
 begin
     if (dir == RIGHT)
@@ -107,12 +120,23 @@ end
 
 always@ (posedge divided_clk)
 begin
-    if (snake[tail][0] != -1) // gasimy ogon
+    if (old_length > length) 
+        begin
+            tail <= tail + 1;
+            old_length <= old_length - 1;
+        end
+    else if (old_length < length) 
+        begin
+            tail <= tail - 1;
+            old_length <= old_length + 1;
+        end
+        
+    else if (snake[tail][0] != -1) // gasimy ogon
         begin
             display[snake[tail][0]] = display[snake[tail][0]] - 2**(snake[tail][1]);
         end
         
-    // uaktualnienie wska?ników
+    // uaktualnienie wskaŸników
     tail = tail + 1;
     head = head + 1;
     if (head == num_of_segments)
@@ -122,7 +146,7 @@ begin
     
     snake[head][0] = curr_display;
 
-    if (curr_display == 0) // obs?uga prawego wy?wietlacza
+    if (curr_display == 0) // obs³uga prawego wyœwietlacza
         begin           
             snake[head][1] = curr_state;
             
@@ -131,42 +155,42 @@ begin
                 curr_display = curr_display + 1;
         end
     
-    else if (curr_display == (num_of_displays - 1)) // obs?uga lewego wy?wietlacza
+    else if (curr_display == (`DISPLAY_COUNT - 1)) // obs³uga lewego wyœwietlacza
         begin
-            snake[head][1] = (curr_state - (num_of_displays - 1) < 6 ? curr_state - (num_of_displays - 1) : 0);
+            snake[head][1] = (curr_state - (`DISPLAY_COUNT - 1) < 6 ? curr_state - (`DISPLAY_COUNT - 1) : 0);
             
-            display[num_of_displays - 1] = display[num_of_displays - 1] + 2**(curr_state - (num_of_displays - 1) < 6 ? curr_state - (num_of_displays - 1) : 0);
-            if ((dir == LEFT && curr_state == (num_of_displays + 2)) || (dir == RIGHT && curr_state == (num_of_displays + 5)))
+            display[`DISPLAY_COUNT - 1] = display[`DISPLAY_COUNT - 1] + 2**(curr_state - (`DISPLAY_COUNT - 1) < 6 ? curr_state - (`DISPLAY_COUNT - 1) : 0);
+            if ((dir == LEFT && curr_state == (`DISPLAY_COUNT + 2)) || (dir == RIGHT && curr_state == (`DISPLAY_COUNT + 5)))
                 curr_display = curr_display - 1;
         end
                 
-    else if (curr_state > 3 && curr_state < (num_of_displays + 2)) // obs?uga dolnych segmentów
+    else if (curr_state > 3 && curr_state < (`DISPLAY_COUNT + 2)) // obs³uga dolnych segmentów
         begin
             snake[head][1] = 3;
             
             display[curr_display] = display[curr_display] + 2**3;
             if (dir == RIGHT)
                 begin
-                    curr_display = (curr_display + 1) & (num_of_displays - 1);
+                    curr_display = (curr_display + 1) & (`DISPLAY_COUNT - 1);
                 end
             
             else
                 begin
-                    curr_display = (curr_display - 1) & (num_of_displays - 1);
+                    curr_display = (curr_display - 1) & (`DISPLAY_COUNT - 1);
                 end
         end
-    else // obs?uga górnych segmentów
+    else // obs³uga górnych segmentów
         begin
             snake[head][1] = 0;
             display[curr_display] = display[curr_display] + 2**0;
             if (dir == RIGHT)
                 begin
-                    curr_display = (curr_display - 1) & (num_of_displays - 1);
+                    curr_display = (curr_display - 1) & (`DISPLAY_COUNT - 1);
                 end
             
             else
                 begin
-                    curr_display = (curr_display + 1) & (num_of_displays - 1);
+                    curr_display = (curr_display + 1) & (`DISPLAY_COUNT - 1);
                 end
         end
 end
@@ -174,7 +198,7 @@ end
 
 
 // u¿ycie modu³u filtruj¹cego zak³ócenia przycisków
-reg button_dir_active, button_freq_up_active, button_freq_dn_active;
+reg button_dir_active, button_freq_up_active, button_freq_dn_active, button_len_dn_active, button_len_up_active;
 debounce dir_debounce ( 
     .clk(clk),
     .button_physical(btn_dir),
@@ -193,13 +217,29 @@ debounce freq_dn_debounce (
     .button_active(button_freq_dn_active)
 );
 
+debounce len_dn_debounce ( 
+    .clk(clk),
+    .button_physical(len_dn),
+    .button_active(button_len_dn_active)
+);
+
+debounce len_up_debounce ( 
+    .clk(clk),
+    .button_physical(len_up),
+    .button_active(button_len_up_active)
+);
+
 reg button_freq_up_old = 0;
 reg button_freq_dn_old = 0;
 reg button_dir_old = 0;
+reg button_len_up_old = 0;
+reg button_len_dn_old = 0;
 
 reg button_freq_up_raise = 0;
 reg button_freq_dn_raise = 0;
 reg button_dir_raise = 0;
+reg button_len_up_raise = 0;
+reg button_len_dn_raise = 0;
 
 // blok wykrywaj¹cy narastaj¹ce stanu przyciku poprzez porównanie starej wartosci z now¹ wartoœci¹
 always@ (posedge clk)
@@ -212,26 +252,44 @@ begin
         
     if (button_dir_active != button_dir_old && button_dir_active == 1)
         button_dir_raise <= 1;
+        
+    if (button_len_up_active != button_len_up_old && button_len_up_active == 1)
+        button_len_up_raise <= 1;
+        
+    if (button_len_dn_active != button_len_dn_old && button_len_dn_active == 1)
+        button_len_dn_raise <= 1;
        
     if (button_freq_up_raise == 1)
-        if (clock_period > 1)
+        if (clock_period > `MIN_ANIMATION_PERIOD)
             clock_period <= clock_period >> 1;
        
     if (button_freq_dn_raise == 1)
-        if (clock_period < 1000*100*1000*100) // maks okres = 100s
+        if (clock_period < `MAX_ANIMATION_PERIOD) 
             clock_period <= clock_period << 1;
         
     if (button_dir_raise == 1)
         if(dir == LEFT) dir <= RIGHT;
         else            dir <= LEFT;
+    
+    if (button_len_up_raise == 1)
+        if (length <= `MAX_SNAKE_LENGTH) 
+            length <= length + 1;
+            
+    if (button_len_dn_raise == 1)
+        if (length > `MIN_SNAKE_LENGTH) 
+             length <= length - 1;
         
     button_freq_dn_old <= button_freq_dn_active;
     button_freq_up_old <= button_freq_up_active;
     button_dir_old <= button_dir_active;
+    button_len_up_old <= button_len_up_active;
+    button_len_dn_old <= button_len_dn_active;
         
     button_freq_up_raise = 0;
     button_freq_dn_raise = 0;
     button_dir_raise = 0;
+    button_len_up_raise = 0;
+    button_len_dn_raise = 0;
 end
 
 endmodule

@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-`define DISPLAY_COUNT 8
+`define USED_DISPLAY_COUNT 8
 
 module displays_driver #(parameter REFERESH_PERIOD = 100 * 1000)(
     input wire clk,
@@ -40,7 +40,7 @@ begin
     sseg_cathodes <= 8'(~display[display_number]);
     
     display_number = display_number + 1;
-    if (display_number >= `DISPLAY_COUNT)
+    if (display_number >= `USED_DISPLAY_COUNT)
         display_number <= 0;
 end
 

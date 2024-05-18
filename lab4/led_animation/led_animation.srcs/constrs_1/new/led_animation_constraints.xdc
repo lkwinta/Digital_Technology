@@ -11,6 +11,8 @@ create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports { c
 set_property -dict { PACKAGE_PIN M18   IOSTANDARD LVCMOS33 } [get_ports {btn_freq_up}];  #IO_L4N_T0_D05_14 Sch=btnu
 set_property -dict { PACKAGE_PIN P18   IOSTANDARD LVCMOS33 } [get_ports {btn_freq_dn}];  #IO_L9N_T1_DQS_D13_14 Sch=btnd
 set_property -dict { PACKAGE_PIN N17   IOSTANDARD LVCMOS33 } [get_ports {btn_dir}];      #IO_L9P_T1_DQS_14 Sch=btnc
+set_property -dict { PACKAGE_PIN M17   IOSTANDARD LVCMOS33 } [get_ports {len_up}];      #IO_L9P_T1_DQS_14 Sch=btnc
+set_property -dict { PACKAGE_PIN P17   IOSTANDARD LVCMOS33 } [get_ports {len_dn}];      #IO_L9P_T1_DQS_14 Sch=btnc
 
 ## Przypisanie wyprowadzen do wyœwietlacza 7 segmentowego - jako, ¿e segmenty s¹ aktywne w stanie niskim
 ## musimy wysterowaæ wszytkie nawet nieu¿ywane segmenty aby ustawiæ stan wysoki na segnentach które nie powinny
