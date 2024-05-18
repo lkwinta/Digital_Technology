@@ -17,7 +17,7 @@ proc create_report { reportName command } {
   }
 }
 namespace eval ::optrace {
-  variable script "D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.runs/impl_1/led_animation.tcl"
+  variable script "C:/DT/Digital_Technology/lab4/led_animation/led_animation.runs/impl_1/led_animation.tcl"
   variable category "vivado_impl"
 }
 
@@ -115,47 +115,190 @@ proc step_failed { step } {
 OPTRACE "impl_1" END { }
 }
 
-set_msg_config -id {Common 17-41} -limit 10000000
 set_msg_config -id {Synth 8-256} -limit 10000
 set_msg_config -id {Synth 8-638} -limit 10000
 
 OPTRACE "impl_1" START { ROLLUP_1 }
-OPTRACE "Phase: Write Bitstream" START { ROLLUP_AUTO }
-OPTRACE "write_bitstream setup" START { }
-start_step write_bitstream
-set ACTIVE_STEP write_bitstream
+OPTRACE "Phase: Init Design" START { ROLLUP_AUTO }
+start_step init_design
+set ACTIVE_STEP init_design
 set rc [catch {
-  create_msg_db write_bitstream.pb
+  create_msg_db init_design.pb
   set_param checkpoint.writeSynthRtdsInDcp 1
-  set_param chipscope.maxJobs 3
-  set_param synth.incrementalSynthesisCache C:/Users/lukasz/AppData/Roaming/Xilinx/Vivado/.Xil/Vivado-16456-DESKTOP-LBE2VK7/incrSyn
-  set_param xicom.use_bs_reader 1
-  set_param runs.launchOptions { -jobs 12  }
-  open_checkpoint led_animation_routed.dcp
-  set_property webtalk.parent_dir D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.cache/wt [current_project]
-set_property TOP led_animation [current_fileset]
-OPTRACE "read constraints: write_bitstream" START { }
-OPTRACE "read constraints: write_bitstream" END { }
-  catch { write_mem_info -force -no_partial_mmi led_animation.mmi }
-OPTRACE "write_bitstream setup" END { }
-OPTRACE "write_bitstream" START { }
-  write_bitstream -force led_animation.bit 
-OPTRACE "write_bitstream" END { }
-OPTRACE "write_bitstream misc" START { }
-OPTRACE "read constraints: write_bitstream_post" START { }
-OPTRACE "read constraints: write_bitstream_post" END { }
-  catch {write_debug_probes -quiet -force led_animation}
-  catch {file copy -force led_animation.ltx debug_nets.ltx}
-  close_msg_db -file write_bitstream.pb
+  set_param chipscope.maxJobs 2
+  set_param synth.incrementalSynthesisCache C:/DT/Digital_Technology/lab4/led_animation/.Xil/Vivado-7372-LAPTOP-TU02N1Q0/incrSyn
+  set_param runs.launchOptions { -jobs 4  }
+OPTRACE "create in-memory project" START { }
+  create_project -in_memory -part xc7a50tcsg324-1
+  set_property design_mode GateLvl [current_fileset]
+  set_param project.singleFileAddWarning.threshold 0
+OPTRACE "create in-memory project" END { }
+OPTRACE "set parameters" START { }
+  set_property webtalk.parent_dir C:/DT/Digital_Technology/lab4/led_animation/led_animation.cache/wt [current_project]
+  set_property parent.project_path C:/DT/Digital_Technology/lab4/led_animation/led_animation.xpr [current_project]
+  set_property ip_output_repo C:/DT/Digital_Technology/lab4/led_animation/led_animation.cache/ip [current_project]
+  set_property ip_cache_permissions {read write} [current_project]
+OPTRACE "set parameters" END { }
+OPTRACE "add files" START { }
+  add_files -quiet C:/DT/Digital_Technology/lab4/led_animation/led_animation.runs/synth_1/led_animation.dcp
+OPTRACE "read constraints: implementation" START { }
+  read_xdc C:/DT/Digital_Technology/lab4/led_animation/led_animation.srcs/constrs_1/new/led_animation_constraints.xdc
+OPTRACE "read constraints: implementation" END { }
+OPTRACE "read constraints: implementation_pre" START { }
+OPTRACE "read constraints: implementation_pre" END { }
+OPTRACE "add files" END { }
+OPTRACE "link_design" START { }
+  link_design -top led_animation -part xc7a50tcsg324-1 
+OPTRACE "link_design" END { }
+OPTRACE "gray box cells" START { }
+OPTRACE "gray box cells" END { }
+OPTRACE "init_design_reports" START { REPORT }
+OPTRACE "init_design_reports" END { }
+OPTRACE "init_design_write_hwdef" START { }
+OPTRACE "init_design_write_hwdef" END { }
+  close_msg_db -file init_design.pb
 } RESULT]
 if {$rc} {
-  step_failed write_bitstream
+  step_failed init_design
   return -code error $RESULT
 } else {
-  end_step write_bitstream
+  end_step init_design
   unset ACTIVE_STEP 
 }
 
-OPTRACE "write_bitstream misc" END { }
-OPTRACE "Phase: Write Bitstream" END { }
+OPTRACE "Phase: Init Design" END { }
+OPTRACE "Phase: Opt Design" START { ROLLUP_AUTO }
+start_step opt_design
+set ACTIVE_STEP opt_design
+set rc [catch {
+  create_msg_db opt_design.pb
+OPTRACE "read constraints: opt_design" START { }
+OPTRACE "read constraints: opt_design" END { }
+OPTRACE "opt_design" START { }
+  opt_design 
+OPTRACE "opt_design" END { }
+OPTRACE "read constraints: opt_design_post" START { }
+OPTRACE "read constraints: opt_design_post" END { }
+OPTRACE "opt_design reports" START { REPORT }
+  create_report "impl_1_opt_report_drc_0" "report_drc -file led_animation_drc_opted.rpt -pb led_animation_drc_opted.pb -rpx led_animation_drc_opted.rpx"
+OPTRACE "opt_design reports" END { }
+OPTRACE "Opt Design: write_checkpoint" START { CHECKPOINT }
+  write_checkpoint -force led_animation_opt.dcp
+OPTRACE "Opt Design: write_checkpoint" END { }
+  close_msg_db -file opt_design.pb
+} RESULT]
+if {$rc} {
+  step_failed opt_design
+  return -code error $RESULT
+} else {
+  end_step opt_design
+  unset ACTIVE_STEP 
+}
+
+OPTRACE "Phase: Opt Design" END { }
+OPTRACE "Phase: Place Design" START { ROLLUP_AUTO }
+start_step place_design
+set ACTIVE_STEP place_design
+set rc [catch {
+  create_msg_db place_design.pb
+OPTRACE "read constraints: place_design" START { }
+OPTRACE "read constraints: place_design" END { }
+  if { [llength [get_debug_cores -quiet] ] > 0 }  { 
+OPTRACE "implement_debug_core" START { }
+    implement_debug_core 
+OPTRACE "implement_debug_core" END { }
+  } 
+OPTRACE "place_design" START { }
+  place_design 
+OPTRACE "place_design" END { }
+OPTRACE "read constraints: place_design_post" START { }
+OPTRACE "read constraints: place_design_post" END { }
+OPTRACE "place_design reports" START { REPORT }
+  create_report "impl_1_place_report_io_0" "report_io -file led_animation_io_placed.rpt"
+  create_report "impl_1_place_report_utilization_0" "report_utilization -file led_animation_utilization_placed.rpt -pb led_animation_utilization_placed.pb"
+  create_report "impl_1_place_report_control_sets_0" "report_control_sets -verbose -file led_animation_control_sets_placed.rpt"
+OPTRACE "place_design reports" END { }
+OPTRACE "Place Design: write_checkpoint" START { CHECKPOINT }
+  write_checkpoint -force led_animation_placed.dcp
+OPTRACE "Place Design: write_checkpoint" END { }
+  close_msg_db -file place_design.pb
+} RESULT]
+if {$rc} {
+  step_failed place_design
+  return -code error $RESULT
+} else {
+  end_step place_design
+  unset ACTIVE_STEP 
+}
+
+OPTRACE "Phase: Place Design" END { }
+OPTRACE "Phase: Physical Opt Design" START { ROLLUP_AUTO }
+start_step phys_opt_design
+set ACTIVE_STEP phys_opt_design
+set rc [catch {
+  create_msg_db phys_opt_design.pb
+OPTRACE "read constraints: phys_opt_design" START { }
+OPTRACE "read constraints: phys_opt_design" END { }
+OPTRACE "phys_opt_design" START { }
+  phys_opt_design 
+OPTRACE "phys_opt_design" END { }
+OPTRACE "read constraints: phys_opt_design_post" START { }
+OPTRACE "read constraints: phys_opt_design_post" END { }
+OPTRACE "phys_opt_design report" START { REPORT }
+OPTRACE "phys_opt_design report" END { }
+OPTRACE "Post-Place Phys Opt Design: write_checkpoint" START { CHECKPOINT }
+  write_checkpoint -force led_animation_physopt.dcp
+OPTRACE "Post-Place Phys Opt Design: write_checkpoint" END { }
+  close_msg_db -file phys_opt_design.pb
+} RESULT]
+if {$rc} {
+  step_failed phys_opt_design
+  return -code error $RESULT
+} else {
+  end_step phys_opt_design
+  unset ACTIVE_STEP 
+}
+
+OPTRACE "Phase: Physical Opt Design" END { }
+OPTRACE "Phase: Route Design" START { ROLLUP_AUTO }
+start_step route_design
+set ACTIVE_STEP route_design
+set rc [catch {
+  create_msg_db route_design.pb
+OPTRACE "read constraints: route_design" START { }
+OPTRACE "read constraints: route_design" END { }
+OPTRACE "route_design" START { }
+  route_design 
+OPTRACE "route_design" END { }
+OPTRACE "read constraints: route_design_post" START { }
+OPTRACE "read constraints: route_design_post" END { }
+OPTRACE "route_design reports" START { REPORT }
+  create_report "impl_1_route_report_drc_0" "report_drc -file led_animation_drc_routed.rpt -pb led_animation_drc_routed.pb -rpx led_animation_drc_routed.rpx"
+  create_report "impl_1_route_report_methodology_0" "report_methodology -file led_animation_methodology_drc_routed.rpt -pb led_animation_methodology_drc_routed.pb -rpx led_animation_methodology_drc_routed.rpx"
+  create_report "impl_1_route_report_power_0" "report_power -file led_animation_power_routed.rpt -pb led_animation_power_summary_routed.pb -rpx led_animation_power_routed.rpx"
+  create_report "impl_1_route_report_route_status_0" "report_route_status -file led_animation_route_status.rpt -pb led_animation_route_status.pb"
+  create_report "impl_1_route_report_timing_summary_0" "report_timing_summary -max_paths 10 -report_unconstrained -file led_animation_timing_summary_routed.rpt -pb led_animation_timing_summary_routed.pb -rpx led_animation_timing_summary_routed.rpx -warn_on_violation "
+  create_report "impl_1_route_report_incremental_reuse_0" "report_incremental_reuse -file led_animation_incremental_reuse_routed.rpt"
+  create_report "impl_1_route_report_clock_utilization_0" "report_clock_utilization -file led_animation_clock_utilization_routed.rpt"
+  create_report "impl_1_route_report_bus_skew_0" "report_bus_skew -warn_on_violation -file led_animation_bus_skew_routed.rpt -pb led_animation_bus_skew_routed.pb -rpx led_animation_bus_skew_routed.rpx"
+OPTRACE "route_design reports" END { }
+OPTRACE "Route Design: write_checkpoint" START { CHECKPOINT }
+  write_checkpoint -force led_animation_routed.dcp
+OPTRACE "Route Design: write_checkpoint" END { }
+OPTRACE "route_design misc" START { }
+  close_msg_db -file route_design.pb
+} RESULT]
+if {$rc} {
+OPTRACE "route_design write_checkpoint" START { CHECKPOINT }
+OPTRACE "route_design write_checkpoint" END { }
+  write_checkpoint -force led_animation_routed_error.dcp
+  step_failed route_design
+  return -code error $RESULT
+} else {
+  end_step route_design
+  unset ACTIVE_STEP 
+}
+
+OPTRACE "route_design misc" END { }
+OPTRACE "Phase: Route Design" END { }
 OPTRACE "impl_1" END { }

@@ -63,83 +63,86 @@ displays_driver display_driver (
 );
 defparam display_driver.REFERESH_PERIOD = 100 * 1000 / 8;
 
-//assign display[0] = `SEGMENT_A_MASK;
-//assign display[1] = `SEGMENT_B_MASK;
-//assign display[2] = `SEGMENT_C_MASK;
-//assign display[3] = `SEGMENT_DOT_MASK;
-//assign display[4] = `SEGMENT_D_MASK;
-//assign display[5] = `SEGMENT_E_MASK;
-//assign display[6] = `SEGMENT_F_MASK;
-//assign display[7] = `SEGMENT_G_MASK;
-
-//definicja stanow dla maszyny stanow
-enum {
-    SEGMENT_A0, SEGMENT_B0, SEGMENT_C0, SEGMENT_D0,
-    SEGMENT_D1, SEGMENT_E1, SEGMENT_F1, SEGMENT_A1
-} current_state = SEGMENT_A0;
-
 // definicja kierunku poruszania sie segmentu
-enum {LEFT, RIGHT} dir = LEFT;
+enum {LEFT, RIGHT} dir = RIGHT;
 
-// w zaleznosci od kierunku, w kazdym cyklu spowolnionego zegara
-// poruszamy sie do przodu lub wstecz po stanach
+
+localparam num_of_displays = 4; // liczba wykorzystywanych wy?wietlaczy
+localparam num_of_segments = (4 + num_of_displays * 2);
+integer curr_state = 0;
+integer curr_display = 0;
+integer prev = 0;
+
+// przej?cie na kolejny segment
 always@ (posedge divided_clk)
 begin
     if (dir == RIGHT)
-        current_state <= current_state.next();
+        curr_state = (curr_state + 1);
     else
-        current_state <= current_state.prev();
+        curr_state = (curr_state - 1);
+        
+    if (curr_state < 0)
+        curr_state = num_of_segments + curr_state;
+        
+    else if (curr_state > num_of_segments - 1)
+        curr_state = curr_state - num_of_segments;
 end
 
-// przypisanie wyjsciastanow wzgledem obecnego wyjscia przy negatywnym zboczu zegara
-// w ten sposob zmiana stanu nastapi przy pozytywnym zboczu zegara,
-// a zmiana wyjscia wzgledem nowego stanu przy opadajacym zboczu zegara
 always@ (posedge divided_clk)
 begin
-    case(current_state)
-        SEGMENT_A0:
-            begin
-                display[1] <= `DISPLAY_CLEAR;
-                display[0] <= `SEGMENT_A_MASK;
-            end
-        SEGMENT_B0:
-            begin
-                display[1] <= `DISPLAY_CLEAR;
-                display[0] <= `SEGMENT_B_MASK;
-            end
-        SEGMENT_C0:
-            begin
-                display[1] <= `DISPLAY_CLEAR;
-                display[0] <= `SEGMENT_C_MASK;
-            end
-        SEGMENT_D0:
-            begin
-                display[1] <= `DISPLAY_CLEAR;
-                display[0] <= `SEGMENT_D_MASK;
-            end
+    if (curr_display == 0) // obs?uga prawego wy?wietlacza
+        begin
+            display[prev] = `DISPLAY_CLEAR;
+            display[0] = 8'(1 << curr_state);
+            prev = curr_display;
+            if ((dir == LEFT && curr_state == 0) || (dir == RIGHT && curr_state == 3))
+                curr_display = curr_display + 1;
+        end
+    
+    else if (curr_display == (num_of_displays - 1)) // obs?uga dolnego wy?wietlacza
+        begin
+            display[prev] = `DISPLAY_CLEAR;
+            display[num_of_displays - 1] = 8'(1 << curr_state - (num_of_displays - 1));
+            prev = curr_display;
+            if ((dir == LEFT && curr_state == (num_of_displays + 2)) || (dir == RIGHT && curr_state == (num_of_displays + 5)))
+                curr_display = curr_display - 1;
+        end
+                
+    else if (curr_state > 3 && curr_state < (num_of_displays + 2)) // obs?uga dolnych segmentów
+        begin
+            display[prev] = `DISPLAY_CLEAR;
+            prev = curr_display;
+            if (dir == RIGHT)
+                begin
+                    display[curr_display] = 8'(1 << 3);
+                    curr_display = (curr_display + 1) & (num_of_displays - 1);
+                end
             
-         SEGMENT_D1:
-            begin
-                display[0] <= `DISPLAY_CLEAR;
-                display[1] <= `SEGMENT_D_MASK;
-            end
-        SEGMENT_E1:
-            begin
-                display[0] <= `DISPLAY_CLEAR;
-                display[1] <= `SEGMENT_E_MASK;
-            end
-        SEGMENT_F1:
-            begin
-                display[0] <= `DISPLAY_CLEAR;
-                display[1] <= `SEGMENT_F_MASK;
-            end
-        SEGMENT_A1:
-            begin
-                display[0] <= `DISPLAY_CLEAR;
-                display[1] <= `SEGMENT_A_MASK;
-            end
-    endcase
+            else
+                begin
+                    display[curr_display] = 8'(1 << 3);
+                    curr_display = (curr_display - 1) & (num_of_displays - 1);
+                end
+        end
+    else // obs?uga górnych segmentów
+        begin
+        display[prev] = `DISPLAY_CLEAR;
+        prev = curr_display;
+            if (dir == RIGHT)
+                begin
+                    display[curr_display] = 8'(1 << 0);
+                    curr_display = (curr_display - 1) & (num_of_displays - 1);
+                end
+            
+            else
+                begin
+                    display[curr_display] = 8'(1 << 0);
+                    curr_display = (curr_display + 1) & (num_of_displays - 1);
+                end
+        end
 end
+
+
 
 // u¿ycie modu³u filtruj¹cego zak³ócenia przycisków
 reg button_dir_active, button_freq_up_active, button_freq_dn_active;
