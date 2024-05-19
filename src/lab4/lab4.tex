@@ -101,9 +101,35 @@
 \section{Cel zadania}
 \Large
 Celem laboratorium było zaprogramowanie układu FPGA tak aby wyświetlał animację poruszających się 
-segmentów na wyświetlaczach 7 segmentowych. 
+segmentów na obrzeżach wyświetlaczy 7 segmentowych. Należało również, zaimplementować prostą funkcjonalność 
+obejmującą zmianę prędkości i kierunku ruchu, świetlnego odcinka, przy pomocy znajdujących się na płytce przycisków.  
 
 \section{Czym są układy FPGA?}
+FPGA (Field-Programmable Gate Array) to rodzaj układu logicznego,
+który można programować po jego wyprodukowaniu. W przeciwieństwie do tradycyjnych układów ASIC (Application-Specific Integrated Circuit), 
+które są zaprojektowane do wykonywania jednego konkretnego zadania i nie mogą być zmieniane po wyprodukowaniu, 
+FPGA oferują elastyczność i możliwość wielokrotnego programowania. 
+Kluczowym aspektem takiego układu jest matryca programowalnych bloków logicznych i konfigurowalnych połączeń.
+
+Bloki logiczne to podstawowe jednostki wykonujące logikę i arytmetykę.
+Każdy blok zawiera programowalne elementy, takie jak bramki logiczne,
+multiplexery, oraz przerzutniki, które można konfigurować do wykonywania różnych funkcji.
+Natomiast, sieć połączeń umożliwia łączenie tych bloków w dowolny sposób.
+
+Dzięki takiej konstrukcji układy FPGA można dostosować do różnych zastosowań, 
+co czyni je niezwykle wszechstronnymi w inżynierii cyfrowej.
+
+\pagebreak
+\section{Realizacja}
+Do napisania programu na układ FPGA, spełniającego warunki zadania, wykorzystaliśmy język opisu sprzętu Verilog, a także
+oprogramowanie Vivado ML Edition od firmy Xilin.
+Dostarczone przez nas rozwiązanie zostało przygotowane na płytkę Nexys-A7 50T.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{nexys-a7-artix-50t-fpga-xilinx-edu.jpg}
+    \caption{Wykorzystana płytka z układem FPGA}
+\end{figure}
 
 \section{Rozwiązanie}
 \begin{figure}[H]
