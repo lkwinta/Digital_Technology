@@ -82,17 +82,16 @@ enum {LEFT, RIGHT} dir = RIGHT;
 localparam num_of_segments = (4 + `DISPLAY_COUNT * 2);
 integer curr_state = 0;
 integer curr_display = 0;
-integer prev = 0;
 
 // robimy cykliczn¹ kolejkê do przechowywania informacji o zaœwieconych segmentach
 integer snake[0:num_of_segments][0:1]; 
 integer head = `START_SNAKE_LENGTH - 1;
 integer tail = 0;
-integer i; 
 
 integer length = `START_SNAKE_LENGTH;
 integer old_length = `START_SNAKE_LENGTH;
 
+integer i; 
 initial begin
     for (i = 0; i < num_of_segments; i = i + 1)
         begin
@@ -156,8 +155,8 @@ begin
     if (curr_display == 0) // obs³uga prawego wyœwietlacza
         begin           
             snake[head][1] = curr_state;
-            
             display[0] = display[0] + 2**curr_state;
+            
             if ((dir == LEFT && curr_state == 0) || (dir == RIGHT && curr_state == 3))
                 curr_display = curr_display + 1;
         end
@@ -165,40 +164,35 @@ begin
     else if (curr_display == (`DISPLAY_COUNT - 1)) // obs³uga lewego wyœwietlacza
         begin
             snake[head][1] = (curr_state - (`DISPLAY_COUNT - 1) < 6 ? curr_state - (`DISPLAY_COUNT - 1) : 0);
+            display[`DISPLAY_COUNT - 1] = display[`DISPLAY_COUNT - 1] + 2**(curr_state - (`DISPLAY_COUNT - 1) < 6 
+                                                                            ? curr_state - (`DISPLAY_COUNT - 1) : 0);
             
-            display[`DISPLAY_COUNT - 1] = display[`DISPLAY_COUNT - 1] + 2**(curr_state - (`DISPLAY_COUNT - 1) < 6 ? curr_state - (`DISPLAY_COUNT - 1) : 0);
-            if ((dir == LEFT && curr_state == (`DISPLAY_COUNT + 2)) || (dir == RIGHT && curr_state == (`DISPLAY_COUNT + 5)))
+            if ((dir == LEFT && curr_state == (`DISPLAY_COUNT + 2)) 
+                 || (dir == RIGHT && curr_state == (`DISPLAY_COUNT + 5)))
                 curr_display = curr_display - 1;
         end
                 
     else if (curr_state > 3 && curr_state < (`DISPLAY_COUNT + 2)) // obs³uga dolnych segmentów
         begin
             snake[head][1] = 3;
-            
             display[curr_display] = display[curr_display] + 2**3;
+            
             if (dir == RIGHT)
-                begin
-                    curr_display = (curr_display + 1) & (`DISPLAY_COUNT - 1);
-                end
+                curr_display = (curr_display + 1) & (`DISPLAY_COUNT - 1);
             
             else
-                begin
-                    curr_display = (curr_display - 1) & (`DISPLAY_COUNT - 1);
-                end
+                curr_display = (curr_display - 1) & (`DISPLAY_COUNT - 1);
         end
     else // obs³uga górnych segmentów
         begin
             snake[head][1] = 0;
             display[curr_display] = display[curr_display] + 2**0;
-            if (dir == RIGHT)
-                begin
-                    curr_display = (curr_display - 1) & (`DISPLAY_COUNT - 1);
-                end
             
+            if (dir == RIGHT)
+                curr_display = (curr_display - 1) & (`DISPLAY_COUNT - 1);
+
             else
-                begin
-                    curr_display = (curr_display + 1) & (`DISPLAY_COUNT - 1);
-                end
+                curr_display = (curr_display + 1) & (`DISPLAY_COUNT - 1);
         end
 end
 
