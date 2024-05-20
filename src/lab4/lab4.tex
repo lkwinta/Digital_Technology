@@ -128,7 +128,7 @@ co czyni je niezwykle wszechstronnymi w inżynierii cyfrowej.
 \pagebreak
 \section{Realizacja}
 Do napisania programu na układ FPGA, spełniającego warunki zadania, wykorzystaliśmy język opisu sprzętu Verilog, a także
-oprogramowanie Vivado ML Edition od firmy Xilin.
+oprogramowanie Vivado ML Edition od firmy Xilinx.
 Dostarczone przez nas rozwiązanie zostało przygotowane na płytkę Nexys-A7 50T.
 
 \begin{figure}[H]
@@ -238,6 +238,7 @@ end
 
 endmodule
 \end{minted}
+\pagebreak
 \subsection{Moduł sterujący wyświetlaczami}
 Aby wyświetlać wiele segmentów wielu wyświetlaczach 7 segmentowych na raz,
 musieliśmy zaimplementować moduł sterujący wyświetlaczami. Moduł ten 
@@ -328,8 +329,6 @@ wyświetlaczy, po zmianie jednego parametru.
 `timescale 1ns / 1ps // tylko dla symulacji
 
 // Przydatne makra dla wyswietlaczow
-`define SET_ACTIVE(mask) 8'(~mask)
-
 `define SEGMENT_A_MASK 8'(1 << 0)
 `define SEGMENT_B_MASK 8'(1 << 1)
 `define SEGMENT_C_MASK 8'(1 << 2)
@@ -341,18 +340,19 @@ wyświetlaczy, po zmianie jednego parametru.
 `define DISPLAY_CLEAR '0
 `define DISPLAY_ALL '1
 
-`define START_ANIMATION_PERIOD (100 * 1000 / 8) // maks okres = 0,25s
+`define DISPLAY_REFRESH_FREQUENCY (100 * 1000 / 8) // częstotliwość odświeżania ekranów = 0,125kHz
+`define START_ANIMATION_PERIOD (1000*100*1000 / 4) // okres startowy = 0,25s
 `define MAX_ANIMATION_PERIOD 1000*100*1000*100 // maks okres = 100s
 `define MIN_ANIMATION_PERIOD 1
 
-`define DISPLAY_COUNT 8 // liczba wykorzystywanych wyœwietlaczy
+`define DISPLAY_COUNT 8 // liczba wykorzystywanych wyświetlaczy
 
 `define MAX_SNAKE_LENGTH (`DISPLAY_COUNT*2 + 3)
 `define START_SNAKE_LENGTH 1
 `define MIN_SNAKE_LENGTH 1
 
 
-/* Definicja modu³u z wejsciami i wyjsciami zdefiniowanymi w pliku .xdc */
+/* Definicja modułu z wejsciami i wyjsciami zdefiniowanymi w pliku .xdc */
 module led_animation(
     // wejscia przycisków
     input wire btn_freq_up,
@@ -383,9 +383,9 @@ begin
 end
 
 // startowy okres spowolnionego zegara
-longint clock_period = 1000*100*1000 / 4;
+longint clock_period = `START_ANIMATION_PERIOD;
 
-// u¿ycie modu³u spowalniaj¹cego zegar
+// użycie modułu spowalniającego zegar
 reg divided_clk;
 assign clk_led = divided_clk;
 clock_divider clk_div (
@@ -401,7 +401,7 @@ displays_driver display_driver (
     .sseg_anodes(sseg_anodes),
     .sseg_cathodes(sseg_cathodes)
 );
-defparam display_driver.REFERESH_PERIOD = `START_ANIMATION_PERIOD;
+defparam display_driver.REFERESH_PERIOD = `DISPLAY_REFRESH_FREQUENCY;
 
 // definicja kierunku poruszania sie segmentu
 enum {LEFT, RIGHT} dir = RIGHT;
@@ -410,7 +410,7 @@ localparam num_of_segments = (4 + `DISPLAY_COUNT * 2);
 integer curr_state = 0;
 integer curr_display = 0;
 
-// robimy cykliczn¹ kolejkê do przechowywania informacji o zaœwieconych segmentach
+// robimy cykliczną kolejkę do przechowywania informacji o zaświeconych segmentach
 integer snake[0:num_of_segments][0:1]; 
 integer head = `START_SNAKE_LENGTH - 1;
 integer tail = 0;
@@ -429,7 +429,7 @@ initial begin
         display[i] = `DISPLAY_CLEAR;
 end
 
-// przejœcie na kolejny segment
+// przejście na kolejny segment
 always@ (posedge divided_clk)
 begin
     if (dir == RIGHT)
@@ -469,7 +469,7 @@ begin
             display[snake[tail][0]] = display[snake[tail][0]] - 2**(snake[tail][1]);
         end
         
-    // uaktualnienie wskaŸników
+    // uaktualnienie wskaźników
     tail = tail + 1;
     head = head + 1;
     if (head == num_of_segments)
@@ -479,7 +479,7 @@ begin
     
     snake[head][0] = curr_display;
 
-    if (curr_display == 0) // obs³uga prawego wyœwietlacza
+    if (curr_display == 0) // obsługa prawego wyświetlacza
         begin           
             snake[head][1] = curr_state;
             display[0] = display[0] + 2**curr_state;
@@ -488,7 +488,7 @@ begin
                 curr_display = curr_display + 1;
         end
     
-    else if (curr_display == (`DISPLAY_COUNT - 1)) // obs³uga lewego wyœwietlacza
+    else if (curr_display == (`DISPLAY_COUNT - 1)) // obsługa lewego wyświetlacza
         begin
             snake[head][1] = (curr_state - (`DISPLAY_COUNT - 1) < 6 ? curr_state - (`DISPLAY_COUNT - 1) : 0);
             display[`DISPLAY_COUNT - 1] = display[`DISPLAY_COUNT - 1] + 2**(curr_state - (`DISPLAY_COUNT - 1) < 6 
@@ -499,7 +499,7 @@ begin
                 curr_display = curr_display - 1;
         end
                 
-    else if (curr_state > 3 && curr_state < (`DISPLAY_COUNT + 2)) // obs³uga dolnych segmentów
+    else if (curr_state > 3 && curr_state < (`DISPLAY_COUNT + 2)) // obsługa dolnych segmentów
         begin
             snake[head][1] = 3;
             display[curr_display] = display[curr_display] + 2**3;
@@ -510,7 +510,7 @@ begin
             else
                 curr_display = (curr_display - 1) & (`DISPLAY_COUNT - 1);
         end
-    else // obs³uga górnych segmentów
+    else // obsługa górnych segmentów
         begin
             snake[head][1] = 0;
             display[curr_display] = display[curr_display] + 2**0;
@@ -525,7 +525,7 @@ end
 
 
 
-// u¿ycie modu³u filtruj¹cego zak³ócenia przycisków
+// użycie modułu filtrującego zakłócenia przycisków
 reg button_dir_active, button_freq_up_active, button_freq_dn_active, button_len_dn_active, button_len_up_active;
 debounce dir_debounce ( 
     .clk(clk),
@@ -569,7 +569,7 @@ reg button_dir_raise = 0;
 reg button_len_up_raise = 0;
 reg button_len_dn_raise = 0;
 
-// blok wykrywaj¹cy narastaj¹ce stanu przyciku poprzez porównanie starej wartosci z now¹ wartoœci¹
+// blok wykrywający narastające stanu przyciku poprzez porównanie starej wartosci z nową wartością
 always@ (posedge clk)
 begin
     if (button_freq_up_active != button_freq_up_old && button_freq_up_active == 1)
@@ -621,7 +621,6 @@ begin
 end
 
 endmodule
-
 \end{minted}
 
 \pagebreak

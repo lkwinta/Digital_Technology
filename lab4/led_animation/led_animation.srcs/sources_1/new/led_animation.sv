@@ -1,8 +1,6 @@
 `timescale 1ns / 1ps // tylko dla symulacji
 
 // Przydatne makra dla wyswietlaczow
-`define SET_ACTIVE(mask) 8'(~mask)
-
 `define SEGMENT_A_MASK 8'(1 << 0)
 `define SEGMENT_B_MASK 8'(1 << 1)
 `define SEGMENT_C_MASK 8'(1 << 2)
@@ -14,7 +12,8 @@
 `define DISPLAY_CLEAR '0
 `define DISPLAY_ALL '1
 
-`define START_ANIMATION_PERIOD (100 * 1000 / 8) // maks okres = 0,25s
+`define DISPLAY_REFRESH_FREQUENCY (100 * 1000 / 8) // czêstotliwoœæ odœwie¿ania ekranów = 0,125kHz
+`define START_ANIMATION_PERIOD (1000*100*1000 / 4) // okres startowy = 0,25s
 `define MAX_ANIMATION_PERIOD 1000*100*1000*100 // maks okres = 100s
 `define MIN_ANIMATION_PERIOD 1
 
@@ -56,7 +55,7 @@ begin
 end
 
 // startowy okres spowolnionego zegara
-longint clock_period = 1000*100*1000 / 4;
+longint clock_period = `START_ANIMATION_PERIOD;
 
 // u¿ycie modu³u spowalniaj¹cego zegar
 reg divided_clk;
@@ -74,7 +73,7 @@ displays_driver display_driver (
     .sseg_anodes(sseg_anodes),
     .sseg_cathodes(sseg_cathodes)
 );
-defparam display_driver.REFERESH_PERIOD = `START_ANIMATION_PERIOD;
+defparam display_driver.REFERESH_PERIOD = `DISPLAY_REFRESH_FREQUENCY;
 
 // definicja kierunku poruszania sie segmentu
 enum {LEFT, RIGHT} dir = RIGHT;

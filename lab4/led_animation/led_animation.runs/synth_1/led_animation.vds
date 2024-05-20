@@ -3,8 +3,8 @@
 # SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Sat May 18 22:32:56 2024
-# Process ID: 17248
+# Start of session at: Mon May 20 12:41:43 2024
+# Process ID: 14468
 # Current directory: D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.runs/synth_1
 # Command line: vivado.exe -log led_animation.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source led_animation.tcl
 # Log file: D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.runs/synth_1/led_animation.vds
@@ -12,7 +12,7 @@
 # Running On: DESKTOP-LBE2VK7, OS: Windows, CPU Frequency: 3600 MHz, CPU Physical cores: 12, Host memory: 34307 MB
 #-----------------------------------------------------------
 source led_animation.tcl -notrace
-create_project: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 455.789 ; gain = 183.062
+create_project: Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 456.020 ; gain = 182.613
 Command: read_checkpoint -auto_incremental -incremental D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/utils_1/imports/synth_1/led_animation.dcp
 INFO: [Vivado 12-5825] Read reference checkpoint from D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/utils_1/imports/synth_1/led_animation.dcp for incremental synthesis
 INFO: [Vivado 12-7989] Please ensure there are no constraint changes
@@ -25,14 +25,14 @@ INFO: [Designutils 20-5440] No compile time benefit to using incremental synthes
 INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 19836
+INFO: [Synth 8-7075] Helper process launched with PID 13304
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 1291.934 ; gain = 440.473
+Starting RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 1291.785 ; gain = 439.457
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-6157] synthesizing module 'led_animation' [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:29]
+INFO: [Synth 8-6157] synthesizing module 'led_animation' [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:28]
 INFO: [Synth 8-6157] synthesizing module 'clock_divider' [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/clock_divider.sv:4]
 INFO: [Synth 8-6155] done synthesizing module 'clock_divider' (0#1) [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/clock_divider.sv:4]
-WARNING: [Synth 8-689] width (64) of port connection 'clock_period' does not match port width (32) of module 'clock_divider' [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:65]
+WARNING: [Synth 8-689] width (64) of port connection 'clock_period' does not match port width (32) of module 'clock_divider' [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:64]
 INFO: [Synth 8-6157] synthesizing module 'displays_driver' [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/displays_driver.sv:5]
 	Parameter REFERESH_PERIOD bound to: 12500 - type: integer 
 WARNING: [Synth 8-6090] variable 'sseg_anodes' is written by both blocking and non-blocking assignments, entire logic could be removed [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/displays_driver.sv:39]
@@ -40,25 +40,25 @@ WARNING: [Synth 8-6090] variable 'display_number' is written by both blocking an
 INFO: [Synth 8-6155] done synthesizing module 'displays_driver' (0#1) [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/displays_driver.sv:5]
 INFO: [Synth 8-6157] synthesizing module 'debounce' [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/debounce.sv:4]
 INFO: [Synth 8-6155] done synthesizing module 'debounce' (0#1) [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/debounce.sv:4]
-WARNING: [Synth 8-6090] variable 'button_freq_up_raise' is written by both blocking and non-blocking assignments, entire logic could be removed [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:295]
-WARNING: [Synth 8-6090] variable 'button_freq_dn_raise' is written by both blocking and non-blocking assignments, entire logic could be removed [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:296]
-WARNING: [Synth 8-6090] variable 'button_dir_raise' is written by both blocking and non-blocking assignments, entire logic could be removed [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:297]
-WARNING: [Synth 8-6090] variable 'button_len_up_raise' is written by both blocking and non-blocking assignments, entire logic could be removed [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:298]
-WARNING: [Synth 8-6090] variable 'button_len_dn_raise' is written by both blocking and non-blocking assignments, entire logic could be removed [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:299]
-INFO: [Synth 8-6155] done synthesizing module 'led_animation' (0#1) [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:29]
+WARNING: [Synth 8-6090] variable 'button_freq_up_raise' is written by both blocking and non-blocking assignments, entire logic could be removed [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:288]
+WARNING: [Synth 8-6090] variable 'button_freq_dn_raise' is written by both blocking and non-blocking assignments, entire logic could be removed [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:289]
+WARNING: [Synth 8-6090] variable 'button_dir_raise' is written by both blocking and non-blocking assignments, entire logic could be removed [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:290]
+WARNING: [Synth 8-6090] variable 'button_len_up_raise' is written by both blocking and non-blocking assignments, entire logic could be removed [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:291]
+WARNING: [Synth 8-6090] variable 'button_len_dn_raise' is written by both blocking and non-blocking assignments, entire logic could be removed [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:292]
+INFO: [Synth 8-6155] done synthesizing module 'led_animation' (0#1) [D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.srcs/sources_1/new/led_animation.sv:28]
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1415.453 ; gain = 563.992
+Finished RTL Elaboration : Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 1415.789 ; gain = 563.461
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1415.453 ; gain = 563.992
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1415.789 ; gain = 563.461
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1415.453 ; gain = 563.992
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1415.789 ; gain = 563.461
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.068 . Memory (MB): peak = 1415.453 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.060 . Memory (MB): peak = 1415.789 ; gain = 0.000
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
@@ -70,28 +70,28 @@ INFO: [Project 1-236] Implementation specific constraints were found while readi
 Resolution: To avoid this warning, move constraints listed in [.Xil/led_animation_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1518.402 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1453.113 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.015 . Memory (MB): peak = 1518.402 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 1453.113 ; gain = 0.000
 INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
 INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:23 ; elapsed = 00:00:23 . Memory (MB): peak = 1518.402 ; gain = 666.941
+Finished Constraint Validation : Time (s): cpu = 00:00:21 ; elapsed = 00:00:22 . Memory (MB): peak = 1453.113 ; gain = 600.785
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a50tcsg324-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:23 ; elapsed = 00:00:23 . Memory (MB): peak = 1518.402 ; gain = 666.941
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:21 ; elapsed = 00:00:22 . Memory (MB): peak = 1453.113 ; gain = 600.785
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:23 . Memory (MB): peak = 1518.402 ; gain = 666.941
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:21 ; elapsed = 00:00:22 . Memory (MB): peak = 1453.113 ; gain = 600.785
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'dir_reg' in module 'led_animation'
 ---------------------------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ INFO: [Synth 8-802] inferred FSM for state register 'dir_reg' in module 'led_ani
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'dir_reg' using encoding 'one-hot' in module 'led_animation'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1518.402 ; gain = 666.941
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 1453.113 ; gain = 600.785
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -147,25 +147,25 @@ Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:01:16 ; elapsed = 00:01:18 . Memory (MB): peak = 1628.539 ; gain = 777.078
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:01:07 ; elapsed = 00:01:08 . Memory (MB): peak = 1625.668 ; gain = 773.340
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:24 ; elapsed = 00:01:26 . Memory (MB): peak = 1628.539 ; gain = 777.078
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:14 ; elapsed = 00:01:16 . Memory (MB): peak = 1625.668 ; gain = 773.340
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:02:08 ; elapsed = 00:02:10 . Memory (MB): peak = 2174.340 ; gain = 1322.879
+Finished Timing Optimization : Time (s): cpu = 00:01:50 ; elapsed = 00:01:52 . Memory (MB): peak = 2170.816 ; gain = 1318.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:02:09 ; elapsed = 00:02:12 . Memory (MB): peak = 2174.340 ; gain = 1322.879
+Finished Technology Mapping : Time (s): cpu = 00:01:52 ; elapsed = 00:01:53 . Memory (MB): peak = 2170.816 ; gain = 1318.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -183,37 +183,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:02:15 ; elapsed = 00:02:18 . Memory (MB): peak = 2174.340 ; gain = 1322.879
+Finished IO Insertion : Time (s): cpu = 00:01:57 ; elapsed = 00:01:59 . Memory (MB): peak = 2170.816 ; gain = 1318.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:02:15 ; elapsed = 00:02:18 . Memory (MB): peak = 2174.340 ; gain = 1322.879
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:57 ; elapsed = 00:01:59 . Memory (MB): peak = 2170.816 ; gain = 1318.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:02:15 ; elapsed = 00:02:18 . Memory (MB): peak = 2174.340 ; gain = 1322.879
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:57 ; elapsed = 00:01:59 . Memory (MB): peak = 2170.816 ; gain = 1318.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:02:15 ; elapsed = 00:02:18 . Memory (MB): peak = 2174.340 ; gain = 1322.879
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:57 ; elapsed = 00:01:59 . Memory (MB): peak = 2170.816 ; gain = 1318.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:02:15 ; elapsed = 00:02:18 . Memory (MB): peak = 2174.340 ; gain = 1322.879
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:57 ; elapsed = 00:01:59 . Memory (MB): peak = 2170.816 ; gain = 1318.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:02:15 ; elapsed = 00:02:18 . Memory (MB): peak = 2174.340 ; gain = 1322.879
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:57 ; elapsed = 00:01:59 . Memory (MB): peak = 2170.816 ; gain = 1318.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -244,19 +244,19 @@ Report Cell Usage:
 |13    |OBUF   |    17|
 +------+-------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:02:15 ; elapsed = 00:02:18 . Memory (MB): peak = 2174.340 ; gain = 1322.879
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:57 ; elapsed = 00:01:59 . Memory (MB): peak = 2170.816 ; gain = 1318.488
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 1 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:02:01 ; elapsed = 00:02:15 . Memory (MB): peak = 2174.340 ; gain = 1219.930
-Synthesis Optimization Complete : Time (s): cpu = 00:02:15 ; elapsed = 00:02:18 . Memory (MB): peak = 2174.340 ; gain = 1322.879
+Synthesis Optimization Runtime : Time (s): cpu = 00:01:45 ; elapsed = 00:01:56 . Memory (MB): peak = 2170.816 ; gain = 1281.164
+Synthesis Optimization Complete : Time (s): cpu = 00:01:58 ; elapsed = 00:01:59 . Memory (MB): peak = 2170.816 ; gain = 1318.488
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.041 . Memory (MB): peak = 2174.340 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.039 . Memory (MB): peak = 2170.816 ; gain = 0.000
 INFO: [Netlist 29-17] Analyzing 274 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 WARNING: [Netlist 29-101] Netlist 'led_animation' is not ideal for floorplanning, since the cellview 'led_animation' contains a large number of primitives.  Please consider enabling hierarchy in synthesis if you want to do floorplanning.
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2174.340 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2170.816 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
@@ -264,8 +264,8 @@ Synth Design complete | Checksum: 456a0e4e
 INFO: [Common 17-83] Releasing license: Synthesis
 31 Infos, 11 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:02:24 ; elapsed = 00:02:28 . Memory (MB): peak = 2174.340 ; gain = 1714.594
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.008 . Memory (MB): peak = 2174.340 ; gain = 0.000
+synth_design: Time (s): cpu = 00:02:06 ; elapsed = 00:02:15 . Memory (MB): peak = 2170.816 ; gain = 1710.805
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 2170.816 ; gain = 0.000
 INFO: [Common 17-1381] The checkpoint 'D:/Documents/Projects/Digital_Technology/lab4/led_animation/led_animation.runs/synth_1/led_animation.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file led_animation_utilization_synth.rpt -pb led_animation_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Sat May 18 22:35:36 2024...
+INFO: [Common 17-206] Exiting Vivado at Mon May 20 12:44:10 2024...
